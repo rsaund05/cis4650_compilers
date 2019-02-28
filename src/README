@@ -9,7 +9,7 @@ generate an executable program called "tiny".
 
   To test source code like "fac.tiny", type 
 
-    "java -classpath /usr/share/java/cup.jar:. Main fac.tiny" 
+    "java -classpath ../java_cup/java-cup-11b-runtime.jar:. Main fac.tiny" 
 
 and the syntax tree will be displayed on the screen.
 
