@@ -4,38 +4,39 @@
  <var-declaration> -> <type-specifier> ID ; | <type-specifier> ID [ NUM ] ;
  <type-specifier> -> int | void
  <fun-declaration> -> <type-specifier> ID ( <params> ) <compound- stmt>
+
  <params> -> <param-list> | void
  <param-list> -> <param-list> , <param> | <param>
  <param> -> <type-specifier> ID | <type-specifier> ID [ ]
- <compound-stmt> -> { <local-declarations> <statement-list> } (11) <local-declarations> -> <local-declarations> <var-declaration> |
+ 
  <statement-list> -> <statement-list> <statement> |
- <statement> -> <expression-stmt> | <compound-stmt> | <selection-stmt> | <iteration-stmt> | <return-stmt>
- <expression-stmt> -> <expression> ; | ;
- <selection-stmt> -> if ( <expression> ) <statement> | if ( <expression> ) <statement> else <statement>
- <iteration-stmt> -> while ( <expression> ) <statement> 
- <return-stmt> -> return <expression> ; | return ;
- 
- <expression> -> ID = <expression> | ID [ <expression> ] = <expression> | <simple-expression> 
- 
- <simple-expression> -> <simple-expression> <= <simple-expression>
- |<simple-expression> < <simple-expression>
- |<simple-expression> > <simple-expression>
- |<simple-expression> >= <simple-expression>
- |<simple-expression> == <simple-expression>
- |<simple-expression> != <simple-expression>
- |<simple-expression>
- |<simple-expression> + <term> 
- |<simple-expression> - <term> 
- |<term>
+ <statement> -> <expression> ; 
+ | ; 
+ | { <local-declarations> <statement-list> } 
+ | if ( <expression> ) <statement> 
+ | if ( <expression> ) <statement> else <statement> 
+ | while ( <expression> ) <statement> 
+ | return <expression> ; 
+ | return ;
 
-
- <term> -> <term> * <term> 
- |<term> / <term> 
- |<term> , <expression>
+ <local-declarations> -> <local-declarations> <var-declaration> |
+ 
+ <expression> -> ID = <expression> 
+ | ID [ <expression> ] = <expression> 
+ |<expression> <= <expression>
+ |<expression> < <expression>
+ |<expression> > <expression>
+ |<expression> >= <expression>
+ |<expression> == <expression>
+ |<expression> != <expression>
+ |<expression> + <expression> 
+ |<expression> - <expression>
+ |<expression> * <expression> 
+ |<expression> / <expression> 
+ |<expression> , <expression>
  |( <expression> ) 
  |ID
  |ID [ <expression> ] 
- |ID ( <term> ) 
  |ID ( <expression> ) 
  |ID (  ) 
- |NUM
+ |NUM 
