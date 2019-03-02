@@ -2,8 +2,8 @@ package c1Absyn;
 
 public class VarExp extends Exp {
   public String name;
-
-  public VarExp( int row, int col, String name ) {
+  
+  public VarExp(int row, int col, String name ) {
     this.row = row;
     this.col = col;
     this.name = name;

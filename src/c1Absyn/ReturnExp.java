@@ -2,12 +2,12 @@ package c1Absyn;
 
 public class ReturnExp extends Exp
 {
-    public int pos;
     public Exp exp;
 
-    public ReturnExp (int pos, Exp exp)
+    public ReturnExp (int row, int col, Exp exp)
     {
-        this.pos = pos;
+        this.row = row;
+        this.col = col;
         this.exp = exp;
     } 
 

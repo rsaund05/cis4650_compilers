@@ -2,13 +2,13 @@ package c1Absyn;
 
 public class CompoundExp extends Exp
 {
-    public int pos;
     public VarDecList decs;
     public ExpList exps;
 
-    public CompoundExp (int pos, VarDecList decs, ExpList exp)
+    public CompoundExp (int row, int col, VarDecList decs, ExpList exp)
     {
-        this.pos = pos;
+        this.row = row;
+        this.col = col;
         this.decs = decs;
         this.exp = exp;
     }

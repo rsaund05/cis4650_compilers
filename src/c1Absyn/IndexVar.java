@@ -2,13 +2,13 @@ package c1Absyn;
 
 public class IndexVar extends Var
 {
-    public int pos;
     public String name;
     public Exp index;
 
-    public IndexVar (int pos, String name, Exp index)
+    public IndexVar (int row, int col, String name, Exp index)
     {
-        this.pos = pos;
+        this.row = row;
+        this.col = col;
         this.name = name;
         this.index = index;
     }

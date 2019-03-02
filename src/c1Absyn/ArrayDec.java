@@ -2,14 +2,14 @@ package c1Absyn;
 
 public class ArrayDec extends VarDec
 {
-    public int pos;
     public NameTy typ;
     public String name;
     public IntExp size;
 
-    public ArrayDec(int pos, NameTy typ, String name, IntExp size)
+    public ArrayDec(int row, int col, NameTy typ, String name, IntExp size)
     {
-        this.pos =pos;
+        this.row = row;
+        this.col = col;
         this.typ = typ;
         this.name = name;
         this.size = size;
