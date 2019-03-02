@@ -103,6 +103,19 @@ public class ShowTreeVisitor implements AbsynVisitor {
     System.out.println( "VarExp: " + exp.name );
   }
 
+//still need to add
+//ArrayDec
+//CallExp
+//CompoundExp
+//FunctionDec
+//IndexVar
+//NameTy
+//NilExp
+//ReturnExp
+//SimpleDec
+//SimpleVar
+//VarDec
+//WhileExp
 
 //tiny stuff
   public void visit( ReadExp exp, int level ) {
