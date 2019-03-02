@@ -1,7 +1,7 @@
  <program> -> <declaration-list>
 
  <declaration-list> -> <declaration-list> <declaration> | <declaration>
- <declaration> -> int ID ; | void ID ; | int ID [ NUM ] ; | void ID [ NUM ] ; | <fun-declaration>
+ <declaration> -> <var-declaration> | <fun-declaration>
  <var-declaration> -> int ID ; | void ID ; | int ID [ NUM ] ; | void ID [ NUM ] ;
  <fun-declaration> -> int ID ( <params> ) <statement> | void ID ( <params> ) <statement>
  <local-declarations> ->  <local-declarations> int ID ; | <local-declarations> void ID ; | <local-declarations> int ID [ NUM ] ; |  <local-declarations> void ID [ NUM ] ; | 
