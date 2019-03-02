@@ -72,7 +72,7 @@ parser code {:
 /* ------------Declaration of Terminals and Non Terminals Section----------- */
    
 terminal IF, ELSE, INT, RETURN, VOID, WHILE;
-terminal ASSIGN, EQ, LT, GT, PLUS, MINUS, TIMES, OVER, LPAREN, RPAREN, SEMI, NOTEQ, GTEQ, LTEQ, LSQUARE, RSQUARE, LBRACE, RBRACE, COMMA, ;
+terminal ASSIGN, EQ, LT, GT, PLUS, MINUS, TIMES, OVER, LPAREN, RPAREN, SEMI, NOTEQ, GTEQ, LTEQ, LSQUARE, RSQUARE, LBRACE, RBRACE, COMMA;
 terminal String ID, NUM;
 terminal ERROR;
 terminal LT;
