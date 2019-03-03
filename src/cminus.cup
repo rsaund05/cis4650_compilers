@@ -74,132 +74,136 @@ parser code {:
 terminal IF, ELSE, INT, RETURN, VOID, WHILE;
 terminal ASSIGN, EQ, LT, GT, PLUS, MINUS, TIMES, OVER, LPAREN, RPAREN, SEMI, NOTEQ, GTEQ, LTEQ, LSQUARE, RSQUARE, LBRACE, RBRACE, COMMA;
 terminal String ID, NUM;
-terminal LT;
+terminal ERROR;
    
 non terminal Exp program;
-non terminal ExpList declaration-list, params, statement-list, local-declarations;
-non terminal Exp declaration, var-declaration, fun-declaration, statement, expression;
+non terminal ExpList declaration_list, params, statement_list, local_declarations;
+non terminal Exp declaration, var_declaration, fun_declaration, statement, expression;
+
+/*precedence*/
+precedence left PLUS, MINUS;
+precedence left TIMES OVER;
 
 /* ----------------------------Grammar Section-------------------- */
    
 start with program;
 
-program           ::= declaration-list:dl
-                    {}
+program           ::= declaration_list:dl
+                    {:;:}
                   ;
 
-declaration-list  ::= declaration-list:dl declaration:d 
-                    {}
+declaration_list  ::= declaration_list:dl declaration:d 
+                    {:;:}
                   | declaration:d
-                    {}
+                    {:;:}
                   ;
 
-declaration       ::= var-declaration:vd 
-                    {}
-                  | fun-declaration:fd
-                    {}
+declaration       ::= var_declaration:vd 
+                    {:;:}
+                  | fun_declaration:fd
+                    {:;:}
                   ;
 
-var-declaration   ::= INT ID:i SEMI
-                    {}
+var_declaration   ::= INT ID:i SEMI
+                    {:;:}
                   | VOID ID:i SEMI
-                    {}
+                    {:;:}
                   | INT ID:i LSQUARE NUM:n RSQUARE SEMI
-                    {}
+                    {:;:}
                   | VOID ID:i LSQUARE NUM:n RSQUARE SEMI
-                    {}
+                    {:;:}
                   ;
 
-fun-declaration   ::= INT ID:id LPAREN params:p RPAREN statement:s
-                    {}
+fun_declaration   ::= INT ID:id LPAREN params:p RPAREN statement:s
+                    {:;:}
                   | VOID ID:id LPAREN params:p RPAREN statement:s
-                    {}
+                    {:;:}
                   ;
 
-local-declarations ::= local-declarations:ld INT ID:id SEMI
-                    {}
-                  | local-declarations:ld VOID ID:id SEMI
-                    {}
-                  | local-declarations:ld INT ID:id LSQUARE NUM:n RSQUARE SEMI
-                    {}
-                  | local-declarations:ld VOID ID:id LSQUARE NUM:n RSQUARE SEMI
-                    {}
+local_declarations ::= local_declarations:ld INT ID:id SEMI
+                    {:;:}
+                  | local_declarations:ld VOID ID:id SEMI
+                    {:;:}
+                  | local_declarations:ld INT ID:id LSQUARE NUM:n RSQUARE SEMI
+                    {:;:}
+                  | local_declarations:ld VOID ID:id LSQUARE NUM:n RSQUARE SEMI
+                    {:;:}
                   ;
 
 params            ::= params:p COMMA params:p
-                    {}
+                    {:;:}
                   | INT ID:i LPAREN RPAREN
-                    {}
+                    {:;:}
                   | VOID ID:i LPAREN RPAREN
-                    {}
+                    {:;:}
                   | INT ID:i
-                    {}
+                    {:;:}
                   | VOID ID:i
-                    {}
+                    {:;:}
                   | VOID
-                    {}
+                    {:;:}
                   ;
 
-statement-list    ::= statement-list:sl statement:s 
-                    {}
+statement_list    ::= statement_list:sl statement:s 
+                    {:;:}
                   |
-                    {}
+                    {:;:}
                   ;
 
 statement         ::= expression:e SEMI
-                    {}
+                    {:;:}
                   | SEMI
-                    {}
-                  | LBRACE local-declarations:ld statement-list:sl RBRACE
-                    {}
+                    {:;:}
+                  | LBRACE local_declarations:ld statement_list:sl RBRACE
+                    {:;:}
                   | IF LPAREN expression:e RPAREN statement:s 
-                    {}
+                    {:;:}
                   | IF LPAREN expression:e RPAREN statement:s ELSE statement:s
-                    {}
+                    {:;:}
                   | WHILE LPAREN expression:e RPAREN statement:s 
-                    {}
+                    {:;:}
                   | RETURN expression:e SEMI
-                    {}
+                    {:;:}
                   | RETURN SEMI
-                    {}
+                    {:;:}
                   ;
 
 expression        ::= ID:i EQ expression:e 
-                    {}
+                    {:;:}
                   | ID:i LSQUARE expression:e RSQUARE EQ expression:e 
-                    {}
+                    {:;:}
                   | expression:e LTEQ expression:e 
-                    {}
+                    {:;:}
                   | expression:e GTEQ expression:e 
-                    {}
+                    {:;:}
                   | expression:e LT expression:e 
-                    {}
+                    {:;:}
                   | expression:e GT expression:e 
-                    {}
+                    {:;:}
                   | expression:e NOTEQ expression:e 
-                    {}
+                    {:;:}
                   | expression:e EQ expression:e 
-                    {}
+                    {:;:}
                   | expression:e PLUS expression:e 
-                    {}
+                    {:;:}
                   | expression:e MINUS expression:e 
-                    {}
+                    {:;:}
                   | expression:e TIMES expression:e 
-                    {}
+                    {:;:}
                   | expression:e OVER expression:e 
-                    {}
+                    {:;:}
                   | expression:e COMMA expression:e 
-                    {}
+                    {:;:}
                   | LPAREN expression RPAREN
-                    {}
+                    {:;:}
                   | ID:i 
-                    {}
+                    {:;:}
                   | ID:i LSQUARE expression:e RSQUARE
-                    {}
+                    {:;:}
                   | ID:i LPAREN expression:e RPAREN
-                    {}
+                    {:;:}
                   | ID:i LPAREN RPAREN
-                    {}
+                    {:;:}
                   | NUM:n
-                    {}
+                    {:;:}
                   ;
