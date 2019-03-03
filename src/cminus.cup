@@ -78,7 +78,7 @@ terminal ERROR;
    
 non terminal  program;
 non terminal  declaration_list, params, statement_list, local_declarations;
-non terminal  declaration, var_declaration, fun_declaration, statement, expression;
+non terminal  declaration, var_declaration, fun_declaration, statement, expression, expression_list , param_list;
 non terminal compound_statement;
 
 /*precedence*/
@@ -121,9 +121,9 @@ var_declaration   ::= INT ID:i SEMI
                     {:;:}
                   ;
 
-fun_declaration   ::= INT ID:id LPAREN params:p RPAREN statement:s
+fun_declaration   ::= INT ID:id LPAREN param_list:p RPAREN compound_statement:s
                     {:;:}
-                  | VOID ID:id LPAREN params:p RPAREN statement:s
+                  | VOID ID:id LPAREN param_list:p RPAREN compound_statement:s
                     {:;:}
                   ;
 
