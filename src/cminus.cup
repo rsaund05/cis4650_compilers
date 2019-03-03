@@ -182,7 +182,7 @@ expression        ::= ID:i ASSIGN expression:e
                     {:;:}
                   | ID:i LSQUARE expression:e1 RSQUARE ASSIGN expression:e2 
                     {:;:}
-                  |id:I LSQUARE RSQUARE
+                  |ID:i LSQUARE RSQUARE
                     {:;:}
                   | expression:e1 LTEQ expression:e2 
                     {:;:}
