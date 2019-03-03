@@ -9,7 +9,7 @@
    
 /* Import the class java_cup.runtime.*  */
 import java_cup.runtime.*;
-//import c1Absyn.*;
+import c1Absyn.*;
    
 /* Parser code to change the way the parser reports errors (include
    line and column number of the error). */
