@@ -132,11 +132,7 @@ local_declarations ::= local_declarations:ld var_declaration:v
                     {:;:}
                   ;
 
-params            ::= INT ID:i LPAREN RPAREN
-                    {:;:}
-                  | VOID ID:i LPAREN RPAREN
-                    {:;:}
-                  | INT ID:i LSQUARE RSQUARE 
+params            ::= INT ID:i LSQUARE RSQUARE 
                     {:;:}
                   | VOID ID:i LSQUARE RSQUARE 
                     {:;:}
