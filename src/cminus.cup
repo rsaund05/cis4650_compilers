@@ -88,8 +88,7 @@ precedence left PLUS, MINUS;
 precedence left TIMES, OVER;
 
 
-/* ----------------------------Grammar Section-------------------- */
-   
+/* ----------------------------Grammar Section-------------------- */ 
 start with program;
 
 program           ::= declaration_list:dl

@@ -86,7 +86,7 @@ number = {digit}+
    Z, a and z, or an underscore followed by zero or more letters
    between A and Z, a and z, zero and nine, or an underscore. */
 letter = [a-zA-Z]
-identifier = [letter][letterdigit]+
+identifier = [_a-zA-Z][_a-zA-Z0-9]*
    
 %%
 /* ------------------------Lexical Rules Section---------------------- */
@@ -125,5 +125,5 @@ identifier = [letter][letterdigit]+
 {identifier}       { return symbol(sym.ID, yytext()); }
 {LineTerminator}    {return symbol(sym.LT);}
 {WhiteSpace}+      { /* skip whitespace */ }   
-"/*"[^\}]*"*/"       { /* skip comments */ }
+"/*"."*/"       { /* skip comments */ }
 .                  { return symbol(sym.ERROR); }
