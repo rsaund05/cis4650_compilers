@@ -145,7 +145,7 @@ params            ::= INT ID:i LPAREN RPAREN
                     {:;:}
                   ;
 
-param_list        := param_list:p1 COMMA params:p2
+param_list        ::= param_list:p1 COMMA params:p2
                     {:;:}
                   | params:p
                     {:;:}
