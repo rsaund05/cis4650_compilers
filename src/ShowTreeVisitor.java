@@ -100,68 +100,89 @@ public class ShowTreeVisitor implements AbsynVisitor {
 
   public void visit( VarExp exp, int level ) {
     indent( level );
-    System.out.println( "VarExp: " + exp.name );
+    System.out.println( "VarExp: ");
+    level++;
+    exp.variable.accept(this, level);
   }
 
 //still need to finish
 //ArrayDec
 public void visit(ArrayDec exp, int level ) {
   indent( level );
+
+  if (exp.size > 0)
+    System.out.println("ArrayDec: " + exp.name + "[" + exp.size + "]" + " - " + exp.typ);
+  else
+    System.out.println("ArrayDec: " + exp.name + "[]" + " - " + exp.typ);
 }
 
 //CallExp
 public void visit(CallExp exp, int level ) {
   indent( level );
+  System.out.println("CallExp: " + exp.func);
+  level++;
+  exp.args.accept(this, level);
 }
 
 //CompoundExp
 public void visit(CompoundExp exp, int level ) {
   indent( level );
+  System.out.println("CompoundExp: ");
+  level++;
+  exp.decs.accept(this, level);
+  exp.exp.accept(this, level);
 }
 
 //FunctionDec
 public void visit(FunctionDec exp, int level ) {
   indent( level );
+  System.out.println("FunctionDec: " + exp.func + " - " + exp.result);
+  level++;
+  exp.params.accept(this, level);
+  exp.body.accept(this, level);
 }
 
 //IndexVar
 public void visit(IndexVar exp, int level ) {
   indent( level );
-}
-
-//NameTy
-public void visit(NameTy exp, int level ) {
-  indent( level );
+  System.out.println("IndexVar: " + exp.name);
 }
 
 //NilExp
 public void visit(NilExp exp, int level ) {
   indent( level );
+  System.out.println("NilExp:");
 }
 
 //ReturnExp
 public void visit(ReturnExp exp, int level ) {
   indent( level );
+  System.out.println("ReturnExp: ");
+  level++;
+  exp.accept(this, level);
 }
 
 //SimpleDec
 public void visit(SimpleDec exp, int level ) {
   indent( level );
+  System.out.println("SimpleDec: " + exp.name + " - " + exp.typ);
 }
 
 //SimpleVar
 public void visit(SimpleVar exp, int level ) {
   indent( level );
-}
-
-//VarDec
-public void visit(VarDec exp, int level ) {
-  indent( level );
+  System.out.println("SimpleVar: " + exp.name);
 }
 
 //WhileExp
 public void visit(WhileExp exp, int level ) {
   indent( level );
+  System.out.println("WhileExp: ");
+  level++;
+  if (exp.test != null)
+    exp.test.accept(this, level);
+  if (exp.body != null)
+    exp.body.accept(this, level);
 }
 
 //tiny stuff

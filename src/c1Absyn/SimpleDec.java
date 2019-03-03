@@ -9,7 +9,7 @@ public class SimpleDec extends VarDec
     {
         this.row = row;
         this.col = col;
-        this.typ = pos;
+        this.typ = typ;
         this.name = name;
     }
 
