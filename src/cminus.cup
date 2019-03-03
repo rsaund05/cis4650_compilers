@@ -76,9 +76,10 @@ terminal ASSIGN, EQ, LT, GT, PLUS, MINUS, TIMES, OVER, LPAREN, RPAREN, SEMI, NOT
 terminal String ID, NUM;
 terminal ERROR;
    
-non terminal  program;
+non terminal  Exp program;
 non terminal  declaration_list, params, statement_list, local_declarations;
 non terminal  declaration, var_declaration, fun_declaration, statement, expression;
+non terminal compound_statement;
 
 /*precedence*/
 precedence left COMMA, ELSE;
@@ -126,13 +127,11 @@ fun_declaration   ::= INT ID:id LPAREN params:p RPAREN statement:s
                     {:;:}
                   ;
 
-local_declarations ::= local_declarations:ld INT ID:id SEMI
+local_declarations ::= local_declarations:ld var_declaration:v
                     {:;:}
-                  | local_declarations:ld VOID ID:id SEMI
+                  |var_declaration:v
                     {:;:}
-                  | local_declarations:ld INT ID:id LSQUARE NUM:n RSQUARE SEMI
-                    {:;:}
-                  | local_declarations:ld VOID ID:id LSQUARE NUM:n RSQUARE SEMI
+                  |
                     {:;:}
                   ;
 
@@ -160,8 +159,6 @@ statement         ::= expression:e SEMI
                     {:;:}
                   | SEMI
                     {:;:}
-                  | LBRACE local_declarations:ld statement_list:sl RBRACE
-                    {:;:}
                   | IF LPAREN expression:e RPAREN statement:s1 ELSE statement:s2
                     {:;:}
                   | IF LPAREN expression:e RPAREN statement:s 
@@ -173,6 +170,9 @@ statement         ::= expression:e SEMI
                   | RETURN SEMI
                     {:;:}
                   ;
+                
+compound_statement  ::=  LBRACE local_declarations:ld statement_list:sl RBRACE
+                      {:;:}
 
 expression        ::= ID:i ASSIGN expression:e 
                     {:;:}
