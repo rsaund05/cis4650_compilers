@@ -168,73 +168,81 @@ param_list        ::= param_list:p1 COMMA params:p2
                   ;
 
 statement_list    ::= statement_list:sl statement:s 
-                    {:;:}
+                    {:ExpList t = sl;
+                    while( t.tail != null )
+                      t = t.tail;
+                    t.tail = new ExpList(s, null);
+                    RESULT = s1;:}
                   |
                     {:;:}
                   ;
 
 statement         ::= expression:e SEMI
-                    {:;:}
+                    {:RESULT = e;:}
                   | SEMI
-                    {:;:}
+                    {RESULT = NilExp(sleft, sright):}
                   | IF LPAREN expression:e RPAREN statement:s1 ELSE statement:s2
-                    {:;:}
+                    {:RESULT = new IfExp(sleft, sright, e, s1, s2);:}
                   | IF LPAREN expression:e RPAREN statement:s 
-                    {:;:}
+                    {:RESULT = new IfExp(sleft, sright, e, s, null);:}
                   | WHILE LPAREN expression:e RPAREN compound_statement:s 
-                    {:;:}
+                    {:RESULT = new WhileExp(sleft, sright, e, s);:}
                   | RETURN expression:e SEMI
-                    {:;:}
+                    {:RESULT = new ReturnExp(sleft, sright, e);:}
                   | RETURN SEMI
-                    {:;:}
+                    {:RESULT = new ReturnExp(sleft, sright, null);:}
                   | compound_statement
                     {:;:}
                   ;
                 
 compound_statement  ::=  LBRACE local_declarations:ld statement_list:sl RBRACE
-                      {:;:}
+                      {:RESULT = new CompoundExp(cleft, cright, ld, sl);:}
                     ;
 
 expression        ::= ID:i ASSIGN expression:e 
-                    {:;:}
+                    {:RESULT = new AssignExp(ileft, iright, i, e);:}
                   | ID:i LSQUARE expression:e1 RSQUARE ASSIGN expression:e2 
-                    {:;:}
+                    {:RESULT = new AssignExp(ileft, iright, new IndexVar(ileft, iright, i, e1), e2);:}
                   | expression:e1 LTEQ expression:e2 
-                    {:;:}
+                    {:RESULT = new OpExp(ileft, iright, e1, OpExp.LE, e2);:}
                   | expression:e1 GTEQ expression:e2 
-                    {:;:}
+                    {:RESULT = new OpExp(ileft, iright, e1, OpExp.GE, e2);:}
                   | expression:e1 LT expression:e2 
-                    {:;:}
+                    {:RESULT = new OpExp(ileft, iright, e1, OpExp.LT, e2);:}
                   | expression:e1 GT expression:e2 
-                    {:;:}
+                    {:RESULT = new OpExp(ileft, iright, e1, OpExp.GT, e2);:}
                   | expression:e1 NOTEQ expression:e2 
-                    {:;:}
+                    {:RESULT = new OpExp(ileft, iright, e1, OpExp.NE, e2);:}
                   | expression:e1 EQ expression:e2
-                    {:;:}
+                    {:RESULT = new OpExp(ileft, iright, e1, OpExp.EQ, e2);:}
                   | expression:e1 PLUS expression:e2 
-                    {:;:}
+                    {:RESULT = new OpExp(ileft, iright, e1, OpExp.PLUS, e2);:}
                   | expression:e1 MINUS expression:e2 
-                    {:;:}
+                    {:RESULT = new OpExp(ileft, iright, e1, OpExp.MINUS, e2);:}
                   | expression:e1 TIMES expression:e2 
-                    {:;:}
+                    {:RESULT = new OpExp(ileft, iright, e1, OpExp.MUL, e2);:}
                   | expression:e1 OVER expression:e2 
-                    {:;:}
-                  | LPAREN expression RPAREN
-                    {:;:}
+                    {:RESULT = new OpExp(ileft, iright, e1, OpExp.DIV, e2);:}
+                  | LPAREN expression:e RPAREN
+                    {:RESULT = e;:}
                   | ID:i 
-                    {:;:}
+                    {:RESULT = new SimpleVar(ileft, iright, i);:}
                   | ID:i LSQUARE expression:e RSQUARE
-                    {:;:}
+                    {:RESULT = new IndexVar(ileft, iright, i, e);:}
                   | ID:i LPAREN expression_list:e RPAREN
-                    {:;:}
+                    {:RESULT = new CallExp(ileft, iright, i, e);:}
                   | ID:i LPAREN RPAREN
-                    {:;:}
+                    {:RESULT = new CallExp(ileft, iright, i, null);:}
                   | NUM:n
-                    {:;:}
+                    {:RESUL = n;:}
                   ;
 
 expression_list ::= expression_list:e1 COMMA expression:e2 
-                    {:;:}
+                    {:ExpList t = e1;
+                    while( t.tail != null )
+                      t = t.tail;
+                    t.tail = new ExpList(e2, null);
+                    RESULT = e1;:}
                   |expression:e
-                    {:;:}
+                    {:RESULT = new ExpList(e, null);:}
                   ;
