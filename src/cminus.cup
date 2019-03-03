@@ -74,15 +74,16 @@ parser code {:
 terminal IF, ELSE, INT, RETURN, VOID, WHILE;
 terminal ASSIGN, EQ, LT, GT, PLUS, MINUS, TIMES, OVER, LPAREN, RPAREN, SEMI, NOTEQ, GTEQ, LTEQ, LSQUARE, RSQUARE, LBRACE, RBRACE, COMMA;
 terminal String ID, NUM;
-terminal ERROR;
+//terminal ERROR;
    
 non terminal Exp program;
 non terminal ExpList declaration_list, params, statement_list, local_declarations;
 non terminal Exp declaration, var_declaration, fun_declaration, statement, expression;
 
 /*precedence*/
-precedence left PLUS, MINUS;
-precedence left TIMES OVER;
+precedence left PLUS, MINUS, COMMA, ELSE;
+precedence left TIMES, OVER;
+precedence nonassoc EQ, NOTEQ, LT, LTEQ, GT, GTEQ;
 
 /* ----------------------------Grammar Section-------------------- */
    
@@ -156,9 +157,9 @@ statement         ::= expression:e SEMI
                     {:;:}
                   | LBRACE local_declarations:ld statement_list:sl RBRACE
                     {:;:}
-                  | IF LPAREN expression:e RPAREN statement:s 
-                    {:;:}
                   | IF LPAREN expression:e RPAREN statement:s ELSE statement:s
+                    {:;:}
+                  | IF LPAREN expression:e RPAREN statement:s 
                     {:;:}
                   | WHILE LPAREN expression:e RPAREN statement:s 
                     {:;:}
@@ -168,9 +169,9 @@ statement         ::= expression:e SEMI
                     {:;:}
                   ;
 
-expression        ::= ID:i EQ expression:e 
+expression        ::= ID:i ASSIGN expression:e 
                     {:;:}
-                  | ID:i LSQUARE expression:e RSQUARE EQ expression:e 
+                  | ID:i LSQUARE expression:e RSQUARE ASSIGN expression:e 
                     {:;:}
                   | expression:e LTEQ expression:e 
                     {:;:}
