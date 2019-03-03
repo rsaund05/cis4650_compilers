@@ -136,9 +136,9 @@ params            ::= INT ID:i LPAREN RPAREN
                     {:;:}
                   | VOID ID:i LPAREN RPAREN
                     {:;:}
-                  | INT ID:i LSQUARE NUM:n RSQUARE 
+                  | INT ID:i LSQUARE RSQUARE 
                     {:;:}
-                  | VOID ID:i LSQUARE NUM:n RSQUARE 
+                  | VOID ID:i LSQUARE RSQUARE 
                     {:;:}
                   | INT ID:i
                     {:;:}
