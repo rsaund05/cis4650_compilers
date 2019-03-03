@@ -1,4 +1,4 @@
 package c1Absyn;
 
-abstract public class VarDEx extends Dec {
+abstract public class VarDec extends Dec {
 }
