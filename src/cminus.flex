@@ -123,7 +123,6 @@ identifier = [_a-zA-Z][_a-zA-Z0-9]*
 ";"                { return symbol(sym.SEMI); }
 {number}           { return symbol(sym.NUM, yytext()); }
 {identifier}       { return symbol(sym.ID, yytext()); }
-{LineTerminator}    {return symbol(sym.LT);}
 {WhiteSpace}+      { /* skip whitespace */ }   
 "/*"."*/"       { /* skip comments */ }
 .                  { return symbol(sym.ERROR); }
