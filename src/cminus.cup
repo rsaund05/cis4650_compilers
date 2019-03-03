@@ -208,7 +208,7 @@ expression        ::= ID:i ASSIGN expression:e
                     {:;:}
                   | ID:i LSQUARE expression:e RSQUARE
                     {:;:}
-                  | ID:i LPAREN expression:e RPAREN
+                  | ID:i LPAREN expression_list:e RPAREN
                     {:;:}
                   | ID:i LPAREN RPAREN
                     {:;:}
