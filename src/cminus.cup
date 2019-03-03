@@ -75,18 +75,13 @@ terminal IF, ELSE, INT, RETURN, VOID, WHILE;
 terminal ASSIGN, EQ, LT, GT, PLUS, MINUS, TIMES, OVER, LPAREN, RPAREN, SEMI, NOTEQ, GTEQ, LTEQ, LSQUARE, RSQUARE, LBRACE, RBRACE, COMMA;
 terminal String ID, NUM;
 terminal ERROR;
-   
-non terminal  program;
-non terminal  declaration_list, params, statement_list, local_declarations;
-non terminal  declaration, var_declaration, fun_declaration, statement, expression, expression_list , param_list;
-non terminal compound_statement;
 
-non terminal Var;
-non terminal Exp;
-non terminal Dec;
-non terminal DecList;
-non terminal VarDecList;
-non terminal ExpList;
+non terminal Var params;
+non terminal Exp statement, expression;
+non terminal Dec declaration, var_declaration, local_declarations, fun_declaration, compound_statement;
+non terminal DecList program, declaration_list;
+non terminal VarDecList param_list;
+non terminal ExpList statement_list, expression_list;
 
 /*precedence*/
 precedence left COMMA, ELSE;
