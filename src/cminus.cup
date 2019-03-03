@@ -173,6 +173,7 @@ statement         ::= expression:e SEMI
                 
 compound_statement  ::=  LBRACE local_declarations:ld statement_list:sl RBRACE
                       {:;:}
+                    ;
 
 expression        ::= ID:i ASSIGN expression:e 
                     {:;:}
