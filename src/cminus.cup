@@ -77,10 +77,10 @@ terminal String ID, NUM;
 terminal ERROR;
 
 non terminal Var params;
-non terminal Exp statement, expression;
-non terminal Dec declaration, var_declaration, local_declarations, fun_declaration, compound_statement;
-non terminal DecList program, declaration_list;
-non terminal VarDecList param_list;
+non terminal Exp statement, expression, compound_statement;
+non terminal Dec declaration, var_declaration, fun_declaration;
+non terminal DecList program, declaration_list, ;
+non terminal VarDecList param_list, local_declarations;
 non terminal ExpList statement_list, expression_list;
 
 /*precedence*/
@@ -94,62 +94,77 @@ precedence left TIMES, OVER;
 start with program;
 
 program           ::= declaration_list:dl
-                    {:;:}
+                    {:RESULT = d1;:}
 
                   | ERROR
                     {:;:}
                   ;
 
 declaration_list  ::= declaration_list:dl declaration:d 
-                    {:;:}
+                    {:DecList l1 = d1;
+                      while(l1.tail != null)
+                        l1 = l1.tail;
+
+                      l1.tail = new DecList(d, null);
+                      RESULT = l1;
+                    :}
                   | declaration:d
-                    {:;:}
+                    {:RESULT = new DecList(d, null);:}
                   ;
 
 declaration       ::= var_declaration:vd 
-                    {:;:}
+                    {:RESULT = vd;:}
                   | fun_declaration:fd
-                    {:;:}
+                    {:RESULT = fd;:}
                   ;
 
 var_declaration   ::= INT ID:i SEMI
-                    {:;:}
+                    {:RESULT = new SimpleDec(ileft, iright, new NameTy(ileft, iright, NameTy.INT), i);:}
                   | VOID ID:i SEMI
-                    {:;:}
+                    {:RESULT = new SimpleDec(ileft, iright, new NameTy(ileft, iright, NameTy.VOID), i);:}
                   | INT ID:i LSQUARE NUM:n RSQUARE SEMI
-                    {:;:}
+                    {:RESULT = new ArrayDec(ileft, iright, new NameTy(ileft, iright, NameTy.INT), i, n);:}
                   | VOID ID:i LSQUARE NUM:n RSQUARE SEMI
-                    {:;:}
+                    {:RESULT = new ArrayDec(ileft, iright, new NameTy(ileft, iright, NameTy.VOID), i, n);:}
                   ;
 
 fun_declaration   ::= INT ID:id LPAREN param_list:p RPAREN compound_statement:s
-                    {:;:}
+                    {:RESULT = new FunctionDec(ileft, iright, new NameTy(ileft, iright, NameTy.INT), p, s);:}
                   | VOID ID:id LPAREN param_list:p RPAREN compound_statement:s
-                    {:;:}
+                    {:RESULT = new FunctionDec(ileft, iright, new NameTy(ileft, iright, NameTy.VOID), p, s);:}
                   ;
 
 local_declarations ::= local_declarations:ld var_declaration:v
-                    {:;:}
+                    {::VarDecList l1 = ld;
+                      while(l1.tail != null)
+                        l1 = l1.tail;
+                      l1.tail = new VarDecList(v, null);
+                      RESULT = l1;:}
                   |
-                    {:;:}
+                    {:RESULT = new VarDecList(p2, null);:}
                   ;
 
 params            ::= INT ID:i LSQUARE RSQUARE 
-                    {:;:}
+                    {:RESULT = new ArrayDec(ileft, iright, new NameTy(ileft, iright, NameTy.INT), i, n);:}
                   | VOID ID:i LSQUARE RSQUARE 
-                    {:;:}
+                    {:RESULT = new ArrayDec(ileft, iright, new NameTy(ileft, iright, NameTy.VOID), i, n);:}
                   | INT ID:i
-                    {:;:}
+                    {:RESULT = new SimpleDec(ileft, iright, new NameTy(ileft, iright, NameTy.INT), i);:}
                   | VOID ID:i
-                    {:;:}
+                    {:RESULT = new SimpleDec(ileft, iright, new NameTy(ileft, iright, NameTy.VOID), i);:}
                   | VOID
                     {:;:}
                   ;
 
 param_list        ::= param_list:p1 COMMA params:p2
-                    {:;:}
+                    {:VarDecList vl = p1;
+                      while(v1.tail != null)
+                        v1 = v1.tail;
+                      v1.tail = new VarDecList(p2, null);
+                      RESULT = v1;
+                    :}
                   | params:p
-                    {:;:}
+                    {:RESULT = new VarDecList(p2, null);:}
                   ;
 
 statement_list    ::= statement_list:sl statement:s 
