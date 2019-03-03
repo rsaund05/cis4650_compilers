@@ -76,7 +76,7 @@ terminal ASSIGN, EQ, LT, GT, PLUS, MINUS, TIMES, OVER, LPAREN, RPAREN, SEMI, NOT
 terminal String ID, NUM;
 terminal ERROR;
    
-non terminal  Exp program;
+non terminal  program;
 non terminal  declaration_list, params, statement_list, local_declarations;
 non terminal  declaration, var_declaration, fun_declaration, statement, expression;
 non terminal compound_statement;
