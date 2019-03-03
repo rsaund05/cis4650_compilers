@@ -96,7 +96,7 @@ program           ::= declaration_list:dl
                     {:;:}
 
                   | ERROR
-                      {:;:}
+                    {:;:}
                   ;
 
 declaration_list  ::= declaration_list:dl declaration:d 
@@ -129,15 +129,11 @@ fun_declaration   ::= INT ID:id LPAREN params:p RPAREN statement:s
 
 local_declarations ::= local_declarations:ld var_declaration:v
                     {:;:}
-                  |var_declaration:v
-                    {:;:}
                   |
                     {:;:}
                   ;
 
-params            ::= params:p1 COMMA params:p2
-                    {:;:}
-                  | INT ID:i LPAREN RPAREN
+params            ::= INT ID:i LPAREN RPAREN
                     {:;:}
                   | VOID ID:i LPAREN RPAREN
                     {:;:}
@@ -146,6 +142,12 @@ params            ::= params:p1 COMMA params:p2
                   | VOID ID:i
                     {:;:}
                   | VOID
+                    {:;:}
+                  ;
+
+param_list        := param_list:p1 COMMA params:p2
+                    {:;:}
+                  | params:p
                     {:;:}
                   ;
 
@@ -199,8 +201,6 @@ expression        ::= ID:i ASSIGN expression:e
                     {:;:}
                   | expression:e1 OVER expression:e2 
                     {:;:}
-                  | expression:e1 COMMA expression:e2 
-                    {:;:}
                   | LPAREN expression RPAREN
                     {:;:}
                   | ID:i 
@@ -212,5 +212,11 @@ expression        ::= ID:i ASSIGN expression:e
                   | ID:i LPAREN RPAREN
                     {:;:}
                   | NUM:n
+                    {:;:}
+                  ;
+
+expression_list ::= expression_list:e1 COMMA expression:e2 
+                    {:;:}
+                  |expression:e
                     {:;:}
                   ;
