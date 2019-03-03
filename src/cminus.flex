@@ -119,10 +119,10 @@ identifier = [_a-zA-Z][_a-zA-Z0-9]*
 "]"                { return symbol(sym.RSQUARE); }
 "{"                { return symbol(sym.LBRACE); }
 "}"                { return symbol(sym.RBRACE); }
-","                 { return symbol(sym.COMMA); }
+","                { return symbol(sym.COMMA); }
 ";"                { return symbol(sym.SEMI); }
 {number}           { return symbol(sym.NUM, yytext()); }
 {identifier}       { return symbol(sym.ID, yytext()); }
 {WhiteSpace}+      { /* skip whitespace */ }   
-"/*"[^]*"*/"          { /* skip comments */ }
+"/*"[^*/]*"*/"       { /* skip comments */ }
 .                  { return symbol(sym.ERROR); }
