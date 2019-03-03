@@ -12,7 +12,7 @@
 */
    
 import java.io.*;
-import absyn.*;
+import c1Absyn.*;
    
 class Main {
   public final static boolean SHOW_TREE = true;

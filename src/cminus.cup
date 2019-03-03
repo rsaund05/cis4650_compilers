@@ -8,8 +8,8 @@
 /* ----------------------Preliminary Declarations Section--------------------*/
    
 /* Import the class java_cup.runtime.*  */
-//import java_cup.runtime.*;
-import absyn.*;
+import java_cup.runtime.*;
+//import c1Absyn.*;
    
 /* Parser code to change the way the parser reports errors (include
    line and column number of the error). */
@@ -76,14 +76,16 @@ terminal ASSIGN, EQ, LT, GT, PLUS, MINUS, TIMES, OVER, LPAREN, RPAREN, SEMI, NOT
 terminal String ID, NUM;
 terminal ERROR;
    
-non terminal Exp program;
-non terminal ExpList declaration_list, params, statement_list, local_declarations;
-non terminal Exp declaration, var_declaration, fun_declaration, statement, expression;
+non terminal  program;
+non terminal  declaration_list, params, statement_list, local_declarations;
+non terminal  declaration, var_declaration, fun_declaration, statement, expression;
 
 /*precedence*/
-precedence left PLUS, MINUS, COMMA, ELSE;
-precedence left TIMES, OVER;
+precedence left COMMA, ELSE;
 precedence nonassoc EQ, NOTEQ, LT, LTEQ, GT, GTEQ;
+precedence left PLUS, MINUS;
+precedence left TIMES, OVER;
+
 
 /* ----------------------------Grammar Section-------------------- */
    
@@ -134,7 +136,7 @@ local_declarations ::= local_declarations:ld INT ID:id SEMI
                     {:;:}
                   ;
 
-params            ::= params:p COMMA params:p
+params            ::= params:p1 COMMA params:p2
                     {:;:}
                   | INT ID:i LPAREN RPAREN
                     {:;:}
@@ -160,7 +162,7 @@ statement         ::= expression:e SEMI
                     {:;:}
                   | LBRACE local_declarations:ld statement_list:sl RBRACE
                     {:;:}
-                  | IF LPAREN expression:e RPAREN statement:s ELSE statement:s
+                  | IF LPAREN expression:e RPAREN statement:s1 ELSE statement:s2
                     {:;:}
                   | IF LPAREN expression:e RPAREN statement:s 
                     {:;:}
@@ -174,29 +176,29 @@ statement         ::= expression:e SEMI
 
 expression        ::= ID:i ASSIGN expression:e 
                     {:;:}
-                  | ID:i LSQUARE expression:e RSQUARE ASSIGN expression:e 
+                  | ID:i LSQUARE expression:e1 RSQUARE ASSIGN expression:e2 
                     {:;:}
-                  | expression:e LTEQ expression:e 
+                  | expression:e1 LTEQ expression:e2 
                     {:;:}
-                  | expression:e GTEQ expression:e 
+                  | expression:e1 GTEQ expression:e2 
                     {:;:}
-                  | expression:e LT expression:e 
+                  | expression:e1 LT expression:e2 
                     {:;:}
-                  | expression:e GT expression:e 
+                  | expression:e1 GT expression:e2 
                     {:;:}
-                  | expression:e NOTEQ expression:e 
+                  | expression:e1 NOTEQ expression:e2 
                     {:;:}
-                  | expression:e EQ expression:e 
+                  | expression:e1 EQ expression:e2
                     {:;:}
-                  | expression:e PLUS expression:e 
+                  | expression:e1 PLUS expression:e2 
                     {:;:}
-                  | expression:e MINUS expression:e 
+                  | expression:e1 MINUS expression:e2 
                     {:;:}
-                  | expression:e TIMES expression:e 
+                  | expression:e1 TIMES expression:e2 
                     {:;:}
-                  | expression:e OVER expression:e 
+                  | expression:e1 OVER expression:e2 
                     {:;:}
-                  | expression:e COMMA expression:e 
+                  | expression:e1 COMMA expression:e2 
                     {:;:}
                   | LPAREN expression RPAREN
                     {:;:}
