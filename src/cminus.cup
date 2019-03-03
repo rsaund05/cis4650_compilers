@@ -136,6 +136,10 @@ params            ::= INT ID:i LPAREN RPAREN
                     {:;:}
                   | VOID ID:i LPAREN RPAREN
                     {:;:}
+                  | INT ID:i LSQUARE NUM:n RSQUARE 
+                    {:;:}
+                  | VOID ID:i LSQUARE NUM:n RSQUARE 
+                    {:;:}
                   | INT ID:i
                     {:;:}
                   | VOID ID:i
@@ -181,8 +185,6 @@ compound_statement  ::=  LBRACE local_declarations:ld statement_list:sl RBRACE
 expression        ::= ID:i ASSIGN expression:e 
                     {:;:}
                   | ID:i LSQUARE expression:e1 RSQUARE ASSIGN expression:e2 
-                    {:;:}
-                  |ID:i LSQUARE RSQUARE
                     {:;:}
                   | expression:e1 LTEQ expression:e2 
                     {:;:}
