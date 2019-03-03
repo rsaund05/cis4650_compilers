@@ -164,11 +164,13 @@ statement         ::= expression:e SEMI
                     {:;:}
                   | IF LPAREN expression:e RPAREN statement:s 
                     {:;:}
-                  | WHILE LPAREN expression:e RPAREN statement:s 
+                  | WHILE LPAREN expression:e RPAREN compound_statement:s 
                     {:;:}
                   | RETURN expression:e SEMI
                     {:;:}
                   | RETURN SEMI
+                    {:;:}
+                  | compound_statement
                     {:;:}
                   ;
                 
