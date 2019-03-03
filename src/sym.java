@@ -18,6 +18,7 @@ public class sym {
   public static final int SEMI = 18;
   public static final int WHILE = 7;
   public static final int RETURN = 5;
+  public static final int ERROR = 29;
   public static final int IF = 2;
   public static final int LBRACE = 24;
   public static final int LPAREN = 16;
@@ -64,7 +65,8 @@ public class sym {
   "RBRACE",
   "COMMA",
   "ID",
-  "NUM"
+  "NUM",
+  "ERROR"
   };
 }
 

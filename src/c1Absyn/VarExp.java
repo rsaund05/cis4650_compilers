@@ -1,7 +1,7 @@
 package c1Absyn;
 
 public class VarExp extends Exp {
-  public String variable;
+  public Var variable;
   
   public VarExp(int row, int col, Var variable ) {
     this.row = row;

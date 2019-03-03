@@ -74,7 +74,7 @@ parser code {:
 terminal IF, ELSE, INT, RETURN, VOID, WHILE;
 terminal ASSIGN, EQ, LT, GT, PLUS, MINUS, TIMES, OVER, LPAREN, RPAREN, SEMI, NOTEQ, GTEQ, LTEQ, LSQUARE, RSQUARE, LBRACE, RBRACE, COMMA;
 terminal String ID, NUM;
-//terminal ERROR;
+terminal ERROR;
    
 non terminal Exp program;
 non terminal ExpList declaration_list, params, statement_list, local_declarations;
@@ -91,6 +91,9 @@ start with program;
 
 program           ::= declaration_list:dl
                     {:;:}
+
+                  | ERROR
+                      {:;:}
                   ;
 
 declaration_list  ::= declaration_list:dl declaration:d 

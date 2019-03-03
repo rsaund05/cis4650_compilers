@@ -3,7 +3,7 @@ package c1Absyn;
 public class CompoundExp extends Exp
 {
     public VarDecList decs;
-    public ExpList exps;
+    public ExpList exp;
 
     public CompoundExp (int row, int col, VarDecList decs, ExpList exp)
     {

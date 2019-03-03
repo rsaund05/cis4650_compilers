@@ -37,4 +37,6 @@ public interface AbsynVisitor {
   public void visit(SimpleVar exp, int level );
 
   public void visit(WhileExp exp, int level );
+
+  public void visit(NameTy exp, int level);
 }
