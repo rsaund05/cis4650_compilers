@@ -179,8 +179,8 @@ statement_list    ::= statement_list:sl statement:s
 
 statement         ::= expression:e SEMI
                     {:RESULT = e;:}
-                  | SEMI
-                    {:RESULT = new NilExp(0, 0);:}
+                  | SEMI:s
+                    {:RESULT = new NilExp(sleft, sright);:}
                   | IF LPAREN expression:e RPAREN statement:s1 ELSE statement:s2
                     {:RESULT = new IfExp(eleft, eright, e, s1, s2);:}
                   | IF LPAREN expression:e RPAREN statement:s 

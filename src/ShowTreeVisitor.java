@@ -102,7 +102,9 @@ public class ShowTreeVisitor implements AbsynVisitor {
     indent( level );
     System.out.println( "VarExp: ");
     level++;
-    exp.variable.accept(this, level);
+
+    if (exp.varaible != null)
+      exp.variable.accept(this, level);
   }
 
 //still need to finish
@@ -117,7 +119,8 @@ public void visit(CallExp exp, int level ) {
   indent( level );
   System.out.println("CallExp: " + exp.func);
   level++;
-  exp.args.accept(this, level);
+  if (exp.args != null)
+    exp.args.accept(this, level);
 }
 
 //CompoundExp
@@ -125,8 +128,10 @@ public void visit(CompoundExp exp, int level ) {
   indent( level );
   System.out.println("CompoundExp: ");
   level++;
-  exp.decs.accept(this, level);
-  exp.exp.accept(this, level);
+  if (exp.decs != null)
+    exp.decs.accept(this, level);
+  if (exp.exp != null)
+    exp.exp.accept(this, level);
 }
 
 //FunctionDec
@@ -134,8 +139,11 @@ public void visit(FunctionDec exp, int level ) {
   indent( level );
   System.out.println("FunctionDec: " + exp.func + " - " + exp.result);
   level++;
-  exp.params.accept(this, level);
-  exp.body.accept(this, level);
+
+  if (exp.params != null)
+    exp.params.accept(this, level);
+  if (exp.body != null)
+    exp.body.accept(this, level);
 }
 
 //IndexVar
@@ -155,7 +163,8 @@ public void visit(ReturnExp exp, int level ) {
   indent( level );
   System.out.println("ReturnExp: ");
   level++;
-  exp.accept(this, level);
+  if (exp.accept != null)
+    exp.accept(this, level);
 }
 
 //SimpleDec
