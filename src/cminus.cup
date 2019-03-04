@@ -109,7 +109,7 @@ declaration_list  ::= declaration_list:dl declaration:d
                         l1 = l1.tail;
 
                       l1.tail = new DecList(d, null);
-                      RESULT = l1;:}
+                      RESULT = dl;:}
                   | declaration:d
                     {:RESULT = new DecList(d, null);:}
                   ;
@@ -141,7 +141,7 @@ local_declarations ::= local_declarations:ld var_declaration:v
                       while(l1.tail != null)
                         l1 = l1.tail;
                       l1.tail = new VarDecList(v, null);
-                      RESULT = l1;:}
+                      RESULT = ld;:}
                   |
                     {:RESULT = new VarDecList(null, null);:}
                   ;
@@ -163,7 +163,7 @@ param_list        ::= param_list:p1 COMMA params:p2
                       while(vl.tail != null)
                         vl = vl.tail;
                       vl.tail = new VarDecList(p2, null);
-                      RESULT = vl;
+                      RESULT = p1;
                     :}
                   | params:p
                     {:RESULT = new VarDecList(p, null);:}

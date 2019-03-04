@@ -123,10 +123,13 @@ public void visit(ArrayDec exp, int level ) {
   else if (exp.typ.typ == NameTy.INT)
       ty = new String("INT");
 
-  System.out.println("this should be an ArrayDec");
-
-  if (exp.size.value.equals(null) == true)
-    System.out.println("ArrayDec: " + exp.name + "[" + exp.size + "]" + " - " + ty);
+  if (exp.size != null)
+  {
+    if (exp.size.value.equals(null) == true)
+      System.out.println("ArrayDec: " + exp.name + "[" + exp.size + "]" + " - " + ty);
+    else
+    System.out.println("ArrayDec: " + exp.name + "[]" + " - " + ty);
+  }
   else
     System.out.println("ArrayDec: " + exp.name + "[]" + " - " + ty);
 
@@ -176,6 +179,8 @@ public void visit(FunctionDec exp, int level ) {
 public void visit(IndexVar exp, int level ) {
   indent( level );
   System.out.println("IndexVar: " + exp.name);
+  level++;
+  exp.index.accept(this, level);
 }
 
 //NilExp
