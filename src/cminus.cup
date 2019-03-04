@@ -189,8 +189,8 @@ statement         ::= expression:e SEMI
                     {:RESULT = new WhileExp(eleft, eright, e, s);:}
                   | RETURN expression:e SEMI
                     {:RESULT = new ReturnExp(eleft, eright, e);:}
-                  | RETURN SEMI
-                    {:RESULT = new NilExp(0,0);:}
+                  | RETURN:r SEMI
+                    {:RESULT = new NilExp(rleft,rright);:}
                   | compound_statement
                     {:;:}
                   ;
