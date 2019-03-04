@@ -78,7 +78,7 @@ public class ShowTreeVisitor implements AbsynVisitor {
         System.out.println( " / " );
         break;
       case OpExp.EQ:
-        System.out.println( " = " );
+        System.out.println( " == " );
         break;
       case OpExp.NE:
         System.out.println(" != ");
@@ -181,7 +181,7 @@ public void visit(ReturnExp exp, int level ) {
   System.out.println("ReturnExp: ");
   level++;
 
-  if (exp != null)
+  if (exp.exp != null)
     exp.accept(this, level);
 }
 
