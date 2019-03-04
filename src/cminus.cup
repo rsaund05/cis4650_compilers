@@ -153,7 +153,7 @@ params            ::= INT ID:i LSQUARE RSQUARE
                   | VOID ID:i
                     {:RESULT = new SimpleDec(ileft, iright, new NameTy(ileft, iright, NameTy.VOID), i);:}
                   | VOID: v
-                    {:RESULT = new SimpleDec(vleft, vright, new NameTy(vleft, vright, NameTy.VOID), null);:}
+                    {:RESULT = null;:}
                   ;
 
 param_list        ::= param_list:p1 COMMA params:p2
