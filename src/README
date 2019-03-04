@@ -1,6 +1,7 @@
-A JFlex+Cup implementation for the Tiny language.
+A JFlex+Cup implementation for the C-minus language.
+Based off the work of Fei Song, his 'java_tiny' project.
 
-  Note that you need to modify the classpath in the Makefile so that it
+  Note that you may need to modify the classpath in the Makefile so that it
 will point to the directory where "java_cup" is located.  The assumed java_cup
 classpath is /usr/share/java/cup.jar.
 

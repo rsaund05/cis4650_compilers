@@ -1,13 +1,13 @@
 JAVA=java
-JAVAC=javac
+JAVAC=javac -nowarn
 JFLEX=jflex
 CLASSPATH=-classpath ../java_cup/java-cup-11b.jar:.
 #CUP=$(JAVA) $(CLASSPATH) java_cup.Main <
 CUP=cup
 
-all: Main.class
+all: CM.class
 
-Main.class: c1Absyn/*.java parser.java sym.java Lexer.java ShowTreeVisitor.java Scanner.java Main.java
+CM.class: c1Absyn/*.java parser.java sym.java Lexer.java ShowTreeVisitor.java Scanner.java CM.java 
 
 %.class: %.java
 	$(JAVAC) $(CLASSPATH)  $^
