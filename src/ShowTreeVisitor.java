@@ -132,7 +132,7 @@ public void visit(CompoundExp exp, int level ) {
   indent( level );
   System.out.println("CompoundExp: ");
   level++;
-  
+
   if (exp.decs != null)
     exp.decs.accept(this, level);
   if (exp.exp != null)
@@ -142,7 +142,11 @@ public void visit(CompoundExp exp, int level ) {
 //FunctionDec
 public void visit(FunctionDec exp, int level ) {
   indent( level );
-  System.out.println("FunctionDec: " + exp.func + " - " + exp.result);
+  if (exp.result.typ == NameTy.VOID)
+    System.out.println("FunctionDec: " + exp.func + " - VOID");
+  else if (exp.result.typ == NameTy.VOID)
+  System.out.println("FunctionDec: " + exp.func + " - INT"); 
+
   level++;
 
   if (exp.params != null)
@@ -176,7 +180,10 @@ public void visit(ReturnExp exp, int level ) {
 //SimpleDec
 public void visit(SimpleDec exp, int level ) {
   indent( level );
-  System.out.println("SimpleDec: " + exp.name + " - " + exp.typ);
+  if (exp.typ.typ == NameTy.VOID)
+    System.out.println("SimpleDec: " + exp.name + " - VOID"); 
+  else if (exp.typ.typ == NameTy.VOID)
+    System.out.println("SimpleDec: " + exp.name + " - INT");
 }
 
 //SimpleVar
