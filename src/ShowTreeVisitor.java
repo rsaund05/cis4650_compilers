@@ -125,10 +125,8 @@ public void visit(ArrayDec exp, int level ) {
 
   if (exp.size != null)
   {
-    if (exp.size.value.equals(null) == true)
-      System.out.println("ArrayDec: " + exp.name + "[" + exp.size + "]" + " - " + ty);
-    else
-    System.out.println("ArrayDec: " + exp.name + "[]" + " - " + ty);
+    if (!exp.size.value.equals(null))
+      System.out.println("ArrayDec: " + exp.name + "[" + exp.size.value + "]" + " - " + ty);
   }
   else
     System.out.println("ArrayDec: " + exp.name + "[]" + " - " + ty);
