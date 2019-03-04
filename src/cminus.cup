@@ -141,7 +141,7 @@ local_declarations ::= local_declarations:ld var_declaration:v
                       l1.tail = new VarDecList(v, null);
                       RESULT = l1;:}
                   |
-                    {:;:}
+                    {:RESULT = new VarDecList(null, null);:}
                   ;
 
 params            ::= INT ID:i LSQUARE RSQUARE 
@@ -174,7 +174,7 @@ statement_list    ::= statement_list:sl statement:s
                     t.tail = new ExpList(s, null);
                     RESULT = sl;:}
                   |
-                    {:;:}
+                    {:RESULT = new ExpList(null, null);:}
                   ;
 
 statement         ::= expression:e SEMI
