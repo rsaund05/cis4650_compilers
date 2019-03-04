@@ -76,9 +76,9 @@ terminal ASSIGN, EQ, LT, GT, PLUS, MINUS, TIMES, OVER, LPAREN, RPAREN, SEMI, NOT
 terminal String ID, NUM;
 terminal ERROR;
 
-non terminal VarDec params;
+non terminal VarDec params, var_declaration;
 non terminal Exp statement, expression, compound_statement;
-non terminal Dec declaration, var_declaration, fun_declaration;
+non terminal Dec declaration, fun_declaration;
 non terminal DecList program, declaration_list;
 non terminal VarDecList param_list, local_declarations;
 non terminal ExpList statement_list, expression_list;
@@ -140,7 +140,7 @@ local_declarations ::= local_declarations:ld var_declaration:v
                       l1.tail = new VarDecList(v, null);
                       RESULT = l1;:}
                   |
-                    {:RESULT = new VarDecList(p2, null);:}
+                    {:;:}
                   ;
 
 params            ::= INT ID:i LSQUARE RSQUARE 
