@@ -195,11 +195,11 @@ statement         ::= expression:e SEMI
                   ;
                 
 compound_statement  ::=  LBRACE local_declarations:ld statement_list:sl RBRACE
-                      {:RESULT = new CompoundExp(cleft, cright, ld, sl);:}
+                      {:RESULT = new CompoundExp(ldleft, ldright, ld, sl);:}
                     ;
 
 expression        ::= ID:i ASSIGN expression:e 
-                    {:RESULT = new AssignExp(ileft, iright, i, e);:}
+                    {:RESULT = new AssignExp(ileft, iright, new SimpleVar(ileft, iright, i), e);:}
                   | ID:i LSQUARE expression:e1 RSQUARE ASSIGN expression:e2 
                     {:RESULT = new AssignExp(e1left, e1right, new IndexVar(ileft, iright, i, e1), e2);:}
                   | expression:e1 LTEQ expression:e2 
@@ -207,7 +207,7 @@ expression        ::= ID:i ASSIGN expression:e
                   | expression:e1 GTEQ expression:e2 
                     {:RESULT = new OpExp(e1left, e1right, e1, OpExp.GE, e2);:}
                   | expression:e1 LT expression:e2 
-                    {:RESULT = new OpExp(e1left, irie1rightght, e1, OpExp.LT, e2);:}
+                    {:RESULT = new OpExp(e1left, e1right, e1, OpExp.LT, e2);:}
                   | expression:e1 GT expression:e2 
                     {:RESULT = new OpExp(e1left, e1right, e1, OpExp.GT, e2);:}
                   | expression:e1 NOTEQ expression:e2 
