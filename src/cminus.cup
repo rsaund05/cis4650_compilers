@@ -76,7 +76,7 @@ terminal ASSIGN, EQ, LT, GT, PLUS, MINUS, TIMES, OVER, LPAREN, RPAREN, SEMI, NOT
 terminal String ID, NUM;
 terminal ERROR;
 
-non terminal Var params;
+non terminal VarDec params;
 non terminal Exp statement, expression, compound_statement;
 non terminal Dec declaration, var_declaration, fun_declaration;
 non terminal DecList program, declaration_list;
@@ -163,7 +163,7 @@ param_list        ::= param_list:p1 COMMA params:p2
                       RESULT = vl;
                     :}
                   | params:p
-                    {:RESULT = new VarDecList(p2, null);:}
+                    {:RESULT = new VarDecList(p, null);:}
                   ;
 
 statement_list    ::= statement_list:sl statement:s 
@@ -171,7 +171,7 @@ statement_list    ::= statement_list:sl statement:s
                     while( t.tail != null )
                       t = t.tail;
                     t.tail = new ExpList(s, null);
-                    RESULT = s1;:}
+                    RESULT = sl;:}
                   |
                     {:;:}
                   ;
