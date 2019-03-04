@@ -111,7 +111,11 @@ public class ShowTreeVisitor implements AbsynVisitor {
 //ArrayDec
 public void visit(ArrayDec exp, int level ) {
   indent( level );
-  System.out.println("ArrayDec: " + exp.name + "[" + exp.size + "]" + " - " + exp.typ);
+  if (exp.size != null)
+    System.out.println("ArrayDec: " + exp.name + "[" + exp.size + "]" + " - " + exp.typ);
+  else
+    System.out.println("ArrayDec: " + exp.name + "[]" + " - " + exp.typ);
+
 }
 
 //CallExp
@@ -128,6 +132,7 @@ public void visit(CompoundExp exp, int level ) {
   indent( level );
   System.out.println("CompoundExp: ");
   level++;
+  
   if (exp.decs != null)
     exp.decs.accept(this, level);
   if (exp.exp != null)
@@ -142,6 +147,7 @@ public void visit(FunctionDec exp, int level ) {
 
   if (exp.params != null)
     exp.params.accept(this, level);
+
   if (exp.body != null)
     exp.body.accept(this, level);
 }

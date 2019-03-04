@@ -98,7 +98,7 @@ program           ::= declaration_list:dl
                     {:RESULT = dl;:}
 
                   | ERROR
-                    {:;:}
+                    {:RESULT = null;:}
                   ;
 
 declaration_list  ::= declaration_list:dl declaration:d 
@@ -141,7 +141,7 @@ local_declarations ::= local_declarations:ld var_declaration:v
                       l1.tail = new VarDecList(v, null);
                       RESULT = l1;:}
                   |
-                    {:RESULT = new VarDecList(null, null);:}
+                    {:RESULT = null;:}
                   ;
 
 params            ::= INT ID:i LSQUARE RSQUARE 
@@ -152,8 +152,8 @@ params            ::= INT ID:i LSQUARE RSQUARE
                     {:RESULT = new SimpleDec(ileft, iright, new NameTy(ileft, iright, NameTy.INT), i);:}
                   | VOID ID:i
                     {:RESULT = new SimpleDec(ileft, iright, new NameTy(ileft, iright, NameTy.VOID), i);:}
-                  | VOID
-                    {:;:}
+                  | VOID: v
+                    {:RESULT = new SimpleDec(vleft, vright, new NameTy(vleft, vright, NameTy.VOID), null);:}
                   ;
 
 param_list        ::= param_list:p1 COMMA params:p2
@@ -174,7 +174,7 @@ statement_list    ::= statement_list:sl statement:s
                     t.tail = new ExpList(s, null);
                     RESULT = sl;:}
                   |
-                    {:RESULT = new ExpList(null, null);:}
+                    {:RESULT = null;:}
                   ;
 
 statement         ::= expression:e SEMI
@@ -191,8 +191,8 @@ statement         ::= expression:e SEMI
                     {:RESULT = new ReturnExp(eleft, eright, e);:}
                   | RETURN:r SEMI
                     {:RESULT = new NilExp(rleft,rright);:}
-                  | compound_statement
-                    {:;:}
+                  | compound_statement: e
+                    {:RESULT = e;:}
                   ;
                 
 compound_statement  ::=  LBRACE local_declarations:ld statement_list:sl RBRACE
