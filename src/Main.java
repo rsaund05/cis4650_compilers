@@ -18,17 +18,26 @@ class Main {
   public final static boolean SHOW_TREE = true;
   static public void main(String argv[]) {    
     /* Start the parser */
-    try {
-      parser p = new parser(new Lexer(new FileReader(argv[0])));
-      Absyn result = (Absyn)(p.parse().value);      
-      if (SHOW_TREE) {
-         System.out.println("The abstract syntax tree is:");
-         ShowTreeVisitor visitor = new ShowTreeVisitor();
-         result.accept(visitor, 0); 
+    if (argv.length < 2)
+    {
+      System.out.println("Error too few arguments");
+      return;
+    }
+
+    if (argv[1].equals("-a"))
+    {
+      try {
+        parser p = new parser(new Lexer(new FileReader(argv[0])));
+        Absyn result = (Absyn)(p.parse().value);      
+        if (SHOW_TREE) {
+          System.out.println("The abstract syntax tree is:");
+          ShowTreeVisitor visitor = new ShowTreeVisitor();
+          result.accept(visitor, 0); 
+        }
+      } catch (Exception e) {
+        /* do cleanup here -- possibly rethrow e */
+        e.printStackTrace();
       }
-    } catch (Exception e) {
-      /* do cleanup here -- possibly rethrow e */
-      e.printStackTrace();
     }
   }
 }
