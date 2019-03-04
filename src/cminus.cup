@@ -140,6 +140,18 @@ fun_declaration   ::= INT ID:id LPAREN param_list:p RPAREN compound_statement:s
                     {:RESULT = new FunctionDec(idleft, idright, new NameTy(idleft, idright, NameTy.INT), id, p, s);:}
                   | VOID ID:id LPAREN param_list:p RPAREN compound_statement:s
                     {:RESULT = new FunctionDec(idleft, idright, new NameTy(idleft, idright, NameTy.VOID), id, p, s);:}
+                  | INT ID:id error:e param_list:p RPAREN compound_statement:s
+                    {:parser.report_error("Invalid function declaration", null);
+                      RESULT = new FunctionDec(idleft, idright, new NameTy(idleft, idright, NameTy.INT), id, p, s);:}
+                  | INT ID:id LPAREN param_list:p error:e compound_statement:s
+                    {:parser.report_error("Invalid function declaration", null);
+                      RESULT = new FunctionDec(idleft, idright, new NameTy(idleft, idright, NameTy.INT), id, p, s);:}
+                  | VOID ID:id error:e param_list:p RPAREN compound_statement:s
+                    {:parser.report_error("Invalid function declaration", null);
+                      RESULT = new FunctionDec(idleft, idright, new NameTy(idleft, idright, NameTy.VOID), id, p, s);:}
+                  | VOID ID:id LPAREN param_list:p error:e compound_statement:s
+                    {:parser.report_error("Invalid function declaration", null);
+                      RESULT = new FunctionDec(idleft, idright, new NameTy(idleft, idright, NameTy.VOID), id, p, s);:}
                   ;
 
 local_declarations ::= local_declarations:ld var_declaration:v

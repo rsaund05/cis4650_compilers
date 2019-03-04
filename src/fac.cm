@@ -1,4 +1,4 @@
-void main(void) {
+void main (int x, int y) {
   int x; int fac; int lol[20];
   x = input();
   fac = 1;
