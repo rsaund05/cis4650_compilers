@@ -1,15 +1,15 @@
 A JFlex+Cup implementation for the Tiny language.
 
   Note that you need to modify the classpath in the Makefile so that it
-will point to the directory where "java_cup" is located.  In my own setting,
+will point to the directory where "java_cup" is located.  The assumed java_cup
 classpath is /usr/share/java/cup.jar.
 
   To build the parser, type "make" in the current directory, which will 
-generate an executable program called "tiny".
+generate an executable program called "CM".
 
-  To test source code like "fac.tiny", type 
+  To test source code like "fac.cm", type 
 
-    "java -classpath ../java_cup/java-cup-11b-runtime.jar:. Main fac.tiny" 
+    "java -classpath /usr/share/java/cup.jar:. Main fac.cm -a" 
 
 and the syntax tree will be displayed on the screen.
 
@@ -21,4 +21,5 @@ is implemented.  In addition, since some java files are generated automatically,
 they may contain variables that are not used, which are safe to ignore in
 the compilation process.
 
--known limitation: cannot have back to back errors in .cm file.
+-known limitations: -cannot have back to back errors in .cm file.
+		    -If an invalid variable declaration is given, line number is reported as one greater than 		     it should be reported as
