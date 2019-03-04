@@ -77,7 +77,8 @@ terminal String ID, NUM;
 terminal ERROR;
 
 non terminal VarDec params, var_declaration;
-non terminal Exp statement, expression, compound_statement;
+non terminal Exp statement, expression;
+non terminal CompoundExp compound_statement;
 non terminal Dec declaration, fun_declaration;
 non terminal DecList program, declaration_list;
 non terminal VarDecList param_list, local_declarations;
