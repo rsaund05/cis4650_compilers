@@ -157,10 +157,10 @@ params            ::= INT ID:i LSQUARE RSQUARE
 
 param_list        ::= param_list:p1 COMMA params:p2
                     {:VarDecList vl = p1;
-                      while(v1.tail != null)
-                        v1 = v1.tail;
-                      v1.tail = new VarDecList(p2, null);
-                      RESULT = v1;
+                      while(vl.tail != null)
+                        vl = vl.tail;
+                      vl.tail = new VarDecList(p2, null);
+                      RESULT = vl;
                     :}
                   | params:p
                     {:RESULT = new VarDecList(p2, null);:}
