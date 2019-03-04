@@ -1,7 +1,7 @@
 package c1Absyn;
 
 public class AssignExp extends Exp {
-  public VarExp lhs;
+  public Var lhs;
   public Exp rhs;
 
   public AssignExp( int row, int col, Var lhs, Exp rhs ) {

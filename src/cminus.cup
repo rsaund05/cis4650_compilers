@@ -128,9 +128,9 @@ var_declaration   ::= INT ID:i SEMI
                   ;
 
 fun_declaration   ::= INT ID:id LPAREN param_list:p RPAREN compound_statement:s
-                    {:RESULT = new FunctionDec(idleft, idright, new NameTy(idleft, idright, NameTy.INT), p, s);:}
+                    {:RESULT = new FunctionDec(idleft, idright, new NameTy(idleft, idright, NameTy.INT), id, p, s);:}
                   | VOID ID:id LPAREN param_list:p RPAREN compound_statement:s
-                    {:RESULT = new FunctionDec(idleft, diright, new NameTy(idleft, idright, NameTy.VOID), p, s);:}
+                    {:RESULT = new FunctionDec(idleft, idright, new NameTy(idleft, idright, NameTy.VOID), id, p, s);:}
                   ;
 
 local_declarations ::= local_declarations:ld var_declaration:v
