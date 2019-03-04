@@ -103,7 +103,7 @@ public class ShowTreeVisitor implements AbsynVisitor {
     System.out.println( "VarExp: ");
     level++;
 
-    if (exp.varaible != null)
+    if (exp.variable != null)
       exp.variable.accept(this, level);
   }
 
@@ -163,7 +163,7 @@ public void visit(ReturnExp exp, int level ) {
   indent( level );
   System.out.println("ReturnExp: ");
   level++;
-  if (exp.accept != null)
+  if (exp != null)
     exp.accept(this, level);
 }
 
