@@ -86,7 +86,7 @@ non terminal ExpList statement_list, expression_list;
 
 /*precedence*/
 precedence right ASSIGN;
-precedence left COMMA, ELSE;
+precedence left COMMA, ELSE, ERROR;
 precedence nonassoc EQ, NOTEQ, LT, LTEQ, GT, GTEQ;
 precedence left PLUS, MINUS;
 precedence left TIMES, OVER;
@@ -168,7 +168,7 @@ param_list        ::= param_list:p1 COMMA params:p2
                   | params:p
                     {:RESULT = new VarDecList(p, null);:}
                   ;
-
+                  
 statement_list    ::= statement_list:sl statement:s 
                     {:ExpList t = sl;
                     while( t.tail != null )
@@ -195,6 +195,9 @@ statement         ::= expression:e SEMI
                     {:RESULT = new ReturnExp(rleft, rright, null);:}
                   | compound_statement: e
                     {:RESULT = e;:}
+                  | error:e SEMI
+                    {:parser.report_error("Error invalid statement", null);
+                    RESULT = new NilExp(eleft, eright);:}
                   ;
                 
 compound_statement  ::=  LBRACE local_declarations:ld statement_list:sl RBRACE
