@@ -201,27 +201,27 @@ compound_statement  ::=  LBRACE local_declarations:ld statement_list:sl RBRACE
 expression        ::= ID:i ASSIGN expression:e 
                     {:RESULT = new AssignExp(ileft, iright, i, e);:}
                   | ID:i LSQUARE expression:e1 RSQUARE ASSIGN expression:e2 
-                    {:RESULT = new AssignExp(ileft, iright, new IndexVar(ileft, iright, i, e1), e2);:}
+                    {:RESULT = new AssignExp(e1left, e1right, new IndexVar(ileft, iright, i, e1), e2);:}
                   | expression:e1 LTEQ expression:e2 
-                    {:RESULT = new OpExp(ileft, iright, e1, OpExp.LE, e2);:}
+                    {:RESULT = new OpExp(e1left, e1right, e1, OpExp.LE, e2);:}
                   | expression:e1 GTEQ expression:e2 
-                    {:RESULT = new OpExp(ileft, iright, e1, OpExp.GE, e2);:}
+                    {:RESULT = new OpExp(e1left, e1right, e1, OpExp.GE, e2);:}
                   | expression:e1 LT expression:e2 
-                    {:RESULT = new OpExp(ileft, iright, e1, OpExp.LT, e2);:}
+                    {:RESULT = new OpExp(e1left, irie1rightght, e1, OpExp.LT, e2);:}
                   | expression:e1 GT expression:e2 
-                    {:RESULT = new OpExp(ileft, iright, e1, OpExp.GT, e2);:}
+                    {:RESULT = new OpExp(e1left, e1right, e1, OpExp.GT, e2);:}
                   | expression:e1 NOTEQ expression:e2 
-                    {:RESULT = new OpExp(ileft, iright, e1, OpExp.NE, e2);:}
+                    {:RESULT = new OpExp(e1left, e1right, e1, OpExp.NE, e2);:}
                   | expression:e1 EQ expression:e2
-                    {:RESULT = new OpExp(ileft, iright, e1, OpExp.EQ, e2);:}
+                    {:RESULT = new OpExp(e1left, e1right, e1, OpExp.EQ, e2);:}
                   | expression:e1 PLUS expression:e2 
-                    {:RESULT = new OpExp(ileft, iright, e1, OpExp.PLUS, e2);:}
+                    {:RESULT = new OpExp(e1left, e1right, e1, OpExp.PLUS, e2);:}
                   | expression:e1 MINUS expression:e2 
-                    {:RESULT = new OpExp(ileft, iright, e1, OpExp.MINUS, e2);:}
+                    {:RESULT = new OpExp(e1left, e1right, e1, OpExp.MINUS, e2);:}
                   | expression:e1 TIMES expression:e2 
-                    {:RESULT = new OpExp(ileft, iright, e1, OpExp.MUL, e2);:}
+                    {:RESULT = new OpExp(e1left, e1right, e1, OpExp.MUL, e2);:}
                   | expression:e1 OVER expression:e2 
-                    {:RESULT = new OpExp(ileft, iright, e1, OpExp.DIV, e2);:}
+                    {:RESULT = new OpExp(e1left, e1right, e1, OpExp.DIV, e2);:}
                   | LPAREN expression:e RPAREN
                     {:RESULT = e;:}
                   | ID:i 
