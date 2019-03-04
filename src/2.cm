@@ -1,8 +1,8 @@
 void main(void)
 {
-    int x
+    int x [2];
     int y;
-     x + y = x;
-     test(one two);
+    x + y = x;
+    test(one, two);
     return;
 }

@@ -128,6 +128,12 @@ var_declaration   ::= INT ID:i SEMI
                     {:RESULT = new ArrayDec(ileft, iright, new NameTy(ileft, iright, NameTy.INT), i, new IntExp(nleft, nright, n));:}
                   | VOID ID:i LSQUARE NUM:n RSQUARE SEMI
                     {:RESULT = new ArrayDec(ileft, iright, new NameTy(ileft, iright, NameTy.VOID), i, new IntExp(nleft, nright, n));:}
+                  |INT error:e 
+                    {:parser.report_error("Error invalid variable declaration", null);
+                    RESULT = new SimpleDec(eleft, eright, new NameTy(eleft, eright, NameTy.INT), null);:}
+                  |VOID error:e
+                    {:parser.report_error("Error invalid variable declaration", null);
+                    RESULT = new SimpleDec(eleft, eright, new NameTy(eleft, eright, NameTy.INT), null);:}
                   ;
 
 fun_declaration   ::= INT ID:id LPAREN param_list:p RPAREN compound_statement:s
@@ -168,7 +174,7 @@ param_list        ::= param_list:p1 COMMA params:p2
                   | params:p
                     {:RESULT = new VarDecList(p, null);:}
                   ;
-                  
+
 statement_list    ::= statement_list:sl statement:s 
                     {:ExpList t = sl;
                     while( t.tail != null )
@@ -195,6 +201,9 @@ statement         ::= expression:e SEMI
                     {:RESULT = new ReturnExp(rleft, rright, null);:}
                   | compound_statement: e
                     {:RESULT = e;:}
+                  |RETURN error:e 
+                    {:parser.report_error("invalid return statment", null);
+                    RESULT = new ReturnExp(eleft, eright, null);:}
                   | error:e SEMI
                     {:parser.report_error("Error invalid statement", null);
                     RESULT = new NilExp(eleft, eright);:}
