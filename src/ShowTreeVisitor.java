@@ -22,6 +22,7 @@ public class ShowTreeVisitor implements AbsynVisitor {
     {
       if (varDecList.head != null)
         varDecList.head.accept(this, level);
+
       varDecList = varDecList.tail;
     }
   }
@@ -32,6 +33,7 @@ public class ShowTreeVisitor implements AbsynVisitor {
     {
       if (decList.head != null)
         decList.head.accept(this, level);
+
       decList = decList.tail;
     }
   }
@@ -134,7 +136,9 @@ public void visit(CallExp exp, int level ) {
 public void visit(CompoundExp exp, int level ) {
   indent( level );
   System.out.println("CompoundExp: ");
-  level++;
+  
+  if (exp.decs != null && exp.exp != null)
+    level++;
 
   if (exp.decs != null)
     exp.decs.accept(this, level);
@@ -176,6 +180,7 @@ public void visit(ReturnExp exp, int level ) {
   indent( level );
   System.out.println("ReturnExp: ");
   level++;
+
   if (exp != null)
     exp.accept(this, level);
 }
@@ -185,7 +190,7 @@ public void visit(SimpleDec exp, int level ) {
   indent( level );
   if (exp.typ.typ == NameTy.VOID)
     System.out.println("SimpleDec: " + exp.name + " - VOID"); 
-  else if (exp.typ.typ == NameTy.VOID)
+  else if (exp.typ.typ == NameTy.INT)
     System.out.println("SimpleDec: " + exp.name + " - INT");
 }
 
