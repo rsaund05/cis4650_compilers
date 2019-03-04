@@ -226,7 +226,7 @@ expression        ::= ID:i ASSIGN expression:e
                     {:RESULT = e;:}
                   | ID:i 
                     {:RESULT = new VarExp (ileft, iright, new SimpleVar(ileft, iright, i));:}
-                  | ID:i LSQUARE expression:e RWSQUARE
+                  | ID:i LSQUARE expression:e RSQUARE
                     {:RESULT = new VarExp(ileft, iright, new IndexVar(ileft, iright, i, e));:}
                   | ID:i LPAREN expression_list:e RPAREN
                     {:RESULT = new CallExp(ileft, iright, i, e);:}
