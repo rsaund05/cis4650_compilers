@@ -227,26 +227,4 @@ public void visit (NameTy exp, int level)
 {
 
 }
-
-//tiny stuff
- /* public void visit( ReadExp exp, int level ) {
-    indent( level );
-    System.out.println( "ReadExp:" );
-    exp.input.accept( this, ++level );
-  }
-
-  public void visit( RepeatExp exp, int level ) {
-    indent( level );
-    System.out.println( "RepeatExp:" );
-    level++;
-    exp.exps.accept( this, level );
-    exp.test.accept( this, level ); 
-  }
-
-  public void visit( WriteExp exp, int level ) {
-    indent( level );
-    System.out.println( "WriteExp:" );
-    exp.output.accept( this, ++level );
-  }*/
-
 }
