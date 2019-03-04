@@ -189,7 +189,7 @@ statement         ::= expression:e SEMI
                   | RETURN expression:e SEMI
                     {:RESULT = new ReturnExp(sleft, sright, e);:}
                   | RETURN SEMI
-                    {:RESULT = new ReturnExp(left, right, null);:}
+                    {:RESULT = new NilExp(null,null);:}
                   | compound_statement
                     {:;:}
                   ;
