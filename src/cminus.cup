@@ -79,7 +79,7 @@ terminal ERROR;
 non terminal Var params;
 non terminal Exp statement, expression, compound_statement;
 non terminal Dec declaration, var_declaration, fun_declaration;
-non terminal DecList program, declaration_list, ;
+non terminal DecList program, declaration_list;
 non terminal VarDecList param_list, local_declarations;
 non terminal ExpList statement_list, expression_list;
 
@@ -94,20 +94,19 @@ precedence left TIMES, OVER;
 start with program;
 
 program           ::= declaration_list:dl
-                    {:RESULT = d1;:}
+                    {:RESULT = dl;:}
 
                   | ERROR
                     {:;:}
                   ;
 
 declaration_list  ::= declaration_list:dl declaration:d 
-                    {:DecList l1 = d1;
+                    {:DecList l1 = dl;
                       while(l1.tail != null)
                         l1 = l1.tail;
 
                       l1.tail = new DecList(d, null);
-                      RESULT = l1;
-                    :}
+                      RESULT = l1;:}
                   | declaration:d
                     {:RESULT = new DecList(d, null);:}
                   ;
@@ -123,9 +122,9 @@ var_declaration   ::= INT ID:i SEMI
                   | VOID ID:i SEMI
                     {:RESULT = new SimpleDec(ileft, iright, new NameTy(ileft, iright, NameTy.VOID), i);:}
                   | INT ID:i LSQUARE NUM:n RSQUARE SEMI
-                    {:RESULT = new ArrayDec(ileft, iright, new NameTy(ileft, iright, NameTy.INT), i, n);:}
+                    {:RESULT = new ArrayDec(ileft, iright, new NameTy(ileft, iright, NameTy.INT), i, new IntExp(nleft, nright, n));:}
                   | VOID ID:i LSQUARE NUM:n RSQUARE SEMI
-                    {:RESULT = new ArrayDec(ileft, iright, new NameTy(ileft, iright, NameTy.VOID), i, n);:}
+                    {:RESULT = new ArrayDec(ileft, iright, new NameTy(ileft, iright, NameTy.VOID), i, new IntExp(nleft, nright, n));:}
                   ;
 
 fun_declaration   ::= INT ID:id LPAREN param_list:p RPAREN compound_statement:s
@@ -135,7 +134,7 @@ fun_declaration   ::= INT ID:id LPAREN param_list:p RPAREN compound_statement:s
                   ;
 
 local_declarations ::= local_declarations:ld var_declaration:v
-                    {::VarDecList l1 = ld;
+                    {:VarDecList l1 = ld;
                       while(l1.tail != null)
                         l1 = l1.tail;
                       l1.tail = new VarDecList(v, null);
@@ -145,9 +144,9 @@ local_declarations ::= local_declarations:ld var_declaration:v
                   ;
 
 params            ::= INT ID:i LSQUARE RSQUARE 
-                    {:RESULT = new ArrayDec(ileft, iright, new NameTy(ileft, iright, NameTy.INT), i, n);:}
+                    {:RESULT = new ArrayDec(ileft, iright, new NameTy(ileft, iright, NameTy.INT), i, null);:}
                   | VOID ID:i LSQUARE RSQUARE 
-                    {:RESULT = new ArrayDec(ileft, iright, new NameTy(ileft, iright, NameTy.VOID), i, n);:}
+                    {:RESULT = new ArrayDec(ileft, iright, new NameTy(ileft, iright, NameTy.VOID), i, null);:}
                   | INT ID:i
                     {:RESULT = new SimpleDec(ileft, iright, new NameTy(ileft, iright, NameTy.INT), i);:}
                   | VOID ID:i
@@ -180,7 +179,7 @@ statement_list    ::= statement_list:sl statement:s
 statement         ::= expression:e SEMI
                     {:RESULT = e;:}
                   | SEMI
-                    {RESULT = NilExp(sleft, sright):}
+                    {:RESULT = new NilExp(sleft, sright);:}
                   | IF LPAREN expression:e RPAREN statement:s1 ELSE statement:s2
                     {:RESULT = new IfExp(sleft, sright, e, s1, s2);:}
                   | IF LPAREN expression:e RPAREN statement:s 
@@ -234,7 +233,7 @@ expression        ::= ID:i ASSIGN expression:e
                   | ID:i LPAREN RPAREN
                     {:RESULT = new CallExp(ileft, iright, i, null);:}
                   | NUM:n
-                    {:RESUL = n;:}
+                    {:RESULT = new IntExp(nleft, nright, n);:}
                   ;
 
 expression_list ::= expression_list:e1 COMMA expression:e2 

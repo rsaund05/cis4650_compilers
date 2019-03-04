@@ -3,8 +3,8 @@ package c1Absyn;
 public class NameTy extends Absyn
 {
     public int typ;
-    final static int INT = 0;
-    final static int VOID = 1;
+    public final static int INT = 0;
+    public final static int VOID = 1;
 
     public NameTy (int row, int col, int typ)
     {
