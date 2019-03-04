@@ -182,7 +182,7 @@ public void visit(ReturnExp exp, int level ) {
   level++;
 
   if (exp.exp != null)
-    exp.accept(this, level);
+    exp.exp.accept(this, level);
 }
 
 //SimpleDec
