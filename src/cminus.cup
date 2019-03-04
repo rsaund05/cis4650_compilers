@@ -128,9 +128,9 @@ var_declaration   ::= INT ID:i SEMI
                   ;
 
 fun_declaration   ::= INT ID:id LPAREN param_list:p RPAREN compound_statement:s
-                    {:RESULT = new FunctionDec(ileft, iright, new NameTy(ileft, iright, NameTy.INT), p, s);:}
+                    {:RESULT = new FunctionDec(idleft, idright, new NameTy(idleft, idright, NameTy.INT), p, s);:}
                   | VOID ID:id LPAREN param_list:p RPAREN compound_statement:s
-                    {:RESULT = new FunctionDec(ileft, iright, new NameTy(ileft, iright, NameTy.VOID), p, s);:}
+                    {:RESULT = new FunctionDec(idleft, diright, new NameTy(idleft, idright, NameTy.VOID), p, s);:}
                   ;
 
 local_declarations ::= local_declarations:ld var_declaration:v
@@ -179,15 +179,15 @@ statement_list    ::= statement_list:sl statement:s
 statement         ::= expression:e SEMI
                     {:RESULT = e;:}
                   | SEMI
-                    {:RESULT = new NilExp(sleft, sright);:}
+                    {:RESULT = new NilExp(0, 0);:}
                   | IF LPAREN expression:e RPAREN statement:s1 ELSE statement:s2
-                    {:RESULT = new IfExp(sleft, sright, e, s1, s2);:}
+                    {:RESULT = new IfExp(eleft, eright, e, s1, s2);:}
                   | IF LPAREN expression:e RPAREN statement:s 
-                    {:RESULT = new IfExp(sleft, sright, e, s, null);:}
+                    {:RESULT = new IfExp(eleft, eright, e, s, null);:}
                   | WHILE LPAREN expression:e RPAREN compound_statement:s 
-                    {:RESULT = new WhileExp(sleft, sright, e, s);:}
+                    {:RESULT = new WhileExp(eleft, eright, e, s);:}
                   | RETURN expression:e SEMI
-                    {:RESULT = new ReturnExp(sleft, sright, e);:}
+                    {:RESULT = new ReturnExp(eleft, eright, e);:}
                   | RETURN SEMI
                     {:RESULT = new NilExp(0,0);:}
                   | compound_statement
