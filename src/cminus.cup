@@ -1,7 +1,7 @@
 /*
-  Created by: Fei Song
-  File Name: tiny.cup
-  To Build: java java_cup.Main < tiny.cup
+  Created by: Rob Saunders, Curtis Collins
+  File Name: cminus.cup
+  To Build: java java_cup.Main < cminus.cup
 */
    
    
