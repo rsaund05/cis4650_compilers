@@ -17,6 +17,7 @@ import c1Absyn.*;
 class CM {
   public static boolean SHOW_TREE = false;
   static public void main(String argv[]) {    
+    /* Start the parser */
 
     //Checking for valid file given in command line
     File test = new File(argv[0]);

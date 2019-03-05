@@ -10,7 +10,7 @@ generate an executable program called "CM".
 
   To test source code like "fac.cm", type 
 
-    "java -classpath /usr/share/java/cup.jar:. Main fac.cm -a" 
+    "java -classpath /usr/share/java/cup.jar:. CM fac.cm -a" 
 
 and the syntax tree will be displayed on the screen.
 

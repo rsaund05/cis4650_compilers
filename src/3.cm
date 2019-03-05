@@ -1,3 +1,6 @@
+/* This program is meant to demonstrate error handling for an invalid function declaration, an 
+   invalid variable declaration, and an invalid return statement */ 
+
 int add int x, int y)
 {
     return x + y;
