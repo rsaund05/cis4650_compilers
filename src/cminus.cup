@@ -129,10 +129,10 @@ var_declaration   ::= INT ID:i SEMI
                   | VOID ID:i LSQUARE NUM:n RSQUARE SEMI
                     {:RESULT = new ArrayDec(ileft, iright, new NameTy(ileft, iright, NameTy.VOID), i, new IntExp(nleft, nright, n));:}
                   |INT error:e 
-                    {:parser.report_error("Error invalid variable declaration", null);
+                    {:parser.report_error("Error invalid variable declaration", (java_cup.runtime.Symbol) e);
                     RESULT = new SimpleDec(eleft, eright, new NameTy(eleft, eright, NameTy.INT), null);:}
                   |VOID error:e
-                    {:parser.report_error("Error invalid variable declaration", null);
+                    {:parser.report_error("Error invalid variable declaration", (java_cup.runtime.Symbol) e);
                     RESULT = new SimpleDec(eleft, eright, new NameTy(eleft, eright, NameTy.INT), null);:}
                   ;
 
@@ -141,16 +141,16 @@ fun_declaration   ::= INT ID:id LPAREN param_list:p RPAREN compound_statement:s
                   | VOID ID:id LPAREN param_list:p RPAREN compound_statement:s
                     {:RESULT = new FunctionDec(idleft, idright, new NameTy(idleft, idright, NameTy.VOID), id, p, s);:}
                   | INT ID:id error:e param_list:p RPAREN compound_statement:s
-                    {:parser.report_error("Invalid function declaration", null);
+                    {:parser.report_error("Invalid function declaration", (java_cup.runtime.Symbol) e);
                       RESULT = new FunctionDec(idleft, idright, new NameTy(idleft, idright, NameTy.INT), id, p, s);:}
                   | INT ID:id LPAREN param_list:p error:e compound_statement:s
-                    {:parser.report_error("Invalid function declaration", null);
+                    {:parser.report_error("Invalid function declaration", (java_cup.runtime.Symbol) e);
                       RESULT = new FunctionDec(idleft, idright, new NameTy(idleft, idright, NameTy.INT), id, p, s);:}
                   | VOID ID:id error:e param_list:p RPAREN compound_statement:s
-                    {:parser.report_error("Invalid function declaration", null);
+                    {:parser.report_error("Invalid function declaration", (java_cup.runtime.Symbol) e);
                       RESULT = new FunctionDec(idleft, idright, new NameTy(idleft, idright, NameTy.VOID), id, p, s);:}
                   | VOID ID:id LPAREN param_list:p error:e compound_statement:s
-                    {:parser.report_error("Invalid function declaration", null);
+                    {:parser.report_error("Invalid function declaration", (java_cup.runtime.Symbol) e);
                       RESULT = new FunctionDec(idleft, idright, new NameTy(idleft, idright, NameTy.VOID), id, p, s);:}
                   ;
 
@@ -214,10 +214,10 @@ statement         ::= expression:e SEMI
                   | compound_statement: e
                     {:RESULT = e;:}
                   |RETURN error:e 
-                    {:parser.report_error("invalid return statment", null);
+                    {:parser.report_error("invalid return statment", (java_cup.runtime.Symbol) e);
                     RESULT = new ReturnExp(eleft, eright, null);:}
                   | error:e SEMI
-                    {:parser.report_error("Error invalid statement", null);
+                    {:parser.report_error("Error invalid statement", (java_cup.runtime.Symbol) e);
                     RESULT = new NilExp(eleft, eright);:}
                   ;
                 
