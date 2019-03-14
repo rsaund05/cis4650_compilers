@@ -47,10 +47,15 @@ public class SymbolTableVisitor implements AbsynVisitor {
   }
 
   public void visit( IfExp exp, int level ) {
+    indent(level);
+    System.out.println("Entering a new block:");
     exp.test.accept( this, level );
     exp.thenpart.accept( this, level );
     if (exp.elsepart != null )
        exp.elsepart.accept( this, level );
+    level--;
+    indent(level);
+    System.out.println("Leaving a new block");
   }
 
   public void visit( IntExp exp, int level ) { 
@@ -118,17 +123,11 @@ public void visit(CallExp exp, int level ) {
 
 //CompoundExp
 public void visit(CompoundExp exp, int level ) {
-  indent(level);
-  System.out.println("Entering a new block:");
   level++;
   if (exp.decs != null)
     exp.decs.accept(this, level);
   if (exp.exp != null)
     exp.exp.accept(this, level);
-
- level--;
- indent(level);
- System.out.println("Leaving a new block");
 }
 
 //FunctionDec
@@ -179,10 +178,17 @@ public void visit(SimpleVar exp, int level ) {
 
 //WhileExp
 public void visit(WhileExp exp, int level ) {
+  level++;
+  lndent(level);
+  System.out.println("Entering a new block");
+   
   if (exp.test != null)
     exp.test.accept(this, level);
   if (exp.body != null)
     exp.body.accept(this, level);
+  level--;
+  indent(level);
+  System.out.println("Leaving a new block");
 }
 
 public void visit (NameTy exp, int level)
