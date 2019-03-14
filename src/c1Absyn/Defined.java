@@ -1,4 +1,4 @@
-import c1Absyn.*;
+package c1Absyn;
 
 public class Defined 
 {
