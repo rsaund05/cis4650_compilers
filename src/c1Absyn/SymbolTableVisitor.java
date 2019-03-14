@@ -3,7 +3,7 @@ import c1Absyn.*;
 public class SymbolTableVisitor implements AbsynVisitor {
 
   final static int SPACES = 4;
-  Arraylist<Defined> definitions = nwe ArrayList<Defined>();
+  Arraylist<Defined> definitions = new ArrayList<Defined>();
   HashMap <String> symTable = new HashMap<>();
 
   private void indent( int level ) {
@@ -102,7 +102,7 @@ public void visit(ArrayDec exp, int level ) {
 
   if (exp.size != null)
   {
-    if (!exp.size.value.equals(null))
+    //if (!exp.size.value.equals(null))
   }
   //else
 
@@ -168,8 +168,8 @@ public void visit(ReturnExp exp, int level ) {
 
 //SimpleDec
 public void visit(SimpleDec exp, int level ) {
-  if (exp.typ.typ == NameTy.VOID)
-  else if (exp.typ.typ == NameTy.INT)
+ // if (exp.typ.typ == NameTy.VOID)
+  //else if (exp.typ.typ == NameTy.INT)
 }
 
 //SimpleVar
