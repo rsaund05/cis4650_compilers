@@ -200,15 +200,14 @@ public void visit(SimpleDec exp, int level ) {
         definitions.add(0, new Defined(exp, level));
         symTable.put(exp.name, definitions);
     
-        System.out.println("added " + definitions.get(0).declaration.name);
+        SimpleVar temp = (SimpleVar)definitions.get(0);
+        System.out.println("added " + temp.name);
   }
   else
   {
       definitions = new ArrayList<Defined>();
       definitions.add(0, new Defined(exp, level));
       symTable.put(exp.name, definitions);
-    
-      System.out.println("added " + definitions.get(0).declaration.name);
   }
 }
 
