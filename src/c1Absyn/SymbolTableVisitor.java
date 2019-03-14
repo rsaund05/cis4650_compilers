@@ -200,7 +200,7 @@ public void visit(SimpleDec exp, int level ) {
         definitions.add(0, new Defined(exp, level));
         symTable.put(exp.name, definitions);
     
-        SimpleVar temp = (SimpleVar)definitions.get(0);
+        SimpleVar temp = (SimpleVar)definitions.get(0).declaration;
         System.out.println("added " + temp.name);
   }
   else
