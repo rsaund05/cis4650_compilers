@@ -150,8 +150,7 @@ public void visit(FunctionDec exp, int level ) {
     for (String key: symTable.keySet())
     {
         definitions = symTable.get(key);
-  
-        for (int i = 0; i <= definitions.size(); i++)
+        for (int i = 0; i < definitions.size(); i++)
         {
           if (definitions.get(i).level == level)
           {
@@ -196,15 +195,16 @@ public void visit(SimpleDec exp, int level ) {
         definitions = symTable.get(exp.name);
         definitions.add(0, new Defined(exp, level));
         symTable.put(exp.name, definitions);
-
-        System.out.println("Added: " + exp.name);
+        SimpleDec temp = (SimpleDec)definitions.get(i).declaration;
+        System.out.println("Added: " + temp.name);
   }
   else
   {
       definitions = new ArrayList<Defined>();
       definitions.add(0, new Defined(exp, level));
       symTable.put(exp.name, definitions);
-      System.out.println("Added: " + exp.name);
+      SimpleDec temp = (SimpleDec)definitions.get(i).declaration;
+        System.out.println("Added: " + temp.name);
   }
 }
 
