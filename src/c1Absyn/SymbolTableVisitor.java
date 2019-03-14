@@ -201,7 +201,7 @@ public void visit(SimpleDec exp, int level ) {
         symTable.put(exp.name, definitions);
 
         for (int i = 0; i < definitions.size(); i++)
-            System.out.println("var: " + (SimpleVar)definitions.get(i).name);
+            System.out.println("var: " + (SimpleVar)definitions.get(i).declaration.name);
   }
   else
   {
