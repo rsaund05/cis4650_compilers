@@ -69,11 +69,13 @@ public class SymbolTableVisitor implements AbsynVisitor {
                    SimpleDec temp = (SimpleDec)tempDef.declaration;
                    indent(level);
                    System.out.println(temp.name);
+
+                   definitions.remove(0);
                  }       
              }
            }
        }
-       
+
     indent(level);
     level--;
     System.out.println("Leaving a new block");
