@@ -150,7 +150,6 @@ public void visit(FunctionDec exp, int level ) {
   for (String key: symTable.keySet())
   {
       definitions = symTable.get(key);
-      Iterator<Defined> i = definitions.iterator();
       
       for (int i = 0; i < definitions.size(); i++)
       {
