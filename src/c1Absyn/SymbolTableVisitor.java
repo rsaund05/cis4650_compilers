@@ -57,13 +57,13 @@ public class SymbolTableVisitor implements AbsynVisitor {
     for (String key: symTable.keySet())
     {
         definitions = symTable.get(key);
-  
-        for (int i = 0; i < definitions.size(); i++)
+            Iterator<Defined> i = definitions.iterator();
+        while(i.hasNext())
         {
-          if (definitions.get(i).declaration instanceof SimpleDec)
+          if (i.declaration instanceof SimpleDec)
           {
-              SimpleDec temp = (SimpleDec)definitions.get(i).declaration;
-              if (definitions.get(i).level == level)
+              SimpleDec temp = (SimpleDec)i.get(i).declaration;
+              if (i.level == level)
               {
                   indent(level);
                   System.out.println(temp.name);
