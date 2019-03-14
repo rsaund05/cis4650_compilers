@@ -1,4 +1,4 @@
-import c1Absyn.*;
+package c1Absyn;
 import java.util.*;
 
 public class SymbolTableVisitor implements AbsynVisitor {
