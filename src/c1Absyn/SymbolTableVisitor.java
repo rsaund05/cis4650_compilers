@@ -150,23 +150,29 @@ public void visit(FunctionDec exp, int level ) {
     for (String key: symTable.keySet())
     {
         definitions = symTable.get(key);
-        Iterator it = definitions.iterator();
 
-        while(it.hasNext())
-        {
-            Defined tempDef = (Defined)it.next();
-          if (tempDef.level == level)
-          {
-              if (tempDef.declaration instanceof SimpleDec)
-              {
-                SimpleDec temp = (SimpleDec)tempDef.declaration;
-                indent(level);
-                System.out.println(temp.name);
-              }       
-          }
-        }
-  
+        SimpleDec temp = (SimpleDec)definitions.get(0).declaration;
+        System.out.println(temp.name);
+        SimpleDec temp = (SimpleDec)definitions.get(1).declaration;
+        System.out.println(temp.name);
+        // Iterator it = definitions.iterator();
+
+        // while(it.hasNext())
+        // {
+        //     Defined tempDef = (Defined)it.next();
+        //   if (tempDef.level == level)
+        //   {
+        //       if (tempDef.declaration instanceof SimpleDec)
+        //       {
+        //         SimpleDec temp = (SimpleDec)tempDef.declaration;
+        //         indent(level);
+        //         System.out.println(temp.name);
+        //       }       
+        //   }
+        // }
     }
+
+    
 
   indent(level);
   level--;
