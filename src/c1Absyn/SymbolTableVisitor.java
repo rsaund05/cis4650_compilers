@@ -64,7 +64,11 @@ public class SymbolTableVisitor implements AbsynVisitor {
           {
               SimpleDec temp = (SimpleDec)definitions.get(i).declaration;
               if (definitions.get(i).level == level)
+              {
+                  indent(level);
                   System.out.println(temp.name);
+                  definitions.remove(i);
+              }  
           }  
         }
     }
@@ -172,7 +176,11 @@ public void visit(FunctionDec exp, int level ) {
         {
             SimpleDec temp = (SimpleDec)definitions.get(i).declaration;
             if (definitions.get(i).level == level)
+            {
+                indent(level);
                 System.out.println(temp.name);
+                definitions.remove(i);
+            }  
         }  
       }
   }
@@ -241,7 +249,11 @@ public void visit(WhileExp exp, int level ) {
         {
             SimpleDec temp = (SimpleDec)definitions.get(i).declaration;
             if (definitions.get(i).level == level)
+            {
+                indent(level);
                 System.out.println(temp.name);
+                definitions.remove(i);
+            }   
         }  
       }
   }
