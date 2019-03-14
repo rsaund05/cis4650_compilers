@@ -55,6 +55,21 @@ public class SymbolTableVisitor implements AbsynVisitor {
        exp.elsepart.accept( this, level );
     
     indent(level);
+    for (String key: symTable.keySet())
+    {
+        definitions = symTable.get(key);
+  
+        for (int i = 0; i < definitions.size(); i++)
+        {
+          if (definitions.get(i).declaration instanceof SimpleDec)
+          {
+              SimpleDec temp = (SimpleDec)definitions.get(i).declaration;
+              if (definitions.get(i).level == level)
+                  System.out.println(temp.name);
+          }  
+        }
+    }
+    
     level--;
     System.out.println("Leaving a new block");
   }
@@ -217,6 +232,20 @@ public void visit(WhileExp exp, int level ) {
     exp.body.accept(this, level);
   
   indent(level);
+  for (String key: symTable.keySet())
+  {
+      definitions = symTable.get(key);
+
+      for (int i = 0; i < definitions.size(); i++)
+      {
+        if (definitions.get(i).declaration instanceof SimpleDec)
+        {
+            SimpleDec temp = (SimpleDec)definitions.get(i).declaration;
+            if (definitions.get(i).level == level)
+                System.out.println(temp.name);
+        }  
+      }
+  }
   level--;
   System.out.println("Leaving a new block");
 }
