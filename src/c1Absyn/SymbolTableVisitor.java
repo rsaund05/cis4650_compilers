@@ -154,11 +154,11 @@ public void visit(FunctionDec exp, int level ) {
 
         while(it.hasNext())
         {
-          if (definitions.get(it.next()).level == level)
+          if (it.next().level == level)
           {
-              if (definitions.get(it.next()).declaration instanceof SimpleDec)
+              if (it.next().declaration instanceof SimpleDec)
               {
-                SimpleDec temp = (SimpleDec)definitions.get(i).declaration;
+                SimpleDec temp = (SimpleDec)it.next().declaration;
                 indent(level);
                 System.out.println(temp.name);
               }       
