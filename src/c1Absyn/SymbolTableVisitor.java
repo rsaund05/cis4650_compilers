@@ -161,7 +161,6 @@ public void visit(FunctionDec exp, int level ) {
         }
   
     }
-  }
 
   indent(level);
   level--;
