@@ -67,7 +67,7 @@ public class SymbolTableVisitor implements AbsynVisitor {
               {
                   indent(level);
                   System.out.println(temp.name);
-                  definitions.remove(symTable.indexOf(i.next()));
+                  definitions.remove(definitions.indexOf(i.next()));
               }  
           }  
         }
