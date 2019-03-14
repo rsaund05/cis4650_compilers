@@ -179,7 +179,7 @@ public void visit(SimpleVar exp, int level ) {
 //WhileExp
 public void visit(WhileExp exp, int level ) {
   level++;
-  lndent(level);
+  indent(level);
   System.out.println("Entering a new block");
    
   if (exp.test != null)
