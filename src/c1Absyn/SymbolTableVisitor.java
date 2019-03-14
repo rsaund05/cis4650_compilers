@@ -150,7 +150,8 @@ public void visit(FunctionDec exp, int level ) {
   for (String key: symTable.keySet())
   {
       definitions = symTable.get(key);
-
+      Iterator<Defined> i = definitions.iterator();
+      
       for (int i = 0; i < definitions.size(); i++)
       {
         if (definitions.get(i).declaration instanceof SimpleDec)
@@ -161,6 +162,9 @@ public void visit(FunctionDec exp, int level ) {
                 indent(level);
                 System.out.println(temp.name);
                 definitions.remove(i);
+
+                if (i != 0)
+                    i--;
             }  
         }  
       }
