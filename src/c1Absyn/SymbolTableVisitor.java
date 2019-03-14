@@ -62,6 +62,7 @@ public class SymbolTableVisitor implements AbsynVisitor {
            {
               System.out.println(temp.name);
               definitions.remove(0);
+              symbTable.put(temp.name, definitions);
            }
        }
 
