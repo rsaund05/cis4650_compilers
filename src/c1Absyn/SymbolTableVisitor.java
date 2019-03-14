@@ -154,11 +154,12 @@ public void visit(FunctionDec exp, int level ) {
 
         while(it.hasNext())
         {
-          if (it.next().level == level)
+            Defind tempDef = it.next();
+          if (tempDef.level == level)
           {
-              if (it.next().declaration instanceof SimpleDec)
+              if (tempDef.declaration instanceof SimpleDec)
               {
-                SimpleDec temp = (SimpleDec)it.next().declaration;
+                SimpleDec temp = (SimpleDec)tempDef.declaration;
                 indent(level);
                 System.out.println(temp.name);
               }       
