@@ -146,8 +146,8 @@ public void visit(FunctionDec exp, int level ) {
   if (exp.body != null)
     exp.body.accept(this, level);
 
-  level--;
   indent(level);
+  level--;
   System.out.println("Leaving the function scope");
 }
 
@@ -186,8 +186,9 @@ public void visit(WhileExp exp, int level ) {
     exp.test.accept(this, level);
   if (exp.body != null)
     exp.body.accept(this, level);
-  level--;
+  
   indent(level);
+  level--;
   System.out.println("Leaving a new block");
 }
 
