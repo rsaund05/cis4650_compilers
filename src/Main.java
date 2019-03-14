@@ -29,8 +29,8 @@ class Main {
 
     //Check for '-a' command, to know whether to print the AST 
     for(i = 0; i < argv.length; i++){
-      if(argv[i].equals("-a")) SHOW_TREE = true
-      if(argv[i].equals("-s")) SHOW_SCOPE = true
+      if(argv[i].equals("-a")) SHOW_TREE = true;
+      if(argv[i].equals("-s")) SHOW_SCOPE = true;
     } 
 
     //Begin parsing
