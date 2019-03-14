@@ -126,6 +126,8 @@ public void visit(CallExp exp, int level ) {
 public void visit(CompoundExp exp, int level ) {
   if (exp.decs != null)
     exp.decs.accept(this, level);
+
+  level++;
   if (exp.exp != null)
     exp.exp.accept(this, level);
 }
