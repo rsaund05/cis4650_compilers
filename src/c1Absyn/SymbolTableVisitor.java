@@ -180,7 +180,7 @@ public void visit(SimpleDec exp, int level ) {
   {
       definitions = new ArrayList<Defined>();
       definitions.add(0, new Defined(exp, level));
-      symbTable.put(exp.name, );
+      symbTable.put(exp.name, definitions);
   }
 }
 
