@@ -54,6 +54,26 @@ public class SymbolTableVisitor implements AbsynVisitor {
     if (exp.elsepart != null )
        exp.elsepart.accept( this, level );
 
+       for (String key: symTable.keySet())
+       {
+           definitions = symTable.get(key);
+           Iterator it = definitions.iterator();
+   
+           while(it.hasNext())
+           {
+               Defined tempDef = (Defined)it.next();
+             if (tempDef.level == level)
+             {
+                 if (tempDef.declaration instanceof SimpleDec)
+                 {
+                   SimpleDec temp = (SimpleDec)tempDef.declaration;
+                   indent(level);
+                   System.out.println(temp.name);
+                 }       
+             }
+           }
+       }
+       
     indent(level);
     level--;
     System.out.println("Leaving a new block");
@@ -151,11 +171,6 @@ public void visit(FunctionDec exp, int level ) {
     for (String key: symTable.keySet())
     {
         definitions = symTable.get(key);
-
-        // SimpleDec temps = (SimpleDec)definitions.get(0).declaration;
-        // System.out.println(temps.name);
-        // temps = (SimpleDec)definitions.get(1).declaration;
-        // System.out.println(temps.name);
         Iterator it = definitions.iterator();
 
         while(it.hasNext())
@@ -235,6 +250,26 @@ public void visit(WhileExp exp, int level ) {
     exp.test.accept(this, level);
   if (exp.body != null)
     exp.body.accept(this, level);
+
+    for (String key: symTable.keySet())
+    {
+        definitions = symTable.get(key);
+        Iterator it = definitions.iterator();
+
+        while(it.hasNext())
+        {
+            Defined tempDef = (Defined)it.next();
+          if (tempDef.level == level)
+          {
+              if (tempDef.declaration instanceof SimpleDec)
+              {
+                SimpleDec temp = (SimpleDec)tempDef.declaration;
+                indent(level);
+                System.out.println(temp.name);
+              }       
+          }
+        }
+    }
 
   indent(level);
   level--;
