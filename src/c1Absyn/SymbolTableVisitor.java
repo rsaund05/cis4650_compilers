@@ -60,10 +60,10 @@ public class SymbolTableVisitor implements AbsynVisitor {
         Iterator<Defined> i = definitions.iterator();
         while(i.hasNext())
         {
-          if (i.declaration instanceof SimpleDec)
+          if (i.next().declaration instanceof SimpleDec)
           {
-              SimpleDec temp = (SimpleDec)i.declaration;
-              if (i.level == level)
+              SimpleDec temp = (SimpleDec)i.next().declaration;
+              if (i.next().level == level)
               {
                   indent(level);
                   System.out.println(temp.name);
