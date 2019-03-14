@@ -148,7 +148,7 @@ public void visit(FunctionDec exp, int level ) {
     exp.body.accept(this, level);
 
   indent(level);
-  for (String key: symTable.keyset())
+  for (String key: symTable.keySet())
   {
       definitions = symTable.get(key);
 
