@@ -156,7 +156,7 @@ public void visit(FunctionDec exp, int level ) {
       {
         if (definitions.get(i).declaration instanceof SimpleDec)
         {
-            if (definitions.get(i).declarationlevel == level)
+            if (definitions.get(i).declaration.level == level)
                 System.out.println((SimpleDec)definitions.get(i).declaration.name);
         }  
       }
