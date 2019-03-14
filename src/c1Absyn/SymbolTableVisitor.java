@@ -53,27 +53,6 @@ public class SymbolTableVisitor implements AbsynVisitor {
     exp.thenpart.accept( this, level );
     if (exp.elsepart != null )
        exp.elsepart.accept( this, level );
-    
-    for (String key: symTable.keySet())
-    {
-        definitions = symTable.get(key);
-        Iterator<Defined> i = definitions.iterator();
-        while(i.hasNext())
-        {
-          if (i.next().declaration instanceof SimpleDec)
-          {
-              SimpleDec temp = (SimpleDec)i.next().declaration;
-              if (i.next().level == level)
-              {
-                  indent(level);
-                  System.out.println(temp.name);
-                  definitions.remove(definitions.indexOf(i.next()));
-              }  
-          }  
-          
-          i.remove();
-        }
-    }
 
     indent(level);
     level--;
