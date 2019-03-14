@@ -62,7 +62,7 @@ public class SymbolTableVisitor implements AbsynVisitor {
         {
           if (i.declaration instanceof SimpleDec)
           {
-              SimpleDec temp = (SimpleDec)i.get(i).declaration;
+              SimpleDec temp = (SimpleDec)i.declaration;
               if (i.level == level)
               {
                   indent(level);
