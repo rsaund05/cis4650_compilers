@@ -42,6 +42,11 @@ class Main {
          ShowTreeVisitor visitor = new ShowTreeVisitor();
          result.accept(visitor, 0); 
        }
+       if(SHOW_SCOPE) {
+        System.out.println("Entering the Global Scope:");
+        SymbolTableVisitor visitor = new SymbolTableVisitor();
+        
+       }
     } catch (Exception e) {
       /* do cleanup here -- possibly rethrow e */
       e.printStackTrace();
