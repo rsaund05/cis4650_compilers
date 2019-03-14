@@ -154,10 +154,11 @@ public void visit(FunctionDec exp, int level ) {
 
       for (int i = 0; i < definitions.size(); i++)
       {
-            if (definitions.get(i).instanceof(SimpleDec))
-            {
+        if (definitions.get(i) instanceof SimpleDec)
+        {
+            if (definitions.get(i).level == level)
                 System.out.println(definitions.get(i).name);
-            }  
+        }  
       }
   }
 
