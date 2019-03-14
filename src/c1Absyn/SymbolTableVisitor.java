@@ -154,7 +154,7 @@ public void visit(FunctionDec exp, int level ) {
 
         while(it.hasNext())
         {
-            Defined tempDef = it.next();
+            Defined tempDef = (Defined)it.next();
           if (tempDef.level == level)
           {
               if (tempDef.declaration instanceof SimpleDec)
