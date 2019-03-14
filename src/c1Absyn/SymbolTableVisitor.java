@@ -151,10 +151,10 @@ public void visit(FunctionDec exp, int level ) {
     {
         definitions = symTable.get(key);
 
-        SimpleDec temp = (SimpleDec)definitions.get(0).declaration;
-        System.out.println(temp.name);
-        SimpleDec temp = (SimpleDec)definitions.get(1).declaration;
-        System.out.println(temp.name);
+        SimpleDec temps = (SimpleDec)definitions.get(0).declaration;
+        System.out.println(temps.name);
+        SimpleDec temps = (SimpleDec)definitions.get(1).declaration;
+        System.out.println(temps.name);
         // Iterator it = definitions.iterator();
 
         // while(it.hasNext())
