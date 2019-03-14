@@ -201,13 +201,23 @@ public void visit(SimpleDec exp, int level ) {
         symTable.put(exp.name, definitions);
 
         for (int i = 0; i < definitions.size(); i++)
-            System.out.println("var: " + (SimpleVar)definitions.get(i).declaration.name);
+        {
+            SimpleVar temp = (SimpleVar)definitions.get(i);
+            System.out.println("var: " + temp.declaration.name);
+        }
+            
   }
   else
   {
       definitions = new ArrayList<Defined>();
       definitions.add(0, new Defined(exp, level));
       symTable.put(exp.name, definitions);
+
+      for (int i = 0; i < definitions.size(); i++)
+      {
+          SimpleVar temp = (SimpleVar)definitions.get(i);
+          System.out.println("var: " + temp.declaration.name);
+      }
   }
 }
 
