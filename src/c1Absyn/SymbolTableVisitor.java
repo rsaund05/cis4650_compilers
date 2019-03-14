@@ -151,7 +151,7 @@ public void visit(FunctionDec exp, int level ) {
     {
         definitions = symTable.get(key);
   
-        for (int i = 0; i < definitions.size(); i++)
+        for (int i = 0; i <= definitions.size(); i++)
         {
           if (definitions.get(i).level == level)
           {
