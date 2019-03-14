@@ -132,8 +132,8 @@ public void visit(CompoundExp exp, int level ) {
 
 //FunctionDec
 public void visit(FunctionDec exp, int level ) {
-  if (exp.result.typ == NameTy.VOID)
-  else if (exp.result.typ == NameTy.INT)
+  /*if (exp.result.typ == NameTy.VOID)
+  else if (exp.result.typ == NameTy.INT)*/
 
   level++;
   indent(level);
