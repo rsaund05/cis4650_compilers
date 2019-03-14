@@ -70,6 +70,8 @@ public class SymbolTableVisitor implements AbsynVisitor {
                   definitions.remove(definitions.indexOf(i.next()));
               }  
           }  
+          
+          i.remove();
         }
     }
 
