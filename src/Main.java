@@ -1,5 +1,5 @@
 /*
-  Created by: Fei Song
+  Created by: Robert Saunders, Curtis Collins
   File Name: Main.java
   To Build: 
   After the scanner, tiny.flex, and the parser, tiny.cup, have been created.
@@ -16,6 +16,7 @@ import c1Absyn.*;
    
 class Main {
   public static boolean SHOW_TREE = false;
+  public static boolean SHOW_SCOPE = false;
   static public void main(String argv[]) {    
     /* Start the parser */
 
@@ -27,11 +28,10 @@ class Main {
     }
 
     //Check for '-a' command, to know whether to print the AST 
-    if (argv.length >= 2){
-      if(argv[1].equals("-a")) SHOW_TREE = true;
-    } else{
-      SHOW_TREE = false;
-    }
+    for(i = 0; i < argv.length; i++){
+      if(argv[i].equals("-a")) SHOW_TREE = true
+      if(argv[i].equals("-s")) SHOW_SCOPE = true
+    } 
 
     //Begin parsing
     try {
