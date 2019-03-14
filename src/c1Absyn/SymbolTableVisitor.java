@@ -174,7 +174,8 @@ public void visit(SimpleDec exp, int level ) {
 
   if (symTable.get(exp.name) != null)
   {
-        System.out.println("Name already exists in hashmap");
+        definitions = symTable.get(exp.name);
+        definitions.put(0, new Defined(exp, level));
   }
   else
   {
