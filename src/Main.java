@@ -45,7 +45,8 @@ class Main {
        if(SHOW_SCOPE) {
         System.out.println("Entering the Global Scope:");
         SymbolTableVisitor visitor = new SymbolTableVisitor();
-        
+        result.accept(visitor, 0);
+        System.out.println("Leaving global scope"); 
        }
     } catch (Exception e) {
       /* do cleanup here -- possibly rethrow e */
