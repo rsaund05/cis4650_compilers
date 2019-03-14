@@ -57,7 +57,7 @@ public class SymbolTableVisitor implements AbsynVisitor {
     for (String key: symTable.keySet())
     {
         definitions = symTable.get(key);
-            Iterator<Defined> i = definitions.iterator();
+        Iterator<Defined> i = definitions.iterator();
         while(i.hasNext())
         {
           if (i.declaration instanceof SimpleDec)
