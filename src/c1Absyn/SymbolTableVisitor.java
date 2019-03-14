@@ -158,6 +158,7 @@ public void visit(FunctionDec exp, int level ) {
               if (definitions.get(i).declaration instanceof SimpleDec)
               {
                 SimpleDec temp = (SimpleDec)definitions.get(i).declaration;
+                indent(level);
                 System.out.println(temp.name);
               }       
           }
@@ -195,12 +196,15 @@ public void visit(SimpleDec exp, int level ) {
         definitions = symTable.get(exp.name);
         definitions.add(0, new Defined(exp, level));
         symTable.put(exp.name, definitions);
+
+        System.out.println("Added: " + exp.name);
   }
   else
   {
       definitions = new ArrayList<Defined>();
       definitions.add(0, new Defined(exp, level));
       symTable.put(exp.name, definitions);
+      System.out.println("Added: " + exp.name);
   }
 }
 
