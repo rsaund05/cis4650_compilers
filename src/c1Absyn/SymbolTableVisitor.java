@@ -54,7 +54,6 @@ public class SymbolTableVisitor implements AbsynVisitor {
     if (exp.elsepart != null )
        exp.elsepart.accept( this, level );
     
-    indent(level);
     for (String key: symTable.keySet())
     {
         definitions = symTable.get(key);
@@ -69,7 +68,8 @@ public class SymbolTableVisitor implements AbsynVisitor {
           }  
         }
     }
-    
+
+    indent(level);
     level--;
     System.out.println("Leaving a new block");
   }
@@ -162,7 +162,6 @@ public void visit(FunctionDec exp, int level ) {
   if (exp.body != null)
     exp.body.accept(this, level);
 
-  indent(level);
   for (String key: symTable.keySet())
   {
       definitions = symTable.get(key);
@@ -178,6 +177,7 @@ public void visit(FunctionDec exp, int level ) {
       }
   }
 
+  indent(level);
   level--;
   System.out.println("Leaving the function scope");
 }
@@ -231,7 +231,6 @@ public void visit(WhileExp exp, int level ) {
   if (exp.body != null)
     exp.body.accept(this, level);
   
-  indent(level);
   for (String key: symTable.keySet())
   {
       definitions = symTable.get(key);
@@ -246,6 +245,7 @@ public void visit(WhileExp exp, int level ) {
         }  
       }
   }
+  indent(level);
   level--;
   System.out.println("Leaving a new block");
 }
