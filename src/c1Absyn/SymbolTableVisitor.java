@@ -64,7 +64,7 @@ public class SymbolTableVisitor implements AbsynVisitor {
            }
        }
 
-       ArrayList<String> toRemove = new Arrayist<String>();
+       ArrayList<String> toRemove = new ArrayList<String>();
        for (String key: symTable.keySet())
        {
            definitions = symTable.get(key);
@@ -78,7 +78,7 @@ public class SymbolTableVisitor implements AbsynVisitor {
        for (int i = 0; i < toRemove.size(); i++)
        {
           definitions = symTable.get(toRemove.get(i));
-
+          SimpleDec temp = (SimpleDec)definitions.get(0).declaration;
           definitions.remove(0);
 
           if (definitions.size() > 0)
