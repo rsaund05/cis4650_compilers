@@ -15,8 +15,8 @@ import java.io.*;
 import c1Absyn.*;
    
 class Main {
-  public boolean SHOW_TREE = false;
-  public boolean SHOW_SCOPE = false;
+  public static boolean SHOW_TREE = false;
+  public static boolean SHOW_SCOPE = false;
   static public void main(String argv[]) {    
     /* Start the parser */
 
@@ -28,7 +28,7 @@ class Main {
     }
 
     //Check for '-a' command, to know whether to print the AST 
-    for(i = 0; i < argv.length; i++){
+    for(int i = 0; i < argv.length; i++){
       if(argv[i].equals("-a")) SHOW_TREE = true;
       if(argv[i].equals("-s")) SHOW_SCOPE = true;
     } 
