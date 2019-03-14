@@ -53,8 +53,9 @@ public class SymbolTableVisitor implements AbsynVisitor {
     exp.thenpart.accept( this, level );
     if (exp.elsepart != null )
        exp.elsepart.accept( this, level );
-    level--;
+    
     indent(level);
+    level--;
     System.out.println("Leaving a new block");
   }
 
