@@ -148,6 +148,19 @@ public void visit(FunctionDec exp, int level ) {
     exp.body.accept(this, level);
 
   indent(level);
+  for (String key: symTable.keyset())
+  {
+      definitions = symTable.get(key);
+
+      for (int i = 0; i < definitions.size(); i++)
+      {
+            if (definitions.get(i).instanceof(SimpleDec))
+            {
+                System.out.println(definitions.get(i).name);
+            }  
+      }
+  }
+
   level--;
   System.out.println("Leaving the function scope");
 }
