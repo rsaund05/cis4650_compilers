@@ -155,8 +155,8 @@ public void visit(FunctionDec exp, int level ) {
         {
           if (definitions.get(i).level == level)
           {
-              if (definitions.get(i) instanceof SimpleDec)
-                  System.out.println(definitions.get(i).declaration.name);
+              if (definitions.get(i).declaration instanceof SimpleDec)
+                  System.out.println((SimpleDec)definitions.get(i).declaration.name);
           }
         }
   
@@ -215,21 +215,6 @@ public void visit(WhileExp exp, int level ) {
     exp.test.accept(this, level);
   if (exp.body != null)
     exp.body.accept(this, level);
-  
-  for (String key: symTable.keySet())
-  {
-      definitions = symTable.get(key);
-
-      for (int i = 0; i < definitions.size(); i++)
-      {
-        if (definitions.get(i).level == level)
-        {
-            if (definitions.get(i) instanceof SimpleDec)
-                System.out.println(definitions.get(i).declaration.name);
-        }
-      }
-
-  }
 
   indent(level);
   level--;
