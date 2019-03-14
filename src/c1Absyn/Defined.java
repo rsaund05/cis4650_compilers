@@ -2,14 +2,12 @@ package c1Absyn;
 
 public class Defined 
 {
-    public String name;
-    public String type;  
+    public Dec declaration; 
     public int level;
 
-    public Defined (String name, String type, int level)
+    public Defined (Dec declaration, int level)
     {
-        this.name = name;
-        this.type = type;
+        this.declaration = declaration;
         this.level = level;
     }
 }

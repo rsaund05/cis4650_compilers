@@ -171,6 +171,17 @@ public void visit(ReturnExp exp, int level ) {
 public void visit(SimpleDec exp, int level ) {
  // if (exp.typ.typ == NameTy.VOID)
   //else if (exp.typ.typ == NameTy.INT)
+
+  if (symTable.get(exp.name) != null)
+  {
+        System.out.println("Name already exists in hashmap");
+  }
+  else
+  {
+      definitions = new ArrayList<Defined>();
+      definitions.add(0, new Defined(exp, level));
+      symbTable.put(exp.name, );
+  }
 }
 
 //SimpleVar
