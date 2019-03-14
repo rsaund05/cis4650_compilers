@@ -195,7 +195,7 @@ public void visit(SimpleDec exp, int level ) {
         definitions = symTable.get(exp.name);
         definitions.add(0, new Defined(exp, level));
         symTable.put(exp.name, definitions);
-        SimpleDec temp = (SimpleDec)definitions.get(i).declaration;
+        SimpleDec temp = (SimpleDec)definitions.get(0).declaration;
         System.out.println("Added: " + temp.name);
   }
   else
@@ -203,7 +203,7 @@ public void visit(SimpleDec exp, int level ) {
       definitions = new ArrayList<Defined>();
       definitions.add(0, new Defined(exp, level));
       symTable.put(exp.name, definitions);
-      SimpleDec temp = (SimpleDec)definitions.get(i).declaration;
+      SimpleDec temp = (SimpleDec)definitions.get(0).declaration;
         System.out.println("Added: " + temp.name);
   }
 }
