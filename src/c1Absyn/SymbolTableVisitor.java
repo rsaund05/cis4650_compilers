@@ -202,7 +202,7 @@ public void visit(SimpleDec exp, int level ) {
 
         for (int i = 0; i < definitions.size(); i++)
         {
-            SimpleVar temp = (SimpleVar)definitions.get(i);
+            SimpleVar temp = (SimpleVar)definitions.get(i).declaraction;
             System.out.println("var: " + temp.declaration.name);
         }
             
@@ -215,7 +215,7 @@ public void visit(SimpleDec exp, int level ) {
 
       for (int i = 0; i < definitions.size(); i++)
       {
-          SimpleVar temp = (SimpleVar)definitions.get(i);
+          SimpleVar temp = (SimpleVar)definitions.get(i).declaraction;
           System.out.println("var: " + temp.declaration.name);
       }
   }
