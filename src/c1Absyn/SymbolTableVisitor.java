@@ -199,9 +199,6 @@ public void visit(SimpleDec exp, int level ) {
         definitions = symTable.get(exp.name);
         definitions.add(0, new Defined(exp, level));
         symTable.put(exp.name, definitions);
-    
-        SimpleDec temp = (SimpleDec)definitions.get(0).declaration;
-        System.out.println("added " + temp.name);
   }
   else
   {
@@ -232,18 +229,15 @@ public void visit(WhileExp exp, int level ) {
 
       for (int i = 0; i < definitions.size(); i++)
       {
-        if (definitions.get(i).declaration instanceof SimpleDec)
+        if (definitions.get(i).level == level)
         {
-            SimpleDec temp = (SimpleDec)definitions.get(i).declaration;
-            if (definitions.get(i).level == level)
-            {
-                indent(level);
-                System.out.println(temp.name);
-                definitions.remove(i);
-            }   
-        }  
+            if (definitions.get(i) instanceof SimpleDec)
+                System.out.println(definitions.get(i).declaration.name);
+        }
       }
+
   }
+
   indent(level);
   level--;
   System.out.println("Leaving a new block");
