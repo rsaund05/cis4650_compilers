@@ -153,7 +153,7 @@ public void visit(FunctionDec exp, int level ) {
 
         SimpleDec temps = (SimpleDec)definitions.get(0).declaration;
         System.out.println(temps.name);
-        SimpleDec temps = (SimpleDec)definitions.get(1).declaration;
+        temps = (SimpleDec)definitions.get(1).declaration;
         System.out.println(temps.name);
         // Iterator it = definitions.iterator();
 
