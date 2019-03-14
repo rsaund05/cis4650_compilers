@@ -58,8 +58,11 @@ public class SymbolTableVisitor implements AbsynVisitor {
        {
            definitions = symTable.get(key);
            SimpleDec temp = (SimpleDec)definitions.get(0).declaration;
-           System.out.println(temp.name);
-           definitions.remove(0);
+           if (definitions.get(0).level == level)
+           {
+              System.out.println(temp.name);
+              definitions.remove(0);
+           }
        }
 
     indent(level);
