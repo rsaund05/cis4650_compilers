@@ -104,7 +104,7 @@ public void visit(ArrayDec exp, int level ) {
   {
     if (!exp.size.value.equals(null))
   }
-  else
+  //else
 
 }
 
@@ -117,7 +117,6 @@ public void visit(CallExp exp, int level ) {
 
 //CompoundExp
 public void visit(CompoundExp exp, int level ) {
-
   indent(level);
   System.out.println("Entering a new block:");
   level++;
