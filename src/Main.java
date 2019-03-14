@@ -15,8 +15,8 @@ import java.io.*;
 import c1Absyn.*;
    
 class Main {
-  public static boolean SHOW_TREE = false;
-  public static boolean SHOW_SCOPE = false;
+  public boolean SHOW_TREE = false;
+  public boolean SHOW_SCOPE = false;
   static public void main(String argv[]) {    
     /* Start the parser */
 
