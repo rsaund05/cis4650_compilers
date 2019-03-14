@@ -124,7 +124,6 @@ public void visit(CallExp exp, int level ) {
 
 //CompoundExp
 public void visit(CompoundExp exp, int level ) {
-  level++;
   if (exp.decs != null)
     exp.decs.accept(this, level);
   if (exp.exp != null)
@@ -151,25 +150,25 @@ public void visit(FunctionDec exp, int level ) {
     {
         definitions = symTable.get(key);
 
-        SimpleDec temps = (SimpleDec)definitions.get(0).declaration;
-        System.out.println(temps.name);
-        temps = (SimpleDec)definitions.get(1).declaration;
-        System.out.println(temps.name);
-        // Iterator it = definitions.iterator();
+        // SimpleDec temps = (SimpleDec)definitions.get(0).declaration;
+        // System.out.println(temps.name);
+        // temps = (SimpleDec)definitions.get(1).declaration;
+        // System.out.println(temps.name);
+        Iterator it = definitions.iterator();
 
-        // while(it.hasNext())
-        // {
-        //     Defined tempDef = (Defined)it.next();
-        //   if (tempDef.level == level)
-        //   {
-        //       if (tempDef.declaration instanceof SimpleDec)
-        //       {
-        //         SimpleDec temp = (SimpleDec)tempDef.declaration;
-        //         indent(level);
-        //         System.out.println(temp.name);
-        //       }       
-        //   }
-        // }
+        while(it.hasNext())
+        {
+            Defined tempDef = (Defined)it.next();
+          if (tempDef.level == level)
+          {
+              if (tempDef.declaration instanceof SimpleDec)
+              {
+                SimpleDec temp = (SimpleDec)tempDef.declaration;
+                indent(level);
+                System.out.println(temp.name);
+              }       
+          }
+        }
     }
 
     
@@ -205,7 +204,8 @@ public void visit(SimpleDec exp, int level ) {
         definitions.add(0, new Defined(exp, level));
         symTable.put(exp.name, definitions);
         SimpleDec temp = (SimpleDec)definitions.get(0).declaration;
-        System.out.println("Added: " + temp.name);
+        //System.out.println("Added: " + temp.name);
+        //System.out.println(definitions.declaration.name);
   }
   else
   {
@@ -213,7 +213,9 @@ public void visit(SimpleDec exp, int level ) {
       definitions.add(0, new Defined(exp, level));
       symTable.put(exp.name, definitions);
       SimpleDec temp = (SimpleDec)definitions.get(0).declaration;
-        System.out.println("Added: " + temp.name);
+        //System.out.println("Added: " + temp.name);
+        //System.out.println(definitions.declaration.name);
+
   }
 }
 

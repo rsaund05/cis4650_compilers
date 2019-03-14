@@ -1,15 +1,19 @@
 int j;
+int i;
 int f(int size){
 	int temp;
 
 	if(i == 0)
 	{
 		int j;
+		int fuckyou;
 	}
 
 	if(i == 1)
 	{
 		int i;
+		int j;
+		int temp;
 	}
 }
 
