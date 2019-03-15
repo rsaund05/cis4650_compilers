@@ -26,11 +26,12 @@ public  void print( int level ) {
               {
                 String type = new String();
                 SimpleDec tempS = (SimpleDec)temp;
-                if (tempS.type.typ == NameTy.INT)
+
+                if (tempS.typ.typ == NameTy.INT)
                   type = "INT";
-                else if (tempS.type.typ == NameTy.VOID)
+                else if (tempS.typ.typ == NameTy.VOID)
                   type = "VOID";
-                  
+
                 System.out.println(tempS.name + ": " + type);
               }
               else if (temp instanceof ArrayDec)
