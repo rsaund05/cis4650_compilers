@@ -36,8 +36,13 @@ public  void print( int level ) {
               }
               else if (temp instanceof ArrayDec)
               {
+                String type = new String();
                 ArrayDec tempS = (ArrayDec)temp;
-                System.out.println(tempS.name);
+                if (tempS.typ.typ == NameTy.VOID)
+                  type = "VOID[]";
+                else
+                  type = "INT[]";
+                System.out.println(tempS.name + ": " + type);
               }
               else if (temp instanceof FunctionDec)
               {
