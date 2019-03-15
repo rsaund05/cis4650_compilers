@@ -63,7 +63,7 @@ public void delete( int level ) {
       else if (temp instanceof FunctionDec)
       {
         FunctionDec remove = (FunctionDec)temp;
-        toRemove.add(remove.name);     
+        toRemove.add(remove.func);     
       }
     }
   }
