@@ -14,7 +14,7 @@ public class SymbolTableVisitor implements AbsynVisitor {
 //Print and delete functions
 //*****************************************************************************************************
 public  void print( int level ) {
-  
+
   for (String key: symTable.keySet())
        {
            definitions = symTable.get(key);
@@ -24,8 +24,14 @@ public  void print( int level ) {
               indent(level);
               if (temp instanceof SimpleDec)
               {
+                String type = new String();
                 SimpleDec tempS = (SimpleDec)temp;
-                System.out.println(tempS.name);
+                if (tempS.type.typ == NameTy.INT)
+                  type = "INT";
+                else if (tempS.type.typ == NameTy.VOID)
+                  type = "VOID";
+                  
+                System.out.println(tempS.name + ": " + type);
               }
               else if (temp instanceof ArrayDec)
               {
