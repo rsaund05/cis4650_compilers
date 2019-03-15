@@ -29,6 +29,28 @@ public  void print( int level ) {
 
 public void delete( int level ) {
 
+  ArrayList<String> toRemove = new ArrayList<String>();
+  for (String key: symTable.keySet())
+  {
+    definitions = symTable.get(key);
+    SimpleDec temp = (SimpleDec)definitions.get(0).declaration;
+    if (definitions.get(0).level == level)
+    {
+      toRemove.add(temp.name);
+    }
+  }
+
+  for (int i = 0; i < toRemove.size(); i++)
+  {
+    definitions = symTable.get(toRemove.get(i));
+    SimpleDec temp = (SimpleDec)definitions.get(0).declaration;
+    definitions.remove(0);
+
+    if (definitions.size() > 0)
+      symTable.put(temp.name, definitions);
+    else
+      symTable.remove(temp.name);
+    }
 
 }
 //*****************************************************************************************************
@@ -79,28 +101,7 @@ public void delete( int level ) {
 
        print(level);
 
-       ArrayList<String> toRemove = new ArrayList<String>();
-       for (String key: symTable.keySet())
-       {
-           definitions = symTable.get(key);
-           SimpleDec temp = (SimpleDec)definitions.get(0).declaration;
-           if (definitions.get(0).level == level)
-           {
-              toRemove.add(temp.name);
-           }
-       }
-
-       for (int i = 0; i < toRemove.size(); i++)
-       {
-          definitions = symTable.get(toRemove.get(i));
-          SimpleDec temp = (SimpleDec)definitions.get(0).declaration;
-          definitions.remove(0);
-
-          if (definitions.size() > 0)
-            symTable.put(temp.name, definitions);
-          else
-            symTable.remove(temp.name);
-       }
+       delete(level);
 
     indent(level);
     level--;
