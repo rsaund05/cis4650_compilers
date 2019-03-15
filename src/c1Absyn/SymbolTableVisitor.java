@@ -25,13 +25,18 @@ public  void print( int level ) {
               if (temp instanceof SimpleDec)
               {
                 SimpleDec tempS = (SimpleDec)temp;
-                System.out.println((SimpleDec)tempS.name);
+                System.out.println(tempS.name);
               }
-                
               else if (temp instanceof ArrayDec)
-                System.out.println((ArrayDec)temp.name);
+              {
+                ArrayDec tempS = (ArrayDec)temp;
+                System.out.println(tempS.name);
+              }
               else if (temp instanceof FunctionDec)
-                System.out.println((FunctionDec)temp.func); 
+              {
+                FunctionDec tempS = (FunctionDec)temp;
+                System.out.println(tempS.func); 
+              }
            }
        }
 }
@@ -46,9 +51,20 @@ public void delete( int level ) {
     if (definitions.get(0).level == level)
     {
       if (temp instanceof SimpleDec)
-        toRemove.add(temp.name);
+      {
+        SimpleDec remove = (SimpleDec)temp;
+        toRemove.add(remove.name);
+      }
       else if (temp instanceof ArrayDec)
-        toRemove.add(temp.name);
+      {
+        ArrayDec remove = (ArrayDec)temp;
+        toRemove.add(remove.name);     
+      }
+      else if (temp instanceof FunctionDec)
+      {
+        FunctionDec remove = (FunctionDec)temp;
+        toRemove.add(remove.name);     
+      }
     }
   }
 
