@@ -149,19 +149,19 @@ public void delete( int level ) {
 //still need to finish
 //ArrayDec
 public void visit(ArrayDec exp, int level ) {
-  String ty = new String("");
-
-  if (exp.typ.typ == NameTy.VOID)
-      ty = new String("VOID");
-  else if (exp.typ.typ == NameTy.INT)
-      ty = new String("INT");
-
-  if (exp.size != null)
+  if (symTable.get(exp.name) != null)
   {
-    //if (!exp.size.value.equals(null))
+        definitions = symTable.get(exp.name);
+        definitions.add(0, new Defined(exp, level));
+        symTable.put(exp.name, definitions);
   }
-  //else
+  else
+  {
+      definitions = new ArrayList<Defined>();
+      definitions.add(0, new Defined(exp, level));
+      symTable.put(exp.name, definitions);
 
+  }
 }
 
 //CallExp
@@ -183,13 +183,23 @@ public void visit(CompoundExp exp, int level ) {
 
 //FunctionDec
 public void visit(FunctionDec exp, int level ) {
-  /*if (exp.result.typ == NameTy.VOID)
-  else if (exp.result.typ == NameTy.INT)*/
+  if (symTable.get(exp.func) != null)
+  {
+        definitions = symTable.get(exp.func);
+        definitions.add(0, new Defined(exp, level));
+        symTable.put(exp.func, definitions);
+  }
+  else
+  {
+      definitions = new ArrayList<Defined>();
+      definitions.add(0, new Defined(exp, level));
+      symTable.put(exp.name, definitions);
 
+  }
+  
   level++;
   indent(level);
   System.out.println("Entering the scope of function " + exp.func + ":");
- 
 
   if (exp.params != null)
     exp.params.accept(this, level);
@@ -198,10 +208,7 @@ public void visit(FunctionDec exp, int level ) {
     exp.body.accept(this, level);
 
     print(level);
-
     delete(level);
-
-    
 
   indent(level);
   level--;
@@ -215,6 +222,7 @@ public void visit(IndexVar exp, int level ) {
 
 //NilExp
 public void visit(NilExp exp, int level ) {
+  exp.accept(this, level);
 }
 
 //ReturnExp
@@ -225,7 +233,6 @@ public void visit(ReturnExp exp, int level ) {
 
 //SimpleDec
 public void visit(SimpleDec exp, int level ) {
-
   if (symTable.get(exp.name) != null)
   {
         definitions = symTable.get(exp.name);
@@ -257,7 +264,6 @@ public void visit(WhileExp exp, int level ) {
     exp.body.accept(this, level);
 
     print(level);
-
     delete(level);
 
   indent(level);
