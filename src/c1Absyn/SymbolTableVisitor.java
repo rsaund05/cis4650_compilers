@@ -193,7 +193,7 @@ public void visit(FunctionDec exp, int level ) {
   {
       definitions = new ArrayList<Defined>();
       definitions.add(0, new Defined(exp, level));
-      symTable.put(exp.name, definitions);
+      symTable.put(exp.func, definitions);
 
   }
   
