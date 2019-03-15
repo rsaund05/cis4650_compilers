@@ -23,7 +23,11 @@ public  void print( int level ) {
            {
               indent(level);
               if (temp instanceof SimpleDec)
-                System.out.println((SimpleDec)temp.name);
+              {
+                SimpleDec tempS = (SimpleDec)temp;
+                System.out.println((SimpleDec)tempS.name);
+              }
+                
               else if (temp instanceof ArrayDec)
                 System.out.println((ArrayDec)temp.name);
               else if (temp instanceof FunctionDec)
@@ -38,10 +42,13 @@ public void delete( int level ) {
   for (String key: symTable.keySet())
   {
     definitions = symTable.get(key);
-    SimpleDec temp = (SimpleDec)definitions.get(0).declaration;
+    Dec temp = definitions.get(0).declaration;
     if (definitions.get(0).level == level)
     {
-      toRemove.add(temp.name);
+      if (temp instanceof SimpleDec)
+        toRemove.add(temp.name);
+      else if (temp instanceof ArrayDec)
+        toRemove.add(temp.name);
     }
   }
 
