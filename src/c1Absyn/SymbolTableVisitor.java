@@ -42,7 +42,53 @@ public  void print( int level ) {
               else if (temp instanceof FunctionDec)
               {
                 FunctionDec tempS = (FunctionDec)temp;
-                System.out.println(tempS.func); 
+                String funcString = tempS.func + ": (";
+                VarDecList tempList= tempS.params;
+
+                do {
+                  if(tempList.head instanceof ArrayDec) {
+                    ArrayDec tempDec = (ArrayDec)tempList.head;
+                  
+                  if(tempDec.typ.typ == NameTy.VOID) funcString+= "VOID[]";
+                  else if(tempDec.typ.typ == NameTy.INT) funcString+= "INT[]";
+                  
+                  if(tempList.tail != null) funcString += ", ";
+                } 
+                else
+                {
+                  SimpleDec tempDec = (SimpleDec)tempList.head;
+                  
+                  if(tempDec.typ.typ == NameTy.VOID) funcString+= "VOID";
+                  else if(tempDec.typ.typ == NameTy.INT) funcString+= "INT";
+                  
+                  if(tempList.tail != null) funcString += ", ";
+                }
+                
+                tempList = tempList.tail;
+              } while(tempList.tail != null);
+
+              if (tempList.head != null)
+              {
+                if (tempList.head instanceof SimpleDec)
+                {
+                  SimpleDec tempDec = (SimpleDec)tempList.head;
+                  
+                  if(tempDec.typ.typ == NameTy.VOID) funcString+= "VOID";
+                  else if(tempDec.typ.typ == NameTy.INT) funcString+= "INT";
+                }
+                else
+                {
+                  ArrayDec tempDec = (ArrayDec)tempList.head;
+                  
+                  if(tempDec.typ.typ == NameTy.VOID) funcString+= "VOID[]";
+                  else if(tempDec.typ.typ == NameTy.INT) funcString+= "INT[]";
+                }
+              }
+
+                funcString += ") -> ";
+                if(tempS.result.typ == NameTy.VOID) funcString += "VOID";
+                else funcString += "INT";
+                System.out.println(funcString); 
               }
            }
        }
@@ -78,13 +124,45 @@ public void delete( int level ) {
   for (int i = 0; i < toRemove.size(); i++)
   {
     definitions = symTable.get(toRemove.get(i));
-    SimpleDec temp = (SimpleDec)definitions.get(0).declaration;
+    Dec temp = definitions.get(0).declaration;
     definitions.remove(0);
 
     if (definitions.size() > 0)
-      symTable.put(temp.name, definitions);
+    {
+      if (temp instanceof SimpleDec)
+      {
+        SimpleDec toAdd = (SimpleDec)temp;
+        symTable.put(toAdd.name, definitions);
+      }
+      else if (temp instanceof ArrayDec)
+      {
+        ArrayDec toAdd = (ArrayDec)temp;
+        symTable.put(toAdd.name, definitions);
+      }
+      else
+      {
+        FunctionDec toAdd = (FunctionDec) temp;
+        symTable.put(toAdd.func, definitions);
+      }
+    }
     else
-      symTable.remove(temp.name);
+    {
+      if (temp instanceof SimpleDec)
+      {
+        SimpleDec toRem = (SimpleDec)temp;
+        symTable.remove(toRem.name);
+      }
+      else if (temp instanceof ArrayDec)
+      {
+        ArrayDec toRem = (ArrayDec)temp;
+        symTable.remove(toRem.name);
+      }
+      else
+      {
+        FunctionDec toRem = (FunctionDec)temp;
+        symTable.remove(toRem.func);
+      }
+    }
     }
 
 }
