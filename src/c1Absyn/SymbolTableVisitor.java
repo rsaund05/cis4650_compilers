@@ -11,6 +11,29 @@ public class SymbolTableVisitor implements AbsynVisitor {
     for( int i = 0; i < level * SPACES; i++ ) System.out.print( " " );
   }
 
+//Print and delete functions
+//*****************************************************************************************************
+public  void print( int level ) {
+  
+  for (String key: symTable.keySet())
+       {
+           definitions = symTable.get(key);
+           SimpleDec temp = (SimpleDec)definitions.get(0).declaration;
+           if (definitions.get(0).level == level)
+           {
+              indent(level);
+              System.out.println(temp.name);
+           }
+       }
+}
+
+public void delete( int level ) {
+
+
+}
+//*****************************************************************************************************
+
+
   public void visit( ExpList expList, int level ) {
     while( expList != null ) {
       if (expList.head != null)
@@ -54,15 +77,7 @@ public class SymbolTableVisitor implements AbsynVisitor {
     if (exp.elsepart != null )
        exp.elsepart.accept( this, level );
 
-       for (String key: symTable.keySet())
-       {
-           definitions = symTable.get(key);
-           SimpleDec temp = (SimpleDec)definitions.get(0).declaration;
-           if (definitions.get(0).level == level)
-           {
-              System.out.println(temp.name);
-           }
-       }
+       print(level);
 
        ArrayList<String> toRemove = new ArrayList<String>();
        for (String key: symTable.keySet())
