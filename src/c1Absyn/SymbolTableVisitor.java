@@ -18,11 +18,16 @@ public  void print( int level ) {
   for (String key: symTable.keySet())
        {
            definitions = symTable.get(key);
-           SimpleDec temp = (SimpleDec)definitions.get(0).declaration;
+           Dec temp = definitions.get(0).declaration;
            if (definitions.get(0).level == level)
            {
               indent(level);
-              System.out.println(temp.name);
+              if (temp instanceof SimpleDec)
+                System.out.println((SimpleDec)temp.name);
+              else if (temp instanceof ArrayDec)
+                System.out.println((ArrayDec)temp.name);
+              else if (temp instanceof FunctionDec)
+                System.out.println((FunctionDec)temp.func); 
            }
        }
 }
