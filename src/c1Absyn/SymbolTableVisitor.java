@@ -45,7 +45,7 @@ public  void print( int level ) {
                 String funcString = tempS.func + ": (";
                 VarDecList tempList= tempS.params;
 
-                do {
+                while(tempList.tail != null) {
                   if(tempList.head instanceof ArrayDec) {
                     ArrayDec tempDec = (ArrayDec)tempList.head;
                   
@@ -65,7 +65,7 @@ public  void print( int level ) {
                 }
                 
                 tempList = tempList.tail;
-              } while(tempList.tail != null);
+              } 
 
               if (tempList.head != null)
               {
