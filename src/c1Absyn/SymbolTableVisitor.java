@@ -372,9 +372,9 @@ public void visit(SimpleVar exp, int level ) {
 
 //WhileExp
 public void visit(WhileExp exp, int level ) {
-  level++;
+ 
   indent(level);
-  System.out.println("Entering a new block");
+  System.out.println("Entering a while block");
    
   if (exp.test != null)
     exp.test.accept(this, level);
@@ -386,7 +386,7 @@ public void visit(WhileExp exp, int level ) {
 
   indent(level);
   level--;
-  System.out.println("Leaving a new block");
+  System.out.println("Leaving a while block");
 }
 
 public void visit (NameTy exp, int level)

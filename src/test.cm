@@ -4,7 +4,7 @@ void ree;
 int foo(int size, void killme, int reeeeeeee[]){
 	int temp;
 	void kek;
-	if(i == 0)
+	while(i != 0)
 	{
 		int j;
 		int fuckyou;
