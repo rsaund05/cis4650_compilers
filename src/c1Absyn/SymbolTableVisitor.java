@@ -197,25 +197,9 @@ public void visit(FunctionDec exp, int level ) {
   if (exp.body != null)
     exp.body.accept(this, level);
 
-    for (String key: symTable.keySet())
-    {
-        definitions = symTable.get(key);
-        Iterator it = definitions.iterator();
+    print(level);
 
-        while(it.hasNext())
-        {
-            Defined tempDef = (Defined)it.next();
-          if (tempDef.level == level)
-          {
-              if (tempDef.declaration instanceof SimpleDec)
-              {
-                SimpleDec temp = (SimpleDec)tempDef.declaration;
-                indent(level);
-                System.out.println(temp.name);
-              }       
-          }
-        }
-    }
+    delete(level);
 
     
 
@@ -241,26 +225,18 @@ public void visit(ReturnExp exp, int level ) {
 
 //SimpleDec
 public void visit(SimpleDec exp, int level ) {
- // if (exp.typ.typ == NameTy.VOID)
-  //else if (exp.typ.typ == NameTy.INT)
 
   if (symTable.get(exp.name) != null)
   {
         definitions = symTable.get(exp.name);
         definitions.add(0, new Defined(exp, level));
         symTable.put(exp.name, definitions);
-        SimpleDec temp = (SimpleDec)definitions.get(0).declaration;
-        //System.out.println("Added: " + temp.name);
-        //System.out.println(definitions.declaration.name);
   }
   else
   {
       definitions = new ArrayList<Defined>();
       definitions.add(0, new Defined(exp, level));
       symTable.put(exp.name, definitions);
-      SimpleDec temp = (SimpleDec)definitions.get(0).declaration;
-        //System.out.println("Added: " + temp.name);
-        //System.out.println(definitions.declaration.name);
 
   }
 }
@@ -280,25 +256,9 @@ public void visit(WhileExp exp, int level ) {
   if (exp.body != null)
     exp.body.accept(this, level);
 
-    for (String key: symTable.keySet())
-    {
-        definitions = symTable.get(key);
-        Iterator it = definitions.iterator();
+    print(level);
 
-        while(it.hasNext())
-        {
-            Defined tempDef = (Defined)it.next();
-          if (tempDef.level == level)
-          {
-              if (tempDef.declaration instanceof SimpleDec)
-              {
-                SimpleDec temp = (SimpleDec)tempDef.declaration;
-                indent(level);
-                System.out.println(temp.name);
-              }       
-          }
-        }
-    }
+    delete(level);
 
   indent(level);
   level--;

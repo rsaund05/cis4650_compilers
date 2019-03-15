@@ -1,8 +1,9 @@
 int j;
 int i;
+void ree;
 int f(int size){
 	int temp;
-
+	void kek;
 	if(i == 0)
 	{
 		int j;
