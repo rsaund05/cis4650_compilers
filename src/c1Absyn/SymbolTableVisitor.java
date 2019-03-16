@@ -229,17 +229,18 @@ public void delete( int level ) {
   public void visit( IntExp exp, int level ) { 
   }
 
-  public int getType(Exp tocheck)
+  public int typeCheck(Exp left, Exp right)
   {
-    int toReturn = -1;
+    int leftType = -1;
+    int rightType = -1;
     SimpleDec tempSDec;
     SimpleVar tempSVar;
     ArrayDec tempIDec;
     Dec tempDec;
 
-    if (tocheck instanceof VarExp)
+    if (left instanceof VarExp)
     {
-      VarExp tempExp = (VarExp) tocheck;
+      VarExp tempExp = (VarExp) left;
 
       if (tempExp.variable instanceof SimpleVar)
       {
@@ -248,63 +249,85 @@ public void delete( int level ) {
         {
           definitions = symTable.get(tempSVar.name);
           tempSDec = (SimpleDec)definitions.get(0).declaration;
-          toReturn = tempSDec.typ.typ;
+          leftType = tempSDec.typ.typ;
         }
       }
     }
-    else if (tocheck instanceof IntExp)
+    else if (left instanceof IntExp)
     {
-      return 0;
+      leftType = 0;
     }
 
-    return toReturn;
+    if (right instanceof VarExp)
+    {
+      VarExp tempExp = (VarExp) right;
+
+      if (tempExp.variable instanceof SimpleVar)
+      {
+        tempSVar = (SimpleVar)tempExp.variable;
+        if (symTable.get(tempSVar.name) != null)
+        {
+          definitions = symTable.get(tempSVar.name);
+          tempSDec = (SimpleDec)definitions.get(0).declaration;
+          rightType = tempSDec.typ.typ;
+        }
+      }
+    }
+    else if (right instanceof IntExp)
+    {
+      rightType = 0;
+    }
+
+    if (leftType == -1 || rightType == -1)
+      return -1;
+    else if (leftType == rightType)
+      return 1;
+    else if (leftType != rightType)
+      return 0;
+
+      return -1;
   }
 
   public void visit( OpExp exp, int level ) {
-    int leftType = 0;
-    int rightType = 0;
-    leftType = getType(exp.left);
-    rightType = getType(exp.right);
-    
     switch( exp.op ) {
       case OpExp.PLUS:
-        if (leftType != rightType && leftType != -1 && rightType != -1)
+        if (typeCheck(exp.left, exp.right) == 0)
           System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
         break;
       case OpExp.MINUS:
-        if (leftType != rightType)
+        if (typeCheck(exp.left, exp.right) == 0)
           System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
         break;
       case OpExp.MUL:
-        if (leftType != rightType)
+      if (typeCheck(exp.left, exp.right) == 0)
           System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
         break;
       case OpExp.DIV:
-        if (leftType != rightType)
+      if (typeCheck(exp.left, exp.right) == 0)
           System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
         break;
       case OpExp.EQ:
-        if (leftType != rightType)
+      if (typeCheck(exp.left, exp.right) == 0)
           System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
         break;
       case OpExp.NE:
-        if (leftType != rightType)
+      if (typeCheck(exp.left, exp.right) == 0)
           System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
         break;
       case OpExp.LT:
-        if (leftType != rightType)
+      if (typeCheck(exp.left, exp.right) == 0)
           System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
         break;
       case OpExp.LE:
-        if (leftType != rightType)
+      if (typeCheck(exp.left, exp.right) == 0)
           System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
         break;
       case OpExp.GT:
-        if (leftType != rightType)
+      if (typeCheck(exp.left, exp.right) == 0)
           System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
         break;
       case OpExp.GE:
-        if (leftType != rightType)
+      if (typeCheck(exp.left, exp.right) == 0)
           System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
         break;
       default:

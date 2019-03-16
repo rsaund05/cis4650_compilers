@@ -9,7 +9,8 @@ int foo(int size, void killme, int reeeeeeee[])
 	{
 		int j;
 		void fuckyou;
-		k + fuckyou;
+		int k;
+		k + k;
 	}
 
 	if(i == 1)
