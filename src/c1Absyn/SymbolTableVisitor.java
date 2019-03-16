@@ -229,27 +229,76 @@ public void delete( int level ) {
   public void visit( IntExp exp, int level ) { 
   }
 
+  public int getType(Exp tocheck)
+  {
+    int toReturn = -1;
+    SimpleDec tempSDec;
+    SimpleVar tempSVar;
+    ArrayDec tempIDec;
+    Dec tempDec;
+
+    if (tocheck instanceof VarExp)
+    {
+      VarExp tempExp = (VarExp) tocheck;
+
+      if (tempExp.variable instanceof SimpleVar)
+      {
+        tempSVar = (SimpleVar)tempExp.variable;
+        definitions = symTable.get(tempSVar.name);
+        tempSDec = (SimpleDec)definitions.get(0).declaration;
+        toReturn = tempSDec.typ.typ;
+      }
+    }
+
+    return toReturn;
+  }
+
   public void visit( OpExp exp, int level ) {
+    int leftType = 0;
+    int rightType = 0;
+    leftType = getType(exp.left);
+    rightType = getType(exp.right);
+    
     switch( exp.op ) {
       case OpExp.PLUS:
+        if (leftType != rightType)
+          System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
         break;
       case OpExp.MINUS:
+        if (leftType != rightType)
+          System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
         break;
       case OpExp.MUL:
+        if (leftType != rightType)
+          System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
         break;
       case OpExp.DIV:
+        if (leftType != rightType)
+          System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
         break;
       case OpExp.EQ:
+        if (leftType != rightType)
+          System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
         break;
       case OpExp.NE:
+        if (leftType != rightType)
+          System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
         break;
       case OpExp.LT:
+        if (leftType != rightType)
+          System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
         break;
       case OpExp.LE:
+        if (leftType != rightType)
+          System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
         break;
       case OpExp.GT:
+        if (leftType != rightType)
+          System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
         break;
       case OpExp.GE:
+        if (leftType != rightType)
+          System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
         break;
       default:
         break;
@@ -259,6 +308,18 @@ public void delete( int level ) {
   }
 
   public void visit( VarExp exp, int level ) {
+    if (exp.variable instanceof SimpleVar)
+    {
+      SimpleVar temp = (SimpleVar) exp.variable;
+        if (symTable.get(temp.name) == null)
+          System.err.println("Error: variable " + temp.name + " undefined");
+    }
+    else
+    {
+      IndexVar temp = (IndexVar) exp.variable;
+      if (symTable.get(temp.name) == null)
+          System.err.println("Error: variable " + temp.name + " undefined");
+    }
 
     if (exp.variable != null)
       exp.variable.accept(this, level);
@@ -284,6 +345,9 @@ public void visit(ArrayDec exp, int level ) {
 
 //CallExp
 public void visit(CallExp exp, int level ) {
+
+  if (symTable.get(exp.func) == null)
+    System.err.println("Error: undefined function " + exp.func);
 
   if (exp.args != null)
     exp.args.accept(this, level);
