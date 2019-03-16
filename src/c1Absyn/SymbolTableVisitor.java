@@ -244,10 +244,17 @@ public void delete( int level ) {
       if (tempExp.variable instanceof SimpleVar)
       {
         tempSVar = (SimpleVar)tempExp.variable;
-        definitions = symTable.get(tempSVar.name);
-        tempSDec = (SimpleDec)definitions.get(0).declaration;
-        toReturn = tempSDec.typ.typ;
+        if (symTable.get(tempSVar.name) != null)
+        {
+          definitions = symTable.get(tempSVar.name);
+          tempSDec = (SimpleDec)definitions.get(0).declaration;
+          toReturn = tempSDec.typ.typ;
+        }
       }
+    }
+    else if (tocheck instanceof IntExp)
+    {
+      return 0;
     }
 
     return toReturn;
@@ -261,7 +268,7 @@ public void delete( int level ) {
     
     switch( exp.op ) {
       case OpExp.PLUS:
-        if (leftType != rightType)
+        if (leftType != rightType && leftType != -1 && rightType != -1)
           System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
         break;
       case OpExp.MINUS:
