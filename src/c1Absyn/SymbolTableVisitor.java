@@ -186,6 +186,7 @@ public int getType(Exp toCheck)
   SimpleVar tempSVar;
   ArrayDec tempIDec;
   IndexVar tempIVar;
+  FunctionDec tempFunc;
   Dec tempDec;
 
   if (toCheck instanceof VarExp)
@@ -219,7 +220,10 @@ public int getType(Exp toCheck)
   }
   else if (toCheck instanceof CallExp)
   {
-    System.err.println("Function call found");
+    CallExp tempCall = (CallExp)toCheck;
+    definitions = symTable.get(tempCall.func);
+    tempFunc = (FunctionDec)definitions.get(0).declaration;
+    toReturn = tempFunc.result.typ;
   }
 
   return toReturn;
