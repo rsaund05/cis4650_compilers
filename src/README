@@ -24,3 +24,4 @@ the compilation process.
 
 -known limitations: -cannot have back to back errors in .cm file.
 		    -If an invalid variable declaration is given, line number is reported as one greater than 		     it should be reported as
+		    -Cannot reference an array without an index provided, otherwise will report an incorrect 		     syntax error
