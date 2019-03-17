@@ -229,18 +229,17 @@ public void delete( int level ) {
   public void visit( IntExp exp, int level ) { 
   }
 
-  public int typeCheck(Exp left, Exp right)
+  public int getType(Exp toCheck)
   {
-    int leftType = -1;
-    int rightType = -1;
+    int toReturn = -1;
     SimpleDec tempSDec;
     SimpleVar tempSVar;
     ArrayDec tempIDec;
     Dec tempDec;
 
-    if (left instanceof VarExp)
+    if (toCheck instanceof VarExp)
     {
-      VarExp tempExp = (VarExp) left;
+      VarExp tempExp = (VarExp) toCheck;
 
       if (tempExp.variable instanceof SimpleVar)
       {
@@ -249,34 +248,24 @@ public void delete( int level ) {
         {
           definitions = symTable.get(tempSVar.name);
           tempSDec = (SimpleDec)definitions.get(0).declaration;
-          leftType = tempSDec.typ.typ;
+          toReturn = tempSDec.typ.typ;
         }
       }
     }
-    else if (left instanceof IntExp)
+    else if (toCheck instanceof IntExp)
     {
-      leftType = 0;
+      toReturn = 0;
     }
 
-    if (right instanceof VarExp)
-    {
-      VarExp tempExp = (VarExp) right;
+    return toReturn;
+  }
+  public int typeCheck(Exp left, Exp right)
+  {
+    int leftType = -1;
+    int rightType = -1;
 
-      if (tempExp.variable instanceof SimpleVar)
-      {
-        tempSVar = (SimpleVar)tempExp.variable;
-        if (symTable.get(tempSVar.name) != null)
-        {
-          definitions = symTable.get(tempSVar.name);
-          tempSDec = (SimpleDec)definitions.get(0).declaration;
-          rightType = tempSDec.typ.typ;
-        }
-      }
-    }
-    else if (right instanceof IntExp)
-    {
-      rightType = 0;
-    }
+    leftType = getType(left);
+    rightType = getType(right);
 
     if (leftType == -1 || rightType == -1)
       return -1;
