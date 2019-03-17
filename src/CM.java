@@ -27,7 +27,7 @@ class Main {
       System.exit(0);
     }
 
-    //Check for '-a' command, to know whether to print the AST 
+    //Check for output flags 
     for(int i = 0; i < argv.length; i++){
       if(argv[i].equals("-a")) SHOW_TREE = true;
       if(argv[i].equals("-s")) SHOW_SCOPE = true;
@@ -42,14 +42,18 @@ class Main {
          ShowTreeVisitor visitor = new ShowTreeVisitor();
          result.accept(visitor, 0); 
        }
-       if(SHOW_SCOPE) {
+       
+      
+      SymbolTableVisitor visitor = new SymbolTableVisitor();
+      if(SHOW_SCOPE == true){
+        visitor.SHOW_SCOPE = true; 
         System.out.println("Entering the Global Scope:");
-        SymbolTableVisitor visitor = new SymbolTableVisitor();
-        result.accept(visitor, 0);
-        visitor.print(0);
-        visitor.delete(0);
-        System.out.println("Leaving global scope"); 
-       }
+      } 
+      result.accept(visitor, 0);
+      visitor.print(0);
+      visitor.delete(0);
+      if(SHOW_SCOPE == true) System.out.println("Leaving global scope"); 
+       
     } catch (Exception e) {
       /* do cleanup here -- possibly rethrow e */
       e.printStackTrace();

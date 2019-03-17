@@ -2,15 +2,21 @@ package c1Absyn;
 import java.util.*;
 
 public class SymbolTableVisitor implements AbsynVisitor {
+  public static boolean SHOW_SCOPE = false;
 
   final static int SPACES = 4;
    ArrayList<Defined> definitions = new ArrayList<Defined>();
    HashMap <String, ArrayList<Defined>> symTable = new HashMap<>();
 
   private void indent( int level ) {
-    for( int i = 0; i < level * SPACES; i++ ) System.out.print( " " );
+    if(SHOW_SCOPE == true) for( int i = 0; i < level * SPACES; i++ ) System.out.print( " " );
   }
 
+public void SysPrint(String toPrint){
+  if(SHOW_SCOPE == true){
+    System.out.println(toPrint);
+  }
+}
 //Print and delete functions
 //*****************************************************************************************************
 public  void print( int level ) {
@@ -32,7 +38,7 @@ public  void print( int level ) {
                 else if (tempS.typ.typ == NameTy.VOID)
                   type = "VOID";
 
-                System.out.println(tempS.name + ": " + type);
+                SysPrint(tempS.name + ": " + type);
               }
               else if (temp instanceof ArrayDec)
               {
@@ -42,7 +48,7 @@ public  void print( int level ) {
                   type = "VOID[]";
                 else
                   type = "INT[]";
-                System.out.println(tempS.name + ": " + type);
+                SysPrint(tempS.name + ": " + type);
               }
               else if (temp instanceof FunctionDec)
               {
@@ -93,7 +99,7 @@ public  void print( int level ) {
                 funcString += ") -> ";
                 if(tempS.result.typ == NameTy.VOID) funcString += "VOID";
                 else funcString += "INT";
-                System.out.println(funcString); 
+                SysPrint(funcString); 
               }
            }
        }
@@ -211,7 +217,7 @@ public void delete( int level ) {
 
   public void visit( IfExp exp, int level ) {
     indent(level);
-    System.out.println("Entering a new block:");
+    SysPrint("Entering a new block:");
     exp.test.accept( this, level );
     exp.thenpart.accept( this, level );
     if (exp.elsepart != null )
@@ -223,7 +229,7 @@ public void delete( int level ) {
 
     indent(level);
     level--;
-    System.out.println("Leaving a new block");
+    SysPrint("Leaving a new block");
   }
 
   public void visit( IntExp exp, int level ) { 
@@ -380,7 +386,7 @@ public void visit(CallExp exp, int level ) {
     {
       if (callList == null)
       {
-        System.err.println("Error too few arguments");
+        System.err.println("Error: too few arguments");
         break;
       }
         type1 = getType(callList.head);
@@ -393,7 +399,7 @@ public void visit(CallExp exp, int level ) {
 
         if (type1 != type2)
         {
-          System.err.println("Error conflicting types: " + type1 + " : " + type2);
+          System.err.println("Error: conflicting types: " + type1 + " : " + type2);
         }
 
         params = params.tail;
@@ -401,7 +407,7 @@ public void visit(CallExp exp, int level ) {
     }
 
     if (params == null && callList != null)
-      System.err.println("Error too many arguments!");
+      System.err.println("Error: too many arguments!");
   }
 
   
@@ -438,7 +444,7 @@ public void visit(FunctionDec exp, int level ) {
   
   level++;
   indent(level);
-  System.out.println("Entering the scope of function " + exp.func + ":");
+  SysPrint("Entering the scope of function " + exp.func + ":");
 
   if (exp.params != null)
     exp.params.accept(this, level);
@@ -451,7 +457,7 @@ public void visit(FunctionDec exp, int level ) {
 
   indent(level);
   level--;
-  System.out.println("Leaving the function scope");
+  SysPrint("Leaving the function scope");
 }
 
 //IndexVar
@@ -495,7 +501,7 @@ public void visit(SimpleVar exp, int level ) {
 public void visit(WhileExp exp, int level ) {
  
   indent(level);
-  System.out.println("Entering a while block");
+  SysPrint("Entering a while block");
    
   if (exp.test != null)
     exp.test.accept(this, level);
@@ -507,7 +513,7 @@ public void visit(WhileExp exp, int level ) {
 
   indent(level);
   level--;
-  System.out.println("Leaving a while block");
+  SysPrint("Leaving a while block");
 }
 
 public void visit (NameTy exp, int level)
