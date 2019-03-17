@@ -177,6 +177,70 @@ public void delete( int level ) {
     }
 
 }
+
+
+public int getType(Exp toCheck)
+{
+  int toReturn = -1;
+  SimpleDec tempSDec;
+  SimpleVar tempSVar;
+  ArrayDec tempIDec;
+  IndexVar tempIVar;
+  Dec tempDec;
+
+  if (toCheck instanceof VarExp)
+  {
+    VarExp tempExp = (VarExp) toCheck;
+
+    if (tempExp.variable instanceof SimpleVar)
+    {
+      tempSVar = (SimpleVar)tempExp.variable;
+      if (symTable.get(tempSVar.name) != null)
+      {
+        definitions = symTable.get(tempSVar.name);
+        tempSDec = (SimpleDec)definitions.get(0).declaration;
+        toReturn = tempSDec.typ.typ;
+      }
+    }
+    else if (tempExp.variable  instanceof IndexVar)
+    {
+      tempIVar = (IndexVar)tempExp.variable;
+      if (symTable.get(tempIVar.name) != null)
+      {
+        definitions = symTable.get(tempIVar.name);
+        tempIDec = (ArrayDec)definitions.get(0).declaration;
+        toReturn = tempIDec.typ.typ;
+      }
+    }
+  }
+  else if (toCheck instanceof IntExp)
+  {
+    toReturn = 0;
+  }
+  else if (toCheck instanceof CallExp)
+  {
+    System.err.println("Function call found");
+  }
+
+  return toReturn;
+}
+public int typeCheck(Exp left, Exp right)
+{
+  int leftType = -1;
+  int rightType = -1;
+
+  leftType = getType(left);
+  rightType = getType(right);
+
+  if (leftType == -1 || rightType == -1)
+    return -1;
+  else if (leftType == rightType)
+    return 1;
+  else if (leftType != rightType)
+    return 0;
+
+    return -1;
+}
 //*****************************************************************************************************
 
 
@@ -233,54 +297,6 @@ public void delete( int level ) {
   }
 
   public void visit( IntExp exp, int level ) { 
-  }
-
-  public int getType(Exp toCheck)
-  {
-    int toReturn = -1;
-    SimpleDec tempSDec;
-    SimpleVar tempSVar;
-    ArrayDec tempIDec;
-    Dec tempDec;
-
-    if (toCheck instanceof VarExp)
-    {
-      VarExp tempExp = (VarExp) toCheck;
-
-      if (tempExp.variable instanceof SimpleVar)
-      {
-        tempSVar = (SimpleVar)tempExp.variable;
-        if (symTable.get(tempSVar.name) != null)
-        {
-          definitions = symTable.get(tempSVar.name);
-          tempSDec = (SimpleDec)definitions.get(0).declaration;
-          toReturn = tempSDec.typ.typ;
-        }
-      }
-    }
-    else if (toCheck instanceof IntExp)
-    {
-      toReturn = 0;
-    }
-
-    return toReturn;
-  }
-  public int typeCheck(Exp left, Exp right)
-  {
-    int leftType = -1;
-    int rightType = -1;
-
-    leftType = getType(left);
-    rightType = getType(right);
-
-    if (leftType == -1 || rightType == -1)
-      return -1;
-    else if (leftType == rightType)
-      return 1;
-    else if (leftType != rightType)
-      return 0;
-
-      return -1;
   }
 
   public void visit( OpExp exp, int level ) {
