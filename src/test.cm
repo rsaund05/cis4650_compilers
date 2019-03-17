@@ -1,7 +1,7 @@
 int j;
 int i;
 void ree;
-int foo(int size, void killme, int reeeeeeee[])
+int foo(int size, void killme, int reeeeeeee)
 {
 	int temp;
 	void kek;
@@ -19,5 +19,13 @@ int foo(int size, void killme, int reeeeeeee[])
 		int j;
 		int temp;
 	}
+}
+
+void main(void)
+{
+	int k;
+	void j;
+	int reee;
+	foo(k, j, reee, asf);
 }
 

@@ -364,9 +364,47 @@ public void visit(ArrayDec exp, int level ) {
 
 //CallExp
 public void visit(CallExp exp, int level ) {
-
+  int type1 = -1;
+  int type2 = -1;
   if (symTable.get(exp.func) == null)
     System.err.println("Error: undefined function " + exp.func);
+  else
+  {
+    definitions = symTable.get(exp.func);
+    ExpList callList = exp.args;
+    Dec tempDec = definitions.get(0).declaration;
+    FunctionDec tempFunc = (FunctionDec)tempDec;
+    VarDecList params = tempFunc.params;
+
+    while(params != null)
+    {
+      if (callList == null)
+      {
+        System.err.println("Error too few arguments");
+        break;
+      }
+        type1 = getType(callList.head);
+
+        if (params.head instanceof SimpleDec)
+        {
+          SimpleDec tempSDec = (SimpleDec)params.head;
+          type2 = tempSDec.typ.typ;
+        }
+
+        if (type1 != type2)
+        {
+          System.err.println("Error conflicting types: " + type1 + " : " + type2);
+        }
+
+        params = params.tail;
+        callList = callList.tail;
+    }
+
+    if (params == null && callList != null)
+      System.err.println("Error too many arguments!");
+  }
+
+  
 
   if (exp.args != null)
     exp.args.accept(this, level);
