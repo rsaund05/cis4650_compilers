@@ -303,11 +303,52 @@ public int typeCheck(Exp left, Exp right)
   public void visit( IntExp exp, int level ) { 
   }
 
+  public int checkOPExp(Exp left, Exp right)
+  {
+      int type1 = 100;
+      int type2 = 100;
+      SimpleVar sTemp;
+      OpExp temp;
+      VarExp tempV;
+      Var tempVar;
+
+      if (left instanceof OpExp)
+      {
+        temp = (OpExp)left;
+        type1 = checkOPExp(temp.left, temp.right);
+      }
+
+      if (right instanceof OpExp)
+      {
+        temp = (OpExp)right;
+        type2 = checkOPExp(temp.left, temp.right);
+      }
+
+      if (left instanceof VarExp)
+      {
+        tempV = (VarExp)left;
+        type1 = getType(tempV);
+      }
+
+    if (right instanceof VarExp)
+    {
+      tempV = (VarExp)right;
+      type2 = getType(tempV);
+    }
+
+      if (type1 != type2)
+        return -1;
+
+      return type1;
+  }
+
   public void visit( OpExp exp, int level ) {
     switch( exp.op ) {
       case OpExp.PLUS:
-        if (typeCheck(exp.left, exp.right) == 0)
-          System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
+      if (checkOPExp(exp.left, exp.right) == -1)
+        System.err.println("Error mismatched types");
+        // if (typeCheck(exp.left, exp.right) == 0)
+        //   System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
         break;
       case OpExp.MINUS:
         if (typeCheck(exp.left, exp.right) == 0)
@@ -348,6 +389,7 @@ public int typeCheck(Exp left, Exp right)
       default:
         break;
     }
+
     exp.left.accept( this, level );
     exp.right.accept( this, level );
   }

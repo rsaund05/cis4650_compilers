@@ -24,8 +24,8 @@ void foo(int size, void killme, int reeeeeeee)
 void main(void)
 {
 	int k;
+	int s;
 	void j;
-	int reee;
-	k + foo(k,j,reee);
+	k + s + j;
 }
 
