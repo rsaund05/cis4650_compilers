@@ -317,79 +317,33 @@ public int typeCheck(Exp left, Exp right)
         temp = (OpExp)left;
         type1 = checkOPExp(temp.left, temp.right);
       }
+      else
+      {
+        type1 = getType(left);
+      }
 
       if (right instanceof OpExp)
       {
         temp = (OpExp)right;
         type2 = checkOPExp(temp.left, temp.right);
       }
-
-      if (left instanceof VarExp)
+      else
       {
-        tempV = (VarExp)left;
-        type1 = getType(tempV);
+        type2 = getType(right);
       }
 
-    if (right instanceof VarExp)
-    {
-      tempV = (VarExp)right;
-      type2 = getType(tempV);
-    }
-
       if (type1 != type2)
+      {
+        System.err.println("Error: Line: " + left.row + " Colums: " + left.col +  " mismatched types " + type1 + " and " + type2);
         return -1;
+      }
+        
 
       return type1;
   }
 
   public void visit( OpExp exp, int level ) {
-    switch( exp.op ) {
-      case OpExp.PLUS:
-      if (checkOPExp(exp.left, exp.right) == -1)
-        System.err.println("Error mismatched types");
-        // if (typeCheck(exp.left, exp.right) == 0)
-        //   System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
-        break;
-      case OpExp.MINUS:
-        if (typeCheck(exp.left, exp.right) == 0)
-          System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
-        break;
-      case OpExp.MUL:
-      if (typeCheck(exp.left, exp.right) == 0)
-          System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
-        break;
-      case OpExp.DIV:
-      if (typeCheck(exp.left, exp.right) == 0)
-          System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
-        break;
-      case OpExp.EQ:
-      if (typeCheck(exp.left, exp.right) == 0)
-          System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
-        break;
-      case OpExp.NE:
-      if (typeCheck(exp.left, exp.right) == 0)
-          System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
-        break;
-      case OpExp.LT:
-      if (typeCheck(exp.left, exp.right) == 0)
-          System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
-        break;
-      case OpExp.LE:
-      if (typeCheck(exp.left, exp.right) == 0)
-          System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
-        break;
-      case OpExp.GT:
-      if (typeCheck(exp.left, exp.right) == 0)
-          System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
-        break;
-      case OpExp.GE:
-      if (typeCheck(exp.left, exp.right) == 0)
-          System.err.println("Error: mismatched types. Row: " + exp.row  + " Col: " + exp.col);
-        break;
-      default:
-        break;
-    }
-
+    checkOPExp(exp.left, exp.right);
     exp.left.accept( this, level );
     exp.right.accept( this, level );
   }

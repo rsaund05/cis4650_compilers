@@ -26,6 +26,6 @@ void main(void)
 	int k;
 	int s;
 	void j;
-	k + s + j;
+	k + s + foo(k, j, s);
 }
 
