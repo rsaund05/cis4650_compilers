@@ -106,7 +106,6 @@ public  void print( int level ) {
 }
 
 public void delete( int level ) {
-
   ArrayList<String> toRemove = new ArrayList<String>();
   for (String key: symTable.keySet())
   {
@@ -202,6 +201,9 @@ public int getType(Exp toCheck)
         tempSDec = (SimpleDec)definitions.get(0).declaration;
         toReturn = tempSDec.typ.typ;
       }
+      else{
+          return -1;
+      }
     }
     else if (tempExp.variable  instanceof IndexVar)
     {
@@ -211,6 +213,9 @@ public int getType(Exp toCheck)
         definitions = symTable.get(tempIVar.name);
         tempIDec = (ArrayDec)definitions.get(0).declaration;
         toReturn = tempIDec.typ.typ;
+      }
+      else{
+        return -1;
       }
     }
   }
@@ -222,8 +227,15 @@ public int getType(Exp toCheck)
   {
     CallExp tempCall = (CallExp)toCheck;
     definitions = symTable.get(tempCall.func);
-    tempFunc = (FunctionDec)definitions.get(0).declaration;
-    toReturn = tempFunc.result.typ;
+    if (definitions != null)
+    {
+      tempFunc = (FunctionDec)definitions.get(0).declaration;
+      toReturn = tempFunc.result.typ;
+    }
+    else
+    {
+      return -1;
+    }
   }
 
   return toReturn;
@@ -281,6 +293,47 @@ public int typeCheck(Exp left, Exp right)
   public void visit( AssignExp exp, int level ) {
     exp.lhs.accept( this, level );
     exp.rhs.accept( this, level );
+
+    int type1 = -1;
+    int type2 = -1;
+
+    if (exp.lhs instanceof SimpleVar)
+    {
+      SimpleVar tempS = (SimpleVar)exp.lhs;
+      SimpleDec tempSDec;
+      if (symTable.get(tempS.name) != null)
+      {
+        definitions = symTable.get(tempS.name);
+        tempSDec = (SimpleDec)definitions.get(0).declaration;
+        type1 = tempSDec.typ.typ;
+      }
+    }
+    else{
+      IndexVar tempI = (IndexVar)exp.lhs;
+      ArrayDec tempADec;
+      if (symTable.get(tempI.name) != null)
+      {
+        definitions = symTable.get(tempI.name);
+        tempADec = (ArrayDec)definitions.get(0).declaration;
+        type1 = tempADec.typ.typ;
+
+      }
+    }
+
+    if (exp.rhs instanceof OpExp)
+    {
+      OpExp tempOP = (OpExp)exp.rhs;
+      type2 = checkOPExp(tempOP.left, tempOP.right);
+    }
+    else
+    {
+      Exp tempE = (Exp)exp.rhs;
+      type2 = getType(tempE);
+    }
+
+    if (type1 != type2 && type2 != -1 && type2 != -2)
+      System.err.println("Error: trying to assign " + type2  + " to variable of type " + type1);
+    
   }
 
   public void visit( IfExp exp, int level ) {
@@ -292,7 +345,6 @@ public int typeCheck(Exp left, Exp right)
        exp.elsepart.accept( this, level );
 
        print(level);
-
        delete(level);
 
     indent(level);
@@ -332,19 +384,20 @@ public int typeCheck(Exp left, Exp right)
         type2 = getType(right);
       }
 
+      if (type1 == -1 || type2 == -1)
+        return -2;
+        
       if (type1 != type2)
       {
-        System.err.println("Error: Line: " + left.row + " Colums: " + left.col +  " mismatched types " + type1 + " and " + type2);
         return -1;
       }
-        
 
       return type1;
   }
 
   public void visit( OpExp exp, int level ) {
-    checkOPExp(exp.left, exp.right);
-    exp.left.accept( this, level );
+    if (checkOPExp(exp.left, exp.right) == -1)
+      System.err.println("Error: Line: " + exp.row + " Colums: " + exp.col +  " mismatched types ");
     exp.right.accept( this, level );
   }
 
@@ -371,9 +424,19 @@ public int typeCheck(Exp left, Exp right)
 public void visit(ArrayDec exp, int level ) {
   if (symTable.get(exp.name) != null)
   {
+    definitions = symTable.get(exp.name);
+    Defined temp = definitions.get(0);
+
+    if (temp.level == level)
+    {
+      System.err.println("Error: variable " + exp.name + " has already been declared");
+    }
+    else
+    {
         definitions = symTable.get(exp.name);
         definitions.add(0, new Defined(exp, level));
         symTable.put(exp.name, definitions);
+    }
   }
   else
   {
@@ -400,6 +463,9 @@ public void visit(CallExp exp, int level ) {
 
     while(params != null)
     {
+      if (params.head == null)
+        break;
+
       if (callList == null)
       {
         System.err.println("Error: too few arguments");
@@ -424,9 +490,9 @@ public void visit(CallExp exp, int level ) {
 
     if (params == null && callList != null)
       System.err.println("Error: too many arguments!");
+    else if (params.head == null && callList != null)
+      System.err.println("Error: too many arguments!");
   }
-
-  
 
   if (exp.args != null)
     exp.args.accept(this, level);
@@ -447,8 +513,18 @@ public void visit(FunctionDec exp, int level ) {
   if (symTable.get(exp.func) != null)
   {
         definitions = symTable.get(exp.func);
-        definitions.add(0, new Defined(exp, level));
-        symTable.put(exp.func, definitions);
+        Defined temp = definitions.get(0);
+
+        if (temp.level == level)
+        {
+          System.err.println("Error: function " + exp.func + " has already been declared");
+        }
+        else
+        {
+          definitions = symTable.get(exp.func);
+          definitions.add(0, new Defined(exp, level));
+          symTable.put(exp.func, definitions);
+        }
   }
   else
   {
@@ -496,9 +572,19 @@ public void visit(ReturnExp exp, int level ) {
 public void visit(SimpleDec exp, int level ) {
   if (symTable.get(exp.name) != null)
   {
+    definitions = symTable.get(exp.name);
+    Defined temp = definitions.get(0);
+
+    if (temp.level == level)
+    {
+      System.err.println("Error: variable " + exp.name + " has already been declared");
+    }
+    else
+    {
         definitions = symTable.get(exp.name);
         definitions.add(0, new Defined(exp, level));
         symTable.put(exp.name, definitions);
+    }
   }
   else
   {
@@ -515,7 +601,6 @@ public void visit(SimpleVar exp, int level ) {
 
 //WhileExp
 public void visit(WhileExp exp, int level ) {
- 
   indent(level);
   SysPrint("Entering a while block");
    
