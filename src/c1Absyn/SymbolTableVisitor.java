@@ -333,7 +333,6 @@ public int typeCheck(Exp left, Exp right)
 
     if (type1 != type2 && type2 != -1 && type2 != -2)
       System.err.println("Error: trying to assign " + type2  + " to variable of type " + type1);
-    
   }
 
   public void visit( IfExp exp, int level ) {
@@ -396,12 +395,17 @@ public int typeCheck(Exp left, Exp right)
   }
 
   public void visit( OpExp exp, int level ) {
+    exp.right.accept( this, level );
+    exp.left.accept(this,level);
+
     if (checkOPExp(exp.left, exp.right) == -1)
       System.err.println("Error: Line: " + exp.row + " Colums: " + exp.col +  " mismatched types ");
-    exp.right.accept( this, level );
   }
 
   public void visit( VarExp exp, int level ) {
+    if (exp.variable != null)
+      exp.variable.accept(this, level);
+
     if (exp.variable instanceof SimpleVar)
     {
       SimpleVar temp = (SimpleVar) exp.variable;
@@ -414,9 +418,6 @@ public int typeCheck(Exp left, Exp right)
       if (symTable.get(temp.name) == null)
           System.err.println("Error: variable " + temp.name + " undefined");
     }
-
-    if (exp.variable != null)
-      exp.variable.accept(this, level);
   }
 
 //still need to finish
@@ -449,6 +450,9 @@ public void visit(ArrayDec exp, int level ) {
 
 //CallExp
 public void visit(CallExp exp, int level ) {
+  if (exp.args != null)
+    exp.args.accept(this, level);
+
   int type1 = -1;
   int type2 = -1;
   if (symTable.get(exp.func) == null)
@@ -490,12 +494,7 @@ public void visit(CallExp exp, int level ) {
 
     if (params == null && callList != null)
       System.err.println("Error: too many arguments!");
-    else if (params.head == null && callList != null)
-      System.err.println("Error: too many arguments!");
   }
-
-  if (exp.args != null)
-    exp.args.accept(this, level);
 }
 
 //CompoundExp
@@ -544,6 +543,9 @@ public void visit(FunctionDec exp, int level ) {
   if (exp.body != null)
     exp.body.accept(this, level);
 
+  if (functionType(exp.body) != exp.result.typ)
+    System.err.println("Error: Function return type doesnt match return type is " +functionType(exp.body) + " should be " + exp.result.typ);
+
     print(level);
     delete(level);
 
@@ -552,9 +554,50 @@ public void visit(FunctionDec exp, int level ) {
   SysPrint("Leaving the function scope");
 }
 
+int functionType(CompoundExp func)
+{
+  int result = 1;
+  Exp tempE;
+  ExpList tempList = func.exp;
+  ReturnExp tempR;
+  VarExp tempV;
+  SimpleVar tempS;
+
+  while(tempList != null)
+  {
+    if (tempList.head instanceof ReturnExp)
+    {
+       tempR = (ReturnExp)tempList.head;
+       tempE = (Exp)tempR.exp;
+      // if (tempE instanceof VarExp)
+      // {
+        //tempV = (VarExp)tempE;
+        result = getType(tempE);
+     // }     
+      break;
+    }
+
+    tempList = tempList.tail;
+  }
+
+  return result;
+}
+
 //IndexVar
 public void visit(IndexVar exp, int level ) {
   exp.index.accept(this, level);
+
+  int type = -1;
+
+  if (exp.index instanceof VarExp)
+  {
+    Exp temp = (Exp)exp.index;
+    type = getType(temp);
+
+    if (type == 1)
+      System.err.println("Error: array index must be of type int");
+
+  }
 }
 
 //NilExp
