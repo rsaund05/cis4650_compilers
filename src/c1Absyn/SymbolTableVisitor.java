@@ -486,7 +486,13 @@ public void visit(CallExp exp, int level ) {
       }
 
         tempE = (Exp)callList.head;
-        type1 = getType(tempE);
+        if (callList.head instanceof OpExp)
+        {
+          OpExp tempO = (OpExp)callList.head;
+          type1 = checkOPExp(tempO.left, tempO.right);
+        }
+        else
+          type1 = getType(tempE);
 
         if (params.head instanceof SimpleDec)
         {
@@ -581,6 +587,34 @@ int functionType(CompoundExp func)
 
   while(tempList != null)
   {
+    if (tempList.head instanceof IfExp)
+    {
+      IfExp temp = (IfExp)tempList.head;
+      if (temp.thenpart instanceof ReturnExp)
+      {
+        tempE = (Exp)temp.thenpart;
+        tempR = (ReturnExp)tempE;
+      
+        if (tempR.exp instanceof OpExp)
+        {
+          OpExp tempOp = (OpExp)tempR.exp;
+          result = checkOPExp(tempOp.left, tempOp.right);
+        }
+        else
+        {
+          tempE = (Exp)tempR.exp;
+          result = getType(tempE); 
+        }
+        }
+    }
+
+    if (tempList.head instanceof CompoundExp)
+    {
+      CompoundExp tempC = (CompoundExp)tempList.head;
+      result = functionType(tempC);
+    }
+      
+
     if (tempList.head instanceof ReturnExp)
     {
       tempR = (ReturnExp)tempList.head;
@@ -595,7 +629,6 @@ int functionType(CompoundExp func)
         tempE = (Exp)tempR.exp;
         result = getType(tempE); 
       }
-      break;
     }
 
     tempList = tempList.tail;
