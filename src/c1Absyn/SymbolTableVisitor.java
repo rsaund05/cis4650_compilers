@@ -19,7 +19,12 @@ public void SysPrint(String toPrint){
 }
 //Print and delete functions
 //*****************************************************************************************************
-public  void print( int level ) {
+public String typeToString(int type){
+  if(type == 0) return "int";
+  if(type == 1) return "void";
+  return "null";
+}
+public void print( int level ) {
 
   for (String key: symTable.keySet())
        {
@@ -340,7 +345,7 @@ public int typeCheck(Exp left, Exp right)
     }
 
     if (type1 != type2 && type2 != -1 && type2 != -2)
-      System.err.println("Error: trying to assign " + type2  + " to variable of type " + type1);
+      System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col + "trying to assign " + typeToString(type2)  + " to variable of type " + typeToString(type1));
   }
 
   public void visit( IfExp exp, int level ) {
@@ -407,7 +412,7 @@ public int typeCheck(Exp left, Exp right)
     exp.left.accept(this,level);
 
     if (checkOPExp(exp.left, exp.right) == -1)
-      System.err.println("Error: Line: " + exp.row + " Colums: " + exp.col +  " mismatched types ");
+      System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col + ": mismatched types ");
   }
 
   public void visit( VarExp exp, int level ) {
@@ -418,19 +423,19 @@ public int typeCheck(Exp left, Exp right)
     {
       SimpleVar temp = (SimpleVar) exp.variable;
         if (symTable.get(temp.name) == null)
-          System.err.println("Error: variable " + temp.name + " undefined");
+          System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col + ": " + temp.name + " undefined");
     }
     else
     {
       IndexVar temp = (IndexVar) exp.variable;
       if (symTable.get(temp.name) == null)
-          System.err.println("Error: variable " + temp.name + " undefined");
+          System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col + ": variable " + temp.name + " undefined");
     }
   }
 
 //still need to finish
 //ArrayDec
-public void visit(ArrayDec exp, int level ) {
+public void visit(ArrayDec exp, int level ){
   if (symTable.get(exp.name) != null)
   {
     definitions = symTable.get(exp.name);
@@ -438,7 +443,7 @@ public void visit(ArrayDec exp, int level ) {
 
     if (temp.level == level)
     {
-      System.err.println("Error: variable " + exp.name + " has already been declared");
+      System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col + ": " + exp.name + " has already been declared");
     }
     else
     {
@@ -464,7 +469,7 @@ public void visit(CallExp exp, int level ) {
   int type1 = -1;
   int type2 = -1;
   if (symTable.get(exp.func) == null)
-    System.err.println("Error: undefined function " + exp.func);
+    System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col + ": undefined function " + exp.func);
   else
   {
     definitions = symTable.get(exp.func);
@@ -481,7 +486,7 @@ public void visit(CallExp exp, int level ) {
 
       if (callList == null)
       {
-        System.err.println("Error: too few arguments");
+        System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col + ": too few arguments");
         break;
       }
 
@@ -507,7 +512,7 @@ public void visit(CallExp exp, int level ) {
 
         if (type1 != type2)
         {
-          System.err.println("Error: conflicting types: " + type1 + " : " + type2);
+          System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col + ": conflicting types: " + typeToString(type1) + " : " + typeToString(type2));
         }
 
         params = params.tail;
@@ -515,7 +520,7 @@ public void visit(CallExp exp, int level ) {
     }
 
     if (params == null && callList != null)
-      System.err.println("Error: too many arguments!");
+      System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col +": too many arguments");
   }
 }
 
@@ -538,7 +543,7 @@ public void visit(FunctionDec exp, int level ) {
 
         if (temp.level == level)
         {
-          System.err.println("Error: function " + exp.func + " has already been declared");
+          System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col + ": " + exp.func + " has already been declared");
         }
         else
         {
@@ -566,7 +571,7 @@ public void visit(FunctionDec exp, int level ) {
     exp.body.accept(this, level);
 
   if (functionType(exp.body) != exp.result.typ && functionType(exp.body) != -1)
-    System.err.println("Error: Function return type doesnt match return type is " +functionType(exp.body) + " should be " + exp.result.typ);
+    System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col +": Function return type does not match, return type is " +functionType(exp.body) + " should be " + exp.result.typ);
  
     print(level);
     delete(level);
@@ -649,7 +654,7 @@ public void visit(IndexVar exp, int level ) {
     type = getType(temp);
 
     if (type == 1)
-      System.err.println("Error: array index must be of type int");
+      System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col +": array index must be of type int");
   }
   else if (exp.index instanceof CallExp)
   {
@@ -657,7 +662,7 @@ public void visit(IndexVar exp, int level ) {
     type = getType(temp);
 
     if (type == 1)
-      System.err.println("Error: array index must be of type int");
+      System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col +": array index must be of type int");
   }
 }
 
@@ -681,7 +686,7 @@ public void visit(SimpleDec exp, int level ) {
 
     if (temp.level == level)
     {
-      System.err.println("Error: variable " + exp.name + " has already been declared");
+      System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col +": variable " + exp.name + " has already been declared");
     }
     else
     {
