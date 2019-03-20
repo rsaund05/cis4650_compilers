@@ -543,7 +543,7 @@ public void visit(FunctionDec exp, int level ) {
   if (exp.body != null)
     exp.body.accept(this, level);
 
-  if (functionType(exp.body) != exp.result.typ)
+  if (functionType(exp.body) != exp.result.typ && functionType(exp.body) != -1)
     System.err.println("Error: Function return type doesnt match return type is " +functionType(exp.body) + " should be " + exp.result.typ);
 
     print(level);
@@ -567,13 +567,18 @@ int functionType(CompoundExp func)
   {
     if (tempList.head instanceof ReturnExp)
     {
-       tempR = (ReturnExp)tempList.head;
-       tempE = (Exp)tempR.exp;
-      // if (tempE instanceof VarExp)
-      // {
-        //tempV = (VarExp)tempE;
-        result = getType(tempE);
-     // }     
+      tempR = (ReturnExp)tempList.head;
+      
+      if (tempR.exp instanceof OpExp)
+      {
+        OpExp tempOp = (OpExp)tempR.exp;
+        result = checkOPExp(tempOp.left, tempOp.right);
+      }
+      else
+      {
+        tempE = (Exp)tempR.exp;
+        result = getType(tempE); 
+      }
       break;
     }
 
