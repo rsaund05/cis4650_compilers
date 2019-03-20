@@ -650,7 +650,14 @@ public void visit(IndexVar exp, int level ) {
 
     if (type == 1)
       System.err.println("Error: array index must be of type int");
+  }
+  else if (exp.index instanceof CallExp)
+  {
+    Exp temp = (Exp)exp.index;
+    type = getType(temp);
 
+    if (type == 1)
+      System.err.println("Error: array index must be of type int");
   }
 }
 
