@@ -15,6 +15,7 @@ import java.io.*;
 import c1Absyn.*;
 import java.lang.*;
 import java.io.*;
+import java.util.*;
    
 class Main {
   public static boolean SHOW_TREE = false;
@@ -54,6 +55,26 @@ class Main {
         System.setOut(new PrintStream(f));
         System.out.println("Entering the Global Scope:");
       } 
+      //ArrayList<Defined> outputList = new ArrayList<Defined>();
+
+      //Creating and adding the 'input' function to the hashmap
+      //SimpleDec tempIn = new SimpleDec(0,0, new NameTy(0,0, NameTy.VOID), null);
+      //VarDecList inputList = new VarDecList(tempIn, null);
+      FunctionDec inputFunc = new FunctionDec(0,0, new NameTy(0,0, NameTy.INT), "input", null, null);
+      Defined inputDef = new Defined(inputFunc, -1);
+      ArrayList<Defined> inputAr = new ArrayList<Defined>();
+      inputAr.add(inputDef);
+
+      SimpleDec tempOut = new SimpleDec(0, 0, new NameTy(0, 0, NameTy.INT), "x");
+      VarDecList outputList = new VarDecList(tempOut, null);
+      FunctionDec outputFunc = new FunctionDec(0, 0, new NameTy(0, 0, NameTy.VOID), "output", outputList, null);
+      Defined outputDef = new Defined(outputFunc, -1);
+      ArrayList<Defined> outputAr = new ArrayList<Defined>();
+      outputAr.add(outputDef);
+
+      visitor.symTable.put("input", inputAr);
+      visitor.symTable.put("output", outputAr);
+
       result.accept(visitor, 0);
       visitor.print(0);
       visitor.delete(0);

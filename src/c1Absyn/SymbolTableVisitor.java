@@ -5,8 +5,8 @@ public class SymbolTableVisitor implements AbsynVisitor {
   public static boolean SHOW_SCOPE = false;
 
   final static int SPACES = 4;
-   ArrayList<Defined> definitions = new ArrayList<Defined>();
-   HashMap <String, ArrayList<Defined>> symTable = new HashMap<>();
+   public static ArrayList<Defined> definitions = new ArrayList<Defined>();
+   public HashMap <String, ArrayList<Defined>> symTable = new HashMap<>();
 
   private void indent( int level ) {
     if(SHOW_SCOPE == true) for( int i = 0; i < level * SPACES; i++ ) System.out.print( " " );
