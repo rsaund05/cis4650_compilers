@@ -198,8 +198,16 @@ public int getType(Exp toCheck)
       if (symTable.get(tempSVar.name) != null)
       {
         definitions = symTable.get(tempSVar.name);
-        tempSDec = (SimpleDec)definitions.get(0).declaration;
-        toReturn = tempSDec.typ.typ;
+        if (definitions.get(0).declaration instanceof SimpleDec)
+        {
+          tempSDec = (SimpleDec)definitions.get(0).declaration;
+          toReturn = tempSDec.typ.typ;
+        }
+        else
+        {
+          tempIDec = (ArrayDec)definitions.get(0).declaration;
+          toReturn = tempIDec.typ.typ;
+        }
       }
       else{
           return -1;
@@ -464,6 +472,7 @@ public void visit(CallExp exp, int level ) {
     Dec tempDec = definitions.get(0).declaration;
     FunctionDec tempFunc = (FunctionDec)tempDec;
     VarDecList params = tempFunc.params;
+    Exp tempE;
 
     while(params != null)
     {
@@ -475,12 +484,19 @@ public void visit(CallExp exp, int level ) {
         System.err.println("Error: too few arguments");
         break;
       }
-        type1 = getType(callList.head);
+
+        tempE = (Exp)callList.head;
+        type1 = getType(tempE);
 
         if (params.head instanceof SimpleDec)
         {
           SimpleDec tempSDec = (SimpleDec)params.head;
           type2 = tempSDec.typ.typ;
+        }
+        else if (params.head instanceof ArrayDec)
+        {
+          ArrayDec tempADec = (ArrayDec)params.head;
+          type2 = tempADec.typ.typ;
         }
 
         if (type1 != type2)
@@ -545,7 +561,7 @@ public void visit(FunctionDec exp, int level ) {
 
   if (functionType(exp.body) != exp.result.typ && functionType(exp.body) != -1)
     System.err.println("Error: Function return type doesnt match return type is " +functionType(exp.body) + " should be " + exp.result.typ);
-
+ 
     print(level);
     delete(level);
 
