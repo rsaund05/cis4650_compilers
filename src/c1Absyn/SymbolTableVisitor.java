@@ -349,7 +349,16 @@ public int typeCheck(Exp left, Exp right)
   }
 
   public void visit( IfExp exp, int level ) {
+    int check = -2;
+    Exp tempE;
     indent(level);
+
+    tempE = (Exp)exp.test;
+    check = checkTest(tempE);
+
+    if (check != 0)
+      System.err.println("Error, Line: " + exp.row + " Col: " + exp.col + " Void value detected in condition.");
+    
     SysPrint("Entering a new block:");
     exp.test.accept( this, level );
     exp.thenpart.accept( this, level );
@@ -362,6 +371,27 @@ public int typeCheck(Exp left, Exp right)
     indent(level);
     level--;
     SysPrint("Leaving a new block");
+  }
+
+  public int checkTest(Exp test)
+  {
+    int result = -1;
+
+    if (test instanceof IntExp)
+    {
+        return 0;
+    }
+    else if (test instanceof VarExp)
+    {
+      result = getType(test);
+    }
+    else if (test instanceof OpExp)
+    {
+      OpExp temp = (OpExp)test;
+      result = checkOPExp(temp.left, temp.right);
+    }
+
+    return result;
   }
 
   public void visit( IntExp exp, int level ) { 
@@ -710,7 +740,15 @@ public void visit(SimpleVar exp, int level ) {
 
 //WhileExp
 public void visit(WhileExp exp, int level ) {
+  int check = -2;
+  Exp tempE;
   indent(level);
+
+  tempE = (Exp)exp.test;
+  check = checkTest(tempE);
+
+  if (check != 0)
+    System.err.println("Error, Line: " + exp.row + " Col: " + exp.col + " Void value detected in condition.");
   SysPrint("Entering a while block");
    
   if (exp.test != null)
