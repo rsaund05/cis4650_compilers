@@ -17,7 +17,7 @@ import java.lang.*;
 import java.io.*;
 import java.util.*;
    
-class Main {
+class CM {
   public static boolean SHOW_TREE = false;
   public static boolean SHOW_SCOPE = false;
   static public void main(String argv[]) throws Exception{    
