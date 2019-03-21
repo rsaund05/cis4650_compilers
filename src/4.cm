@@ -1,23 +1,13 @@
-void main (void)
-{
-    int x
-    int y;
+int x;
+int y;
 
-    x = y + x + y + = x;
-
-    return;
+void functionToEndAllFunctions(){
+	return 69;
 }
 
-int max(int x, int y)
-{
-    if (x > y)
-    {
-        return x;
-    }
-    else
-    {
-        return y;
-    }
-
-    return
+void main(void){
+	int x; void g; int test;
+	x = foo();
+	g + test;
+	
 }

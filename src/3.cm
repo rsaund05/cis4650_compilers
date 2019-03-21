@@ -1,34 +1,14 @@
-int add int x, int y)
-{
-    return x + y;
-}
+/* A program to compute the factorial value of an input */
 
-int pow (int x, int pow)
-{
-    if (pow == 0)
-        return pow(x,0);
+void main(void fuck) {
+  int x; int fac; int x;
+  x = input(fac);
+  fac = 1;
+  
+  while (x > 1) {
+    fac = fac * x;
+    x = x - 1;
+  } 
 
-    pow(x*x, pow -1);
-}
-
-void main (void)
-{
-    int x;
-    int y
-    int z;
-    z = 0;
-
-    x = 12;
-    y = x * 7 + 23 / 3;
-
-    while(z < 100)
-    {
-        z = z + 1;
-    }
-
-    y = add(y,z);
-
-    pow(add(x,z),y);
-
-    return 
+  output();
 }

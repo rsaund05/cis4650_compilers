@@ -345,7 +345,7 @@ public int typeCheck(Exp left, Exp right)
     }
 
     if (type1 != type2 && type2 != -1 && type2 != -2)
-      System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col + "trying to assign " + typeToString(type2)  + " to variable of type " + typeToString(type1));
+      System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col + " trying to assign " + typeToString(type2)  + " to variable of type " + typeToString(type1));
   }
 
   public void visit( IfExp exp, int level ) {
@@ -601,7 +601,7 @@ public void visit(FunctionDec exp, int level ) {
     exp.body.accept(this, level);
 
   if (functionType(exp.body) != exp.result.typ && functionType(exp.body) != -1)
-    System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col +": Function return type does not match, return type is " +functionType(exp.body) + " should be " + exp.result.typ);
+    System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col +": Function return type does not match, return type is " + typeToString(functionType(exp.body)) + " should be " + typeToString(exp.result.typ));
  
     print(level);
     delete(level);
