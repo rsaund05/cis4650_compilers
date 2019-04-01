@@ -8,6 +8,17 @@ public class CodeGen {
 	int DADDR_SIZE = 1024;
 	int NO_REGS = 8;
 	int PC_REG = 7;
+	public static int line = 3; //Variable to track line number in output file, starts at line after prelude
+
+	public static void emitRM(String opCode, int r1, int offset, int r2, String comment) {
+		System.out.println(line + ": " + opCode + " " + r1 + ", " + offset + "(" + r2 + ") \t" + comment);
+		line++;
+	}
+
+	public static void emitRO(String opCode, int r1, int r2, int r3){
+		System.out.println(line + ": " + opCode + " " + r1 + ", " + r2 + ", " + r3 + " \t" + comment);
+		line++;
+	}
 
 	public static void codeGen() throws Exception{
 		//Setting up output stream to file
@@ -15,7 +26,7 @@ public class CodeGen {
 		System.out.println("GENERATING CODE");
 		FileOutputStream f = new FileOutputStream("./output.tm");
 		System.setOut(new PrintStream(f));
-		int line = 3; //Variable to track line number in output file, starts at line after prelude
+		
 
 		//Printing prelude
 		System.out.println("0: LD 6, 0(0)"); //load gp with maxaddr
@@ -25,17 +36,6 @@ public class CodeGen {
 		//Rest of the stuff lol
 
 		//Printing finale
-		System.out.println(line + ": ST 5, -1(5)");
-		line++;
-		System.out.println(line + ": LDA 5, -1(5)");
-		line++;
-		System.out.println(line + ": LDA 0, 1(7)");
-		line++;
-		System.out.println(line + ": LDA 7, -35(7)");
-		line++;
-		System.out.println(line + ": LD 5, 0(5)");
-		line++;
-		System.out.println(line + ": HALT 0, 0, 0");
 		
 		if(f != null) f.close();
 		System.setOut(console); //Reset output to terminal
