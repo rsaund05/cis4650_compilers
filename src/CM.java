@@ -11,7 +11,6 @@
   where gcd.tiny is an test input file for the tiny language.
 */
    
-import java.io.*;
 import c1Absyn.*;
 import java.lang.*;
 import java.io.*;
