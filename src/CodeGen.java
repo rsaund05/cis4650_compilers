@@ -9,6 +9,7 @@ public class CodeGen {
 	int NO_REGS = 8;
 	int PC_REG = 7;
 
+	//predifined registers
 	public static int pc = 7;
 	public static int gp = 6;
 	public static int fp = 5;
@@ -52,9 +53,6 @@ public class CodeGen {
 		emitRM("LD", 6, 0, 0, "load gp with maxaddr");
 		emitRM("LDA", 5, 0, 6, "Copy gp to fp");
 		emitRM("ST", 0, 0, 0, "Clear content at loc");
-		// System.out.println("0: LD 6, 0(0) \tload gp with maxaddr"); 
-		// System.out.println("1: LDA 5, 0(6) \tCopy gp to fp"); 
-		// System.out.println("2: ST 0, 0(0) \tClear content at loc"); 
 
 		//Rest of the stuff lol
 
