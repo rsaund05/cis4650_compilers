@@ -19,11 +19,13 @@ import java.util.*;
 class CM {
   public static boolean SHOW_TREE = false;
   public static boolean SHOW_SCOPE = false;
+  public static boolean COMPILE = false;
   static public void main(String argv[]) throws Exception{    
     /* Start the parser */
 
     //Checking for valid file given in command line
     File test = new File(argv[0]);
+    PrintStream console = System.out; //Saving the outputstream 
     if(!(test.exists() && !test.isDirectory())){
       System.out.println("Error: Invalid file given. Exiting.");
       System.exit(0);
@@ -34,6 +36,7 @@ class CM {
     for(int i = 0; i < argv.length; i++){
       if(argv[i].equals("-a")) SHOW_TREE = true;
       if(argv[i].equals("-s")) SHOW_SCOPE = true;
+      if(argv[i].equals("-c")) COMPILE = true;
     } 
 
     //Begin parsing
@@ -45,6 +48,7 @@ class CM {
          ShowTreeVisitor visitor = new ShowTreeVisitor();
          result.accept(visitor, 0); 
        }
+
        
       
       SymbolTableVisitor visitor = new SymbolTableVisitor();
@@ -79,8 +83,13 @@ class CM {
       visitor.delete(0);
       if(SHOW_SCOPE == true) {
         System.out.println("Leaving global scope"); 
+        System.setOut(console);
         if(f != null) f.close();
       }
+      if(COMPILE == true){
+        CodeGen.codeGen();
+      }
+
     } catch (Exception e) {
       /* do cleanup here -- possibly rethrow e */
       e.printStackTrace();
