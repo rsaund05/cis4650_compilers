@@ -121,107 +121,107 @@ public class CodeGen implements AbsynVisitor {
 	}
 
 	  public void visit( ExpList expList, int level ) {
-    while( expList != null ) {
-      if (expList.head != null)
-        expList.head.accept( this, level );
-      expList = expList.tail;
-    } 
+    // while( expList != null ) {
+    //   if (expList.head != null)
+    //     expList.head.accept( this, level );
+    //   expList = expList.tail;
+    // } 
   }
 
   public void visit (VarDecList varDecList, int level)
   {
-    while(varDecList != null)
-    {
-      if (varDecList.head != null)
-        varDecList.head.accept(this, level);
+    // while(varDecList != null)
+    // {
+    //   if (varDecList.head != null)
+    //     varDecList.head.accept(this, level);
 
-      varDecList = varDecList.tail;
-    }
+    //   varDecList = varDecList.tail;
+    // }
   }
 
   public void visit (DecList decList, int level)
   {
-    while(decList != null)
-    {
-      if (decList.head != null)
-        decList.head.accept(this, level);
+    // while(decList != null)
+    // {
+    //   if (decList.head != null)
+    //     decList.head.accept(this, level);
 
-      decList = decList.tail;
-    }
+    //   decList = decList.tail;
+    // }
   }
 
   public void visit( AssignExp exp, int level ) {
  
-    System.out.println( "AssignExp:" );
-    level++;
-    exp.lhs.accept( this, level );
-    exp.rhs.accept( this, level );
+    // System.out.println( "AssignExp:" );
+    // level++;
+    // exp.lhs.accept( this, level );
+    // exp.rhs.accept( this, level );
   }
 
   public void visit( IfExp exp, int level ) {
  
-    System.out.println( "IfExp:" );
+    //System.out.println( "IfExp:" );
     level++;
-    exp.test.accept( this, level );
-    exp.thenpart.accept( this, level );
-    if (exp.elsepart != null )
-       exp.elsepart.accept( this, level );
+    // exp.test.accept( this, level );
+    // exp.thenpart.accept( this, level );
+    // if (exp.elsepart != null )
+    //    exp.elsepart.accept( this, level );
   }
 
   public void visit( IntExp exp, int level ) {
  
-    System.out.println( "IntExp: " + exp.value ); 
+    //System.out.println( "IntExp: " + exp.value ); 
   }
 
   public void visit( OpExp exp, int level ) {
  
-    System.out.print( "OpExp:" ); 
+    //System.out.print( "OpExp:" ); 
     switch( exp.op ) {
       case OpExp.PLUS:
-        System.out.println( " + " );
+        //System.out.println( " + " );
         break;
       case OpExp.MINUS:
-        System.out.println( " - " );
+        //System.out.println( " - " );
         break;
       case OpExp.MUL:
-        System.out.println( " * " );
+        //System.out.println( " * " );
         break;
       case OpExp.DIV:
-        System.out.println( " / " );
+        //System.out.println( " / " );
         break;
       case OpExp.EQ:
-        System.out.println( " == " );
+        //System.out.println( " == " );
         break;
       case OpExp.NE:
-        System.out.println(" != ");
+        //System.out.println(" != ");
         break;
       case OpExp.LT:
-        System.out.println( " < " );
+        //System.out.println( " < " );
         break;
       case OpExp.LE:
-        System.out.println(" <= ");
+        //System.out.println(" <= ");
         break;
       case OpExp.GT:
-        System.out.println( " > " );
+        //System.out.println( " > " );
         break;
       case OpExp.GE:
-        System.out.println(" >= ");
+        //System.out.println(" >= ");
         break;
       default:
-        System.out.println( "Unrecognized operator at line " + exp.row + " and column " + exp.col);
+        //System.out.println( "Unrecognized operator at line " + exp.row + " and column " + exp.col);
     }
     level++;
-    exp.left.accept( this, level );
-    exp.right.accept( this, level );
+    // exp.left.accept( this, level );
+    // exp.right.accept( this, level );
   }
 
   public void visit( VarExp exp, int level ) {
  
-    System.out.println( "VarExp: ");
+    //System.out.println( "VarExp: ");
     level++;
 
-    if (exp.variable != null)
-      exp.variable.accept(this, level);
+    // if (exp.variable != null)
+    //   exp.variable.accept(this, level);
   }
 
 //still need to finish
