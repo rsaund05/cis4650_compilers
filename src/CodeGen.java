@@ -9,7 +9,7 @@ public class CodeGen implements AbsynVisitor {
 	int NO_REGS = 8;
   	int PC_REG = 7;
 
-  	public static int offset = 1;
+  	//public static int offset = 1;
 
   	public static ArrayList<Defined> definitions = new ArrayList<Defined>();
     public HashMap <String, ArrayList<Defined>> symTable = new HashMap<>();
@@ -24,7 +24,7 @@ public class CodeGen implements AbsynVisitor {
 
 	//public static int line = 0; //Variable to track line number in output file, starts at line after prelude
 	public static int entry = 0;
-	public static int globalOffset = 0;
+	public static int globalOffset = 1;
 
 	public static int ofpFO = 0;
 	public static int retFO = -1;
@@ -122,6 +122,7 @@ public class CodeGen implements AbsynVisitor {
 	//Hashmap Functions
 	public void delete( int level ) {
   ArrayList<String> toRemove = new ArrayList<String>();
+
   for (String key: symTable.keySet())
   {
     definitions = symTable.get(key);
@@ -393,6 +394,8 @@ public int typeCheck(Exp left, Exp right)
 //still need to finish
 //ArrayDec
 public void visit(ArrayDec exp, int level ) {
+	exp.setOffset(globalOffset);
+	globalOffset++;
   if (level == 0)
   {
     emitComment("allocating global var: " + exp.name);
@@ -451,16 +454,20 @@ public void visit(FunctionDec exp, int level ) {
     //System.out.println("FunctionDec: " + exp.func + " - VOID");
  // else if (exp.result.typ == NameTy.INT)
   //System.out.println("FunctionDec: " + exp.func + " - INT"); 
-
+	exp.setOffset(globalOffset);
+	globalOffset++;
   emitComment("Processing function: " + exp.func);
   emitComment("jump around function body here");
+  emitRM("ST", 0, 0, 0, "store return");
   level++;
   if (exp.params != null)
     exp.params.accept(this, level);
 
   if (exp.body != null)
     exp.body.accept(this, level);
-
+	
+	emitRM("LD", 0, 0, 0, "return to caller");
+	emitRM_Abs("LDA", 0, 0, "Jump around function body");
   emitComment("<- fundecl");
 }
 
@@ -490,6 +497,8 @@ public void visit(ReturnExp exp, int level ) {
 
 //SimpleDec
 public void visit(SimpleDec exp, int level ) {
+	exp.setOffset(globalOffset);
+	globalOffset++;
     if (level == 0)
     {
       emitComment("allocating global var: " + exp.name);

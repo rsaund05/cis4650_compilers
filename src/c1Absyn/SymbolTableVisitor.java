@@ -721,6 +721,7 @@ public void visit(SimpleDec exp, int level ) {
     else
     {
         definitions = symTable.get(exp.name);
+        
         definitions.add(0, new Defined(exp, level));
         symTable.put(exp.name, definitions);
     }
