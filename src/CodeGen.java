@@ -9,7 +9,7 @@ public class CodeGen implements AbsynVisitor {
 	int NO_REGS = 8;
   int PC_REG = 7;
 
-  
+  public static int funDec = 1;
   public static int varNum = 1;
   public static boolean inComp = false;
 	//predifined registers
@@ -297,6 +297,9 @@ public void visit(FunctionDec exp, int level ) {
 
   if (exp.body != null)
     exp.body.accept(this, level);
+
+    emitComment("<- fundec" + fundec);
+    fundec++;
 }
 
 //IndexVar
