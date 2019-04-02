@@ -93,7 +93,18 @@ class CM {
         if(f != null) f.close();
       }
       if(COMPILE == true){
-        CodeGen.codeGen(fileNameTM);
+        //Setting up output stream to file
+        //PrintStream console = System.out;
+        //System.out.println("GENERATING CODE");
+        FileOutputStream fTM = new FileOutputStream("./" + fileNameTM);
+        System.setOut(new PrintStream(fTM));
+
+        //Prelude
+        CodeGen.prelude(fileNameTM);
+        //Other stuff
+
+        //Finale
+        CodeGen.finale(console);
       }
 
     } catch (Exception e) {

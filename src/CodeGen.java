@@ -9,7 +9,7 @@ public class CodeGen implements AbsynVisitor {
 	int NO_REGS = 8;
   int PC_REG = 7;
   
-  public static varNum = 1;
+  public static int varNum = 1;
 
 	//predifined registers
 	public static int pc = 7;
@@ -80,14 +80,7 @@ public class CodeGen implements AbsynVisitor {
 		emitLoc = loc;
 	}
 
-	public static void codeGen(String fileNameTM) throws Exception{
-		//Setting up output stream to file
-		PrintStream console = System.out;
-		//System.out.println("GENERATING CODE");
-		FileOutputStream f = new FileOutputStream("./" + fileNameTM);
-		System.setOut(new PrintStream(f));
-		
-
+	public static void prelude(String fileNameTM){
 		//Printing prelude
 		emitComment("C-Minus Compilation to TM Code");
 		emitComment("File: " + fileNameTM);
@@ -108,17 +101,16 @@ public class CodeGen implements AbsynVisitor {
 		emitBackup(savedLoc);
 		emitRM("LDA", 7, 7, 7, "jump around i/o code");
 		emitRestore();
+	}
 
-		//Rest of the stuff lol
-
+	public static void finale(PrintStream console){
 		//Printing finale
 		emitRM("ST", fp, globalOffset+ofpFO, fp, "push ofp");
 		emitRM("LDA", fp, globalOffset, fp, "push frame");
 		emitRM_Abs("LDA", pc, entry, "jump to main loc");
 		emitRM("LD", fp, ofpFO, fp, "pop frame");
 		emitRO("HALT", 0, 0, 0, "");
-
-		if(f != null) f.close();
+		//reset to stdout
 		System.setOut(console); //Reset output to terminal
 	}
 
@@ -238,7 +230,7 @@ public void visit(ArrayDec exp, int level ) {
   if (level == 0)
   {
     emitComment("allocating global var: " + exp.name);
-    emitComment("<- vardec" +  varnum;)
+    emitComment("<- vardec" +  varNum);
     varNum++;
   }
   else
@@ -332,7 +324,7 @@ public void visit(SimpleDec exp, int level ) {
     if (level == 0)
     {
       emitComment("allocating global var: " + exp.name);
-      emitComment("<- vardec" +  varnum;)
+      emitComment("<- vardec" +  varNum);
       varNum++;
     }
     else
