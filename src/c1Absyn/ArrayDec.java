@@ -16,7 +16,7 @@ public class ArrayDec extends VarDec
         this.size = size;
     }
 
-    public setOffset (int offset)
+    public void setOffset (int offset)
     {
         this.offset = offset;
     }

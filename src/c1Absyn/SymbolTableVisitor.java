@@ -4,8 +4,6 @@ import java.util.*;
 public class SymbolTableVisitor implements AbsynVisitor {
   public static boolean SHOW_SCOPE = false;
 
-  public int offset = 0;
-
   final static int SPACES = 4;
    public static ArrayList<Defined> definitions = new ArrayList<Defined>();
    public HashMap <String, ArrayList<Defined>> symTable = new HashMap<>();

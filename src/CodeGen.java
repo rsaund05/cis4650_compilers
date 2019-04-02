@@ -7,7 +7,12 @@ public class CodeGen implements AbsynVisitor {
 	int IADDR_SIZE = 1024;
 	int DADDR_SIZE = 1024;
 	int NO_REGS = 8;
-  int PC_REG = 7;
+  	int PC_REG = 7;
+
+  	public static int offset = 1;
+
+  	public static ArrayList<Defined> definitions = new ArrayList<Defined>();
+    public HashMap <String, ArrayList<Defined>> symTable = new HashMap<>();
 
   public static boolean inComp = false;
 	//predifined registers
@@ -113,6 +118,166 @@ public class CodeGen implements AbsynVisitor {
 		//reset to stdout
 		System.setOut(console); //Reset output to terminal
 	}
+
+	//Hashmap Functions
+	public void delete( int level ) {
+  ArrayList<String> toRemove = new ArrayList<String>();
+  for (String key: symTable.keySet())
+  {
+    definitions = symTable.get(key);
+    Dec temp = definitions.get(0).declaration;
+    if (definitions.get(0).level == level)
+    {
+      if (temp instanceof SimpleDec)
+      {
+        SimpleDec remove = (SimpleDec)temp;
+        toRemove.add(remove.name);
+      }
+      else if (temp instanceof ArrayDec)
+      {
+        ArrayDec remove = (ArrayDec)temp;
+        toRemove.add(remove.name);     
+      }
+      else if (temp instanceof FunctionDec)
+      {
+        FunctionDec remove = (FunctionDec)temp;
+        toRemove.add(remove.func);     
+      }
+    }
+  }
+
+  for (int i = 0; i < toRemove.size(); i++)
+  {
+    definitions = symTable.get(toRemove.get(i));
+    Dec temp = definitions.get(0).declaration;
+    definitions.remove(0);
+
+    if (definitions.size() > 0)
+    {
+      if (temp instanceof SimpleDec)
+      {
+        SimpleDec toAdd = (SimpleDec)temp;
+        symTable.put(toAdd.name, definitions);
+      }
+      else if (temp instanceof ArrayDec)
+      {
+        ArrayDec toAdd = (ArrayDec)temp;
+        symTable.put(toAdd.name, definitions);
+      }
+      else
+      {
+        FunctionDec toAdd = (FunctionDec) temp;
+        symTable.put(toAdd.func, definitions);
+      }
+    }
+    else
+    {
+      if (temp instanceof SimpleDec)
+      {
+        SimpleDec toRem = (SimpleDec)temp;
+        symTable.remove(toRem.name);
+      }
+      else if (temp instanceof ArrayDec)
+      {
+        ArrayDec toRem = (ArrayDec)temp;
+        symTable.remove(toRem.name);
+      }
+      else
+      {
+        FunctionDec toRem = (FunctionDec)temp;
+        symTable.remove(toRem.func);
+      }
+    }
+    }
+
+}
+public int getType(Exp toCheck)
+{
+  int toReturn = -1;
+  SimpleDec tempSDec;
+  SimpleVar tempSVar;
+  ArrayDec tempIDec;
+  IndexVar tempIVar;
+  FunctionDec tempFunc;
+  Dec tempDec;
+
+  if (toCheck instanceof VarExp)
+  {
+    VarExp tempExp = (VarExp) toCheck;
+
+    if (tempExp.variable instanceof SimpleVar)
+    {
+      tempSVar = (SimpleVar)tempExp.variable;
+      if (symTable.get(tempSVar.name) != null)
+      {
+        definitions = symTable.get(tempSVar.name);
+        if (definitions.get(0).declaration instanceof SimpleDec)
+        {
+          tempSDec = (SimpleDec)definitions.get(0).declaration;
+          toReturn = tempSDec.typ.typ;
+        }
+        else
+        {
+          tempIDec = (ArrayDec)definitions.get(0).declaration;
+          toReturn = tempIDec.typ.typ;
+        }
+      }
+      else{
+          return -1;
+      }
+    }
+    else if (tempExp.variable  instanceof IndexVar)
+    {
+      tempIVar = (IndexVar)tempExp.variable;
+      if (symTable.get(tempIVar.name) != null)
+      {
+        definitions = symTable.get(tempIVar.name);
+        tempIDec = (ArrayDec)definitions.get(0).declaration;
+        toReturn = tempIDec.typ.typ;
+      }
+      else{
+        return -1;
+      }
+    }
+  }
+  else if (toCheck instanceof IntExp)
+  {
+    toReturn = 0;
+  }
+  else if (toCheck instanceof CallExp)
+  {
+    CallExp tempCall = (CallExp)toCheck;
+    definitions = symTable.get(tempCall.func);
+    if (definitions != null)
+    {
+      tempFunc = (FunctionDec)definitions.get(0).declaration;
+      toReturn = tempFunc.result.typ;
+    }
+    else
+    {
+      return -1;
+    }
+  }
+
+  return toReturn;
+}
+public int typeCheck(Exp left, Exp right)
+{
+  int leftType = -1;
+  int rightType = -1;
+
+  leftType = getType(left);
+  rightType = getType(right);
+
+  if (leftType == -1 || rightType == -1)
+    return -1;
+  else if (leftType == rightType)
+    return 1;
+  else if (leftType != rightType)
+    return 0;
+
+    return -1;
+}
 
 	  public void visit( ExpList expList, int level ) {
     while( expList != null ) {
@@ -355,11 +520,15 @@ public void visit(WhileExp exp, int level ) {
   emitComment("-> while");
   emitComment("while: jump after body comes back here");
   level++;
-  if (exp.test != null)
-    exp.test.accept(this, level);
+  if (exp.test != null){
+  	exp.test.accept(this, level);
+  	emitComment("while: jump to end belongs here");
+  }
+    
   if (exp.body != null)
     exp.body.accept(this, level);
-  emitComment("while: jump to end belongs here");
+	emitComment("<- while");
+  
 }
 
 public void visit (NameTy exp, int level)

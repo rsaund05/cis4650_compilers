@@ -18,7 +18,7 @@ public class FunctionDec extends Dec
         this.body = body;
     }
     
-    public setOffset (int offset)
+    public void setOffset (int offset)
     {
         this.offset = offset;
     }
