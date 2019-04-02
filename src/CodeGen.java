@@ -81,7 +81,7 @@ public class CodeGen {
 	public static void codeGen(String fileNameTM) throws Exception{
 		//Setting up output stream to file
 		PrintStream console = System.out;
-		System.out.println("GENERATING CODE");
+		//System.out.println("GENERATING CODE");
 		FileOutputStream f = new FileOutputStream("./" + fileNameTM);
 		System.setOut(new PrintStream(f));
 		
