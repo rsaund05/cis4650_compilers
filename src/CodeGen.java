@@ -145,11 +145,12 @@ public class CodeGen implements AbsynVisitor {
   }
 
   public void visit( AssignExp exp, int level ) {
- 
+    emitComment("-> op");
     // System.out.println( "AssignExp:" );
     level++;
     exp.lhs.accept( this, level );
     exp.rhs.accept( this, level );
+    emitComment("<- op");
   }
 
   public void visit( IfExp exp, int level ) {
