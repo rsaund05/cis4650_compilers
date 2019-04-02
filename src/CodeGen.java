@@ -7,7 +7,9 @@ public class CodeGen implements AbsynVisitor {
 	int IADDR_SIZE = 1024;
 	int DADDR_SIZE = 1024;
 	int NO_REGS = 8;
-	int PC_REG = 7;
+  int PC_REG = 7;
+  
+  public static varNum = 1;
 
 	//predifined registers
 	public static int pc = 7;
@@ -159,22 +161,27 @@ public class CodeGen implements AbsynVisitor {
   }
 
   public void visit( IfExp exp, int level ) {
- 
+    emitComment("-> if");
     //System.out.println( "IfExp:" );
     level++;
     exp.test.accept( this, level );
     exp.thenpart.accept( this, level );
     if (exp.elsepart != null )
+    {
+      emitComment("if: jump to else belongs here");
        exp.elsepart.accept( this, level );
+    }
+    emitComment("<- if");
   }
 
   public void visit( IntExp exp, int level ) {
- 
+    emitComment("-> constant");
+    emitComment("<- constant");
     //System.out.println( "IntExp: " + exp.value ); 
   }
 
   public void visit( OpExp exp, int level ) {
- 
+    emitComment("-> op");
     //System.out.print( "OpExp:" ); 
     switch( exp.op ) {
       case OpExp.PLUS:
@@ -213,6 +220,7 @@ public class CodeGen implements AbsynVisitor {
     level++;
     exp.left.accept( this, level );
     exp.right.accept( this, level );
+    emitComment("<- op");
   }
 
   public void visit( VarExp exp, int level ) {
@@ -227,6 +235,16 @@ public class CodeGen implements AbsynVisitor {
 //still need to finish
 //ArrayDec
 public void visit(ArrayDec exp, int level ) {
+  if (level == 0)
+  {
+    emitComment("allocating global var: " + exp.name);
+    emitComment("<- vardec" +  varnum;)
+    varNum++;
+  }
+  else
+  {
+    emitComment("Processing local var: " + exp.name);
+  }
   // String ty = new String("");
 
   // if (exp.typ.typ == NameTy.VOID)
@@ -247,15 +265,17 @@ public void visit(ArrayDec exp, int level ) {
 //CallExp
 public void visit(CallExp exp, int level ) {
   //System.out.println("CallExp: " + exp.func);
+  emitComment("-> call of function: " + exp.func);
   level++;
   if (exp.args != null)
     exp.args.accept(this, level);
+  emitComment("<- call");
 }
 
 //CompoundExp
 public void visit(CompoundExp exp, int level ) {
   //System.out.println("CompoundExp: ");
-  
+  emitComment("-> compound statement");
   if (exp.decs != null && exp.exp != null)
     level++;
 
@@ -263,6 +283,7 @@ public void visit(CompoundExp exp, int level ) {
     exp.decs.accept(this, level);
   if (exp.exp != null)
     exp.exp.accept(this, level);
+    emitComment("<- compound statement");
 }
 
 //FunctionDec
@@ -272,8 +293,9 @@ public void visit(FunctionDec exp, int level ) {
  // else if (exp.result.typ == NameTy.INT)
   //System.out.println("FunctionDec: " + exp.func + " - INT"); 
 
+  emitComment("Processing function: " + exp.func);
+  emitComment("jump around function body here");
   level++;
-
   if (exp.params != null)
     exp.params.accept(this, level);
 
@@ -283,9 +305,11 @@ public void visit(FunctionDec exp, int level ) {
 
 //IndexVar
 public void visit(IndexVar exp, int level ) {
+  emitComment("-> subs");
   //System.out.println("IndexVar: " + exp.name);
   level++;
   exp.index.accept(this, level);
+  emitComment("<- subs");
 }
 
 //NilExp
@@ -297,13 +321,25 @@ public void visit(NilExp exp, int level ) {
 public void visit(ReturnExp exp, int level ) {
   //System.out.println("ReturnExp: ");
   level++;
-
+  emitComment("-> return");
   if (exp.exp != null)
     exp.exp.accept(this, level);
+  emitComment("<- return");
 }
 
 //SimpleDec
 public void visit(SimpleDec exp, int level ) {
+    if (level == 0)
+    {
+      emitComment("allocating global var: " + exp.name);
+      emitComment("<- vardec" +  varnum;)
+      varNum++;
+    }
+    else
+    {
+      emitComment("Processing local var: " + exp.name);
+    }
+      
   //if (exp.typ.typ == NameTy.VOID)
     //System.out.println("SimpleDec: " + exp.name + " - VOID"); 
   //else if (exp.typ.typ == NameTy.INT)
@@ -312,17 +348,23 @@ public void visit(SimpleDec exp, int level ) {
 
 //SimpleVar
 public void visit(SimpleVar exp, int level ) {
+  emitComment("-> id");
+  emitComment("looking up id: " + exp.name);
+  emitComment("<- id");
   //System.out.println("SimpleVar: " + exp.name);
 }
 
 //WhileExp
 public void visit(WhileExp exp, int level ) {
   //System.out.println("WhileExp: ");
+  emitComment("-> while");
+  emitComment("while: jump after body comes back here");
   level++;
   if (exp.test != null)
     exp.test.accept(this, level);
   if (exp.body != null)
     exp.body.accept(this, level);
+  emitComment("while: jump to end belongs here");
 }
 
 public void visit (NameTy exp, int level)
