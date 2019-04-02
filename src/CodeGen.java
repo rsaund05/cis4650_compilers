@@ -8,9 +8,10 @@ public class CodeGen implements AbsynVisitor {
 	int DADDR_SIZE = 1024;
 	int NO_REGS = 8;
   int PC_REG = 7;
+
   
   public static int varNum = 1;
-
+  public static boolean inComp = false;
 	//predifined registers
 	public static int pc = 7;
 	public static int gp = 6;
@@ -234,7 +235,7 @@ public void visit(ArrayDec exp, int level ) {
     emitComment("<- vardec" +  varNum);
     varNum++;
   }
-  else
+  else if (inComp == true)
   {
     emitComment("Processing local var: " + exp.name);
   }
@@ -269,6 +270,7 @@ public void visit(CallExp exp, int level ) {
 public void visit(CompoundExp exp, int level ) {
   //System.out.println("CompoundExp: ");
   emitComment("-> compound statement");
+  inComp = true;
   if (exp.decs != null && exp.exp != null)
     level++;
 
@@ -277,6 +279,7 @@ public void visit(CompoundExp exp, int level ) {
   if (exp.exp != null)
     exp.exp.accept(this, level);
     emitComment("<- compound statement");
+    inComp = false;
 }
 
 //FunctionDec
@@ -328,7 +331,7 @@ public void visit(SimpleDec exp, int level ) {
       emitComment("<- vardec" +  varNum);
       varNum++;
     }
-    else
+    else if (inComp == true)
     {
       emitComment("Processing local var: " + exp.name);
     }
