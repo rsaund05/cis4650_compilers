@@ -9,8 +9,6 @@ public class CodeGen implements AbsynVisitor {
 	int NO_REGS = 8;
   int PC_REG = 7;
 
-  public static int funDec = 1;
-  public static int varNum = 1;
   public static boolean inComp = false;
 	//predifined registers
 	public static int pc = 7;
@@ -109,7 +107,8 @@ public class CodeGen implements AbsynVisitor {
 		emitRM("ST", fp, globalOffset+ofpFO, fp, "push ofp");
 		emitRM("LDA", fp, globalOffset, fp, "push frame");
 		emitRM_Abs("LDA", pc, entry, "jump to main loc");
-		emitRM("LD", fp, ofpFO, fp, "pop frame");
+    emitRM("LD", fp, ofpFO, fp, "pop frame");
+    emitComment("end of execution.");
 		emitRO("HALT", 0, 0, 0, "");
 		//reset to stdout
 		System.setOut(console); //Reset output to terminal
@@ -232,8 +231,7 @@ public void visit(ArrayDec exp, int level ) {
   if (level == 0)
   {
     emitComment("allocating global var: " + exp.name);
-    emitComment("<- vardec" +  varNum);
-    varNum++;
+    emitComment("<- vardec");
   }
   else if (inComp == true)
   {
@@ -278,8 +276,8 @@ public void visit(CompoundExp exp, int level ) {
     exp.decs.accept(this, level);
   if (exp.exp != null)
     exp.exp.accept(this, level);
-    emitComment("<- compound statement");
-    inComp = false;
+  emitComment("<- compound statement");
+  inComp = false;
 }
 
 //FunctionDec
@@ -298,8 +296,7 @@ public void visit(FunctionDec exp, int level ) {
   if (exp.body != null)
     exp.body.accept(this, level);
 
-    emitComment("<- fundec" + fundec);
-    fundec++;
+  emitComment("<- fundecl");
 }
 
 //IndexVar
@@ -331,8 +328,7 @@ public void visit(SimpleDec exp, int level ) {
     if (level == 0)
     {
       emitComment("allocating global var: " + exp.name);
-      emitComment("<- vardec" +  varNum);
-      varNum++;
+      emitComment("<- vardec");
     }
     else if (inComp == true)
     {
