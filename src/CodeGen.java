@@ -99,12 +99,14 @@ public class CodeGen implements AbsynVisitor {
 		emitRO("IN", 0, 0, 0, "input");
 		emitRM("LD", 7, -1, 5, "return to caller");
 		emitComment("code for output routine");
+		emitRM("ST", 0, -1, 5, "store return");
 		emitRM("ST", 0,-1,5, "load output value");
 		emitRO("OUT", 0, 0, 0, "output");
 		emitRM("LD", 7, -1, 5, "return to caller");
 		emitBackup(savedLoc);
 		emitRM("LDA", 7, 7, 7, "jump around i/o code");
 		emitRestore();
+		emitComment("End of standard prelude");
 	}
 
 	public static void finale(PrintStream console){
@@ -112,8 +114,8 @@ public class CodeGen implements AbsynVisitor {
 		emitRM("ST", fp, globalOffset+ofpFO, fp, "push ofp");
 		emitRM("LDA", fp, globalOffset, fp, "push frame");
 		emitRM_Abs("LDA", pc, entry, "jump to main loc");
-    emitRM("LD", fp, ofpFO, fp, "pop frame");
-    emitComment("end of execution.");
+    	emitRM("LD", fp, ofpFO, fp, "pop frame");
+    	emitComment("end of execution.");
 		emitRO("HALT", 0, 0, 0, "");
 		//reset to stdout
 		System.setOut(console); //Reset output to terminal
@@ -316,7 +318,6 @@ public int typeCheck(Exp left, Exp right)
     level++;
 
     exp.lhs.accept( this, level );
-    exp.rhs.accept( this, level );
 
     if (exp.lhs instanceof SimpleVar)
     {
@@ -325,6 +326,7 @@ public int typeCheck(Exp left, Exp right)
   		emitComment("looking up id: " + temp.name);
   		emitRM("LDA", 0, globalOffset, gp, "load id address");
   		emitComment("<- id");
+  		emitRM("ST", ac, globalOffset, gp, "op: Push left");
     }
     else if (exp.lhs instanceof IndexVar)
     {
@@ -333,8 +335,10 @@ public int typeCheck(Exp left, Exp right)
   		emitComment("looking up id: " + temp.name);
   		emitRM("LDA", 0, globalOffset, gp, "load id address");
   		emitComment("<- id");
+  		emitRM("ST", ac, globalOffset, gp, "op: Push left");
     } 
 
+	exp.rhs.accept( this, level );
     if (exp.rhs instanceof VarExp)
     {
     	VarExp tempV = (VarExp)exp.rhs;
@@ -369,7 +373,8 @@ public int typeCheck(Exp left, Exp right)
   		}
   		
     }
-
+    emitRM("LD", ac, globalOffset, gp, "op: load left");
+    emitRM("ST", ac, globalOffset, gp, "assign: Store value");
     emitComment("<- op");
   }
 
