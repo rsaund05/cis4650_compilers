@@ -102,7 +102,8 @@ class CM {
         //Prelude
         CodeGen.prelude(fileNameTM);
         //Other stuff
-
+        CodeGen visitorTM = new CodeGen();
+        result.accept(visitorTM, 0);
         //Finale
         CodeGen.finale(console);
       }
