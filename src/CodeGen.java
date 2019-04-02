@@ -78,17 +78,17 @@ public class CodeGen {
 		emitLoc = loc;
 	}
 
-	public static void codeGen() throws Exception{
+	public static void codeGen(String fileNameTM) throws Exception{
 		//Setting up output stream to file
 		PrintStream console = System.out;
 		System.out.println("GENERATING CODE");
-		FileOutputStream f = new FileOutputStream("./output.tm");
+		FileOutputStream f = new FileOutputStream("./" + fileNameTM);
 		System.setOut(new PrintStream(f));
 		
 
 		//Printing prelude
 		emitComment("C-Minus Compilation to TM Code");
-		emitComment("File: filename.tm");
+		emitComment("File: " + fileNameTM);
 		emitComment("Standard prelude:");
 		emitRM("LD", 6, 0, 0, "load gp with maxaddr");
 		emitRM("LDA", 5, 0, 6, "Copy gp to fp");

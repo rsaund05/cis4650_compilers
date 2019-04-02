@@ -20,6 +20,7 @@ class CM {
   public static boolean SHOW_TREE = false;
   public static boolean SHOW_SCOPE = false;
   public static boolean COMPILE = false;
+  public static String fileNameTM = "";
   static public void main(String argv[]) throws Exception{    
     /* Start the parser */
 
@@ -30,6 +31,11 @@ class CM {
       System.out.println("Error: Invalid file given. Exiting.");
       System.exit(0);
     }
+    fileNameTM = argv[0].substring(0, argv[0].indexOf(".cm")) + ".tm";
+
+    System.out.println("FILE: " + fileNameTM);
+    
+
     FileOutputStream f = new FileOutputStream("./output.txt");
     
     //Check for output flags 
@@ -87,7 +93,7 @@ class CM {
         if(f != null) f.close();
       }
       if(COMPILE == true){
-        CodeGen.codeGen();
+        CodeGen.codeGen(fileNameTM);
       }
 
     } catch (Exception e) {
