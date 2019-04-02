@@ -314,8 +314,62 @@ public int typeCheck(Exp left, Exp right)
     emitComment("-> op");
     // System.out.println( "AssignExp:" );
     level++;
+
     exp.lhs.accept( this, level );
     exp.rhs.accept( this, level );
+
+    if (exp.lhs instanceof SimpleVar)
+    {
+    	SimpleVar temp = (SimpleVar)exp.lhs;
+    	emitComment("-> id");
+  		emitComment("looking up id: " + temp.name);
+  		emitRM("LDA", 0, globalOffset, gp, "load id address");
+  		emitComment("<- id");
+    }
+    else if (exp.lhs instanceof IndexVar)
+    {
+		IndexVar temp = (IndexVar)exp.lhs;
+    	emitComment("-> id");
+  		emitComment("looking up id: " + temp.name);
+  		emitRM("LDA", 0, globalOffset, gp, "load id address");
+  		emitComment("<- id");
+    } 
+
+    if (exp.rhs instanceof VarExp)
+    {
+    	VarExp tempV = (VarExp)exp.rhs;
+    	Var rhs = (Var)tempV.variable;
+
+    	 if (rhs instanceof SimpleVar) {
+    		SimpleVar temp = (SimpleVar)rhs;
+    		emitComment("-> id");
+  			emitComment("looking up id: " + temp.name);
+  			emitRM("LD", 0, globalOffset, gp, "load id value");
+  			emitComment("<- id");
+    	}
+    	else if (rhs instanceof IndexVar){
+    		IndexVar temp = (IndexVar)rhs;
+    		emitComment("-> id");
+  			emitComment("looking up id: " + temp.name);
+  			emitRM("LD", 0, globalOffset, gp, "load id value");
+  			emitComment("<- id");
+    	}
+    }
+
+   
+    if (exp.rhs instanceof IntExp) {
+    	IntExp temp = (IntExp)exp.rhs;
+    	emitComment("-> constant");
+  		try {
+  			int tempVal = Integer.parseInt(temp.value);
+  			emitRM("LDC", ac, tempVal, 0, "load const");
+  			emitComment("<- constant");
+  		} catch (Exception e) {
+  			e.printStackTrace();
+  		}
+  		
+    }
+
     emitComment("<- op");
   }
 
@@ -395,7 +449,7 @@ public int typeCheck(Exp left, Exp right)
 //ArrayDec
 public void visit(ArrayDec exp, int level ) {
 	exp.setOffset(globalOffset);
-	globalOffset++;
+	//globalOffset++;
   if (level == 0)
   {
     emitComment("allocating global var: " + exp.name);
@@ -455,10 +509,10 @@ public void visit(FunctionDec exp, int level ) {
  // else if (exp.result.typ == NameTy.INT)
   //System.out.println("FunctionDec: " + exp.func + " - INT"); 
 	exp.setOffset(globalOffset);
-	globalOffset++;
+	//globalOffset++;
   emitComment("Processing function: " + exp.func);
   emitComment("jump around function body here");
-  emitRM("ST", 0, 0, 0, "store return");
+  emitRM("ST", 0, -1, fp, "store return");
   level++;
   if (exp.params != null)
     exp.params.accept(this, level);
@@ -466,8 +520,8 @@ public void visit(FunctionDec exp, int level ) {
   if (exp.body != null)
     exp.body.accept(this, level);
 	
-	emitRM("LD", 0, 0, 0, "return to caller");
-	emitRM_Abs("LDA", 0, 0, "Jump around function body");
+	emitRM("LD", pc, -1, fp, "return to caller");
+	emitRM_Abs("LDA", pc, 0, "Jump around function body");
   emitComment("<- fundecl");
 }
 
@@ -498,7 +552,7 @@ public void visit(ReturnExp exp, int level ) {
 //SimpleDec
 public void visit(SimpleDec exp, int level ) {
 	exp.setOffset(globalOffset);
-	globalOffset++;
+	//globalOffset++;
     if (level == 0)
     {
       emitComment("allocating global var: " + exp.name);
@@ -517,9 +571,6 @@ public void visit(SimpleDec exp, int level ) {
 
 //SimpleVar
 public void visit(SimpleVar exp, int level ) {
-  emitComment("-> id");
-  emitComment("looking up id: " + exp.name);
-  emitComment("<- id");
   //System.out.println("SimpleVar: " + exp.name);
 }
 
