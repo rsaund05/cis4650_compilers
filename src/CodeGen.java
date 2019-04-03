@@ -7,12 +7,12 @@ public class CodeGen implements AbsynVisitor {
 	int IADDR_SIZE = 1024;
 	int DADDR_SIZE = 1024;
 	int NO_REGS = 8;
-  	int PC_REG = 7;
+  int PC_REG = 7;
 
   	//public static int offset = 1;
 
-  	public static ArrayList<Defined> definitions = new ArrayList<Defined>();
-    public HashMap <String, ArrayList<Defined>> symTable = new HashMap<>();
+  public static ArrayList<Defined> definitions = new ArrayList<Defined>();
+  public HashMap <String, ArrayList<Defined>> symTable = new HashMap<>();
 
   public static boolean inComp = false;
 	//predifined registers
@@ -23,8 +23,11 @@ public class CodeGen implements AbsynVisitor {
 	public static int ac1 = 1;
 
 	//public static int line = 0; //Variable to track line number in output file, starts at line after prelude
-	public static int entry = 0;
-	public static int globalOffset = 1;
+  public static int entry = 0;
+  
+  //offsets
+  public static int globalOffset = 0;
+  public static int frameOffset = 0;
 
 	public static int ofpFO = 0;
 	public static int retFO = -1;
@@ -35,7 +38,8 @@ public class CodeGen implements AbsynVisitor {
 
 	public static void emitRM(String opCode, int r1, int offset, int r2, String comment) {
 		System.out.println(emitLoc + ": " + opCode + " " + r1 + ", " + offset + "(" + r2 + ") \t" + comment);
-		emitLoc++;
+    emitLoc++;
+    highEmitLoc++;
 
 		if (highEmitLoc < emitLoc)
 			highEmitLoc = emitLoc;
@@ -43,7 +47,8 @@ public class CodeGen implements AbsynVisitor {
 
 	public static void emitRO(String opCode, int r1, int r2, int r3, String comment){
 		System.out.println(emitLoc + ": " + opCode + " " + r1 + ", " + r2 + ", " + r3 + " \t" + comment);
-		emitLoc++;
+    emitLoc++;
+    highEmitLoc++;
 
 		if (highEmitLoc < emitLoc)
 			highEmitLoc = emitLoc;
@@ -51,7 +56,8 @@ public class CodeGen implements AbsynVisitor {
 
 	public static void emitRM_Abs(String opCode, int r, int a, String comment){
 		System.out.println(emitLoc + ": " + opCode + " " + r + " " + (a - (emitLoc + 1)) + "(" + pc + ") \t" + comment);
-		emitLoc++;
+    emitLoc++;
+    highEmitLoc++;
 
 		if (highEmitLoc < emitLoc)
 			highEmitLoc = emitLoc;
@@ -84,7 +90,8 @@ public class CodeGen implements AbsynVisitor {
 		emitLoc = loc;
 	}
 
-	public static void prelude(String fileNameTM){
+  public static void prelude(String fileNameTM)
+  {
 		//Printing prelude
 		emitComment("C-Minus Compilation to TM Code");
 		emitComment("File: " + fileNameTM);
@@ -109,7 +116,8 @@ public class CodeGen implements AbsynVisitor {
 		emitComment("End of standard prelude");
 	}
 
-	public static void finale(PrintStream console){
+  public static void finale(PrintStream console)
+  {
 		//Printing finale
 		emitRM("ST", fp, globalOffset+ofpFO, fp, "push ofp");
 		emitRM("LDA", fp, globalOffset, fp, "push frame");
@@ -122,7 +130,8 @@ public class CodeGen implements AbsynVisitor {
 	}
 
 	//Hashmap Functions
-	public void delete( int level ) {
+  public void delete( int level ) 
+  {
   ArrayList<String> toRemove = new ArrayList<String>();
 
   for (String key: symTable.keySet())
@@ -194,95 +203,8 @@ public class CodeGen implements AbsynVisitor {
     }
 
 }
-public int getType(Exp toCheck)
-{
-  int toReturn = -1;
-  SimpleDec tempSDec;
-  SimpleVar tempSVar;
-  ArrayDec tempIDec;
-  IndexVar tempIVar;
-  FunctionDec tempFunc;
-  Dec tempDec;
 
-  if (toCheck instanceof VarExp)
-  {
-    VarExp tempExp = (VarExp) toCheck;
-
-    if (tempExp.variable instanceof SimpleVar)
-    {
-      tempSVar = (SimpleVar)tempExp.variable;
-      if (symTable.get(tempSVar.name) != null)
-      {
-        definitions = symTable.get(tempSVar.name);
-        if (definitions.get(0).declaration instanceof SimpleDec)
-        {
-          tempSDec = (SimpleDec)definitions.get(0).declaration;
-          toReturn = tempSDec.typ.typ;
-        }
-        else
-        {
-          tempIDec = (ArrayDec)definitions.get(0).declaration;
-          toReturn = tempIDec.typ.typ;
-        }
-      }
-      else{
-          return -1;
-      }
-    }
-    else if (tempExp.variable  instanceof IndexVar)
-    {
-      tempIVar = (IndexVar)tempExp.variable;
-      if (symTable.get(tempIVar.name) != null)
-      {
-        definitions = symTable.get(tempIVar.name);
-        tempIDec = (ArrayDec)definitions.get(0).declaration;
-        toReturn = tempIDec.typ.typ;
-      }
-      else{
-        return -1;
-      }
-    }
-  }
-  else if (toCheck instanceof IntExp)
-  {
-    toReturn = 0;
-  }
-  else if (toCheck instanceof CallExp)
-  {
-    CallExp tempCall = (CallExp)toCheck;
-    definitions = symTable.get(tempCall.func);
-    if (definitions != null)
-    {
-      tempFunc = (FunctionDec)definitions.get(0).declaration;
-      toReturn = tempFunc.result.typ;
-    }
-    else
-    {
-      return -1;
-    }
-  }
-
-  return toReturn;
-}
-public int typeCheck(Exp left, Exp right)
-{
-  int leftType = -1;
-  int rightType = -1;
-
-  leftType = getType(left);
-  rightType = getType(right);
-
-  if (leftType == -1 || rightType == -1)
-    return -1;
-  else if (leftType == rightType)
-    return 1;
-  else if (leftType != rightType)
-    return 0;
-
-    return -1;
-}
-
-	  public void visit( ExpList expList, int level ) {
+public void visit( ExpList expList, int level ) {
     while( expList != null ) {
       if (expList.head != null)
         expList.head.accept( this, level );
@@ -321,12 +243,16 @@ public int typeCheck(Exp left, Exp right)
 
     if (exp.lhs instanceof SimpleVar)
     {
-    	SimpleVar temp = (SimpleVar)exp.lhs;
+      SimpleVar temp = (SimpleVar)exp.lhs;
     	emitComment("-> id");
-  		emitComment("looking up id: " + temp.name);
-  		emitRM("LDA", 0, globalOffset, gp, "load id address");
+      emitComment("looking up id: " + temp.name);
+
+      definitions = symTable.get(temp.name);
+      Defined tempD = definitions.get(0);
+      int offset = tempD.getOffSet();
+  		emitRM("LDA", 0, offset, gp, "load id address");
   		emitComment("<- id");
-  		emitRM("ST", ac, globalOffset, gp, "op: Push left");
+  		emitRM("ST", ac, offset, gp, "op: Push left");
     }
     else if (exp.lhs instanceof IndexVar)
     {
@@ -380,7 +306,6 @@ public int typeCheck(Exp left, Exp right)
 
   public void visit( IfExp exp, int level ) {
     emitComment("-> if");
-    //System.out.println( "IfExp:" );
     level++;
     exp.test.accept( this, level );
     exp.thenpart.accept( this, level );
@@ -395,7 +320,6 @@ public int typeCheck(Exp left, Exp right)
   public void visit( IntExp exp, int level ) {
     emitComment("-> constant");
     emitComment("<- constant");
-    //System.out.println( "IntExp: " + exp.value ); 
   }
 
   public void visit( OpExp exp, int level ) {
@@ -442,8 +366,6 @@ public int typeCheck(Exp left, Exp right)
   }
 
   public void visit( VarExp exp, int level ) {
- 
-    //System.out.println( "VarExp: ");
     level++;
 
     if (exp.variable != null)
@@ -453,8 +375,6 @@ public int typeCheck(Exp left, Exp right)
 //still need to finish
 //ArrayDec
 public void visit(ArrayDec exp, int level ) {
-	exp.setOffset(globalOffset);
-	//globalOffset++;
   if (level == 0)
   {
     emitComment("allocating global var: " + exp.name);
@@ -464,21 +384,6 @@ public void visit(ArrayDec exp, int level ) {
   {
     emitComment("Processing local var: " + exp.name);
   }
-  // String ty = new String("");
-
-  // if (exp.typ.typ == NameTy.VOID)
-  //    ty = new String("VOID");
-  // else if (exp.typ.typ == NameTy.INT)
-  //    ty = new String("INT");
-
-  // if (exp.size != null)
-  // {
-  //  if (!exp.size.value.equals(null))
-  //     //System.out.println("ArrayDec: " + exp.name + "[" + exp.size.value + "]" + " - " + ty);
-  // }
-  // else
-    //System.out.println("ArrayDec: " + exp.name + "[]" + " - " + ty);
-
 }
 
 //CallExp
@@ -492,7 +397,8 @@ public void visit(CallExp exp, int level ) {
 }
 
 //CompoundExp
-public void visit(CompoundExp exp, int level ) {
+public void visit(CompoundExp exp, int level ) 
+{
   //System.out.println("CompoundExp: ");
   emitComment("-> compound statement");
   inComp = true;
@@ -508,16 +414,14 @@ public void visit(CompoundExp exp, int level ) {
 }
 
 //FunctionDec
-public void visit(FunctionDec exp, int level ) {
-  //if (exp.result.typ == NameTy.VOID)
-    //System.out.println("FunctionDec: " + exp.func + " - VOID");
- // else if (exp.result.typ == NameTy.INT)
-  //System.out.println("FunctionDec: " + exp.func + " - INT"); 
-	exp.setOffset(globalOffset);
-	//globalOffset++;
+public void visit(FunctionDec exp, int level ) 
+{
+
+  frameOffset = 0;
   emitComment("Processing function: " + exp.func);
   emitComment("jump around function body here");
-  emitRM("ST", 0, -1, fp, "store return");
+  frameOffset--;
+  emitRM("ST", 0, frameOffset, fp, "store return");
   level++;
   if (exp.params != null)
     exp.params.accept(this, level);
@@ -531,7 +435,8 @@ public void visit(FunctionDec exp, int level ) {
 }
 
 //IndexVar
-public void visit(IndexVar exp, int level ) {
+public void visit(IndexVar exp, int level ) 
+{
   emitComment("-> subs");
   //System.out.println("IndexVar: " + exp.name);
   level++;
@@ -545,7 +450,8 @@ public void visit(NilExp exp, int level ) {
 }
 
 //ReturnExp
-public void visit(ReturnExp exp, int level ) {
+public void visit(ReturnExp exp, int level ) 
+{
   //System.out.println("ReturnExp: ");
   level++;
   emitComment("-> return");
@@ -555,23 +461,81 @@ public void visit(ReturnExp exp, int level ) {
 }
 
 //SimpleDec
-public void visit(SimpleDec exp, int level ) {
-	exp.setOffset(globalOffset);
-	//globalOffset++;
-    if (level == 0)
+public void visit(SimpleDec exp, int level ) 
+{
+  if (level == 0)
+  {
+    emitComment("allocating global var: " + exp.name);
+    emitComment("<- vardec");
+    if (symTable.get(exp.name) != null)
     {
-      emitComment("allocating global var: " + exp.name);
-      emitComment("<- vardec");
+      definitions = symTable.get(exp.name);
+      Defined temp = definitions.get(0);
+      definitions = symTable.get(exp.name);
+      Defined tempDef = new Defined(exp, level);
+      tempDef.setOffSet(globalOffset);
+      definitions.add(0, tempDef);
+      symTable.put(exp.name, definitions);
     }
-    else if (inComp == true)
+    else
     {
-      emitComment("Processing local var: " + exp.name);
+        definitions = new ArrayList<Defined>();
+        Defined tempDef = new Defined(exp, level);
+        tempDef.setOffSet(globalOffset);
+        definitions.add(0, tempDef);
+        definitions.add(0, tempDef);
+        symTable.put(exp.name, definitions);
     }
-      
-  //if (exp.typ.typ == NameTy.VOID)
-    //System.out.println("SimpleDec: " + exp.name + " - VOID"); 
-  //else if (exp.typ.typ == NameTy.INT)
-    //System.out.println("SimpleDec: " + exp.name + " - INT");
+  
+    globalOffset--;
+  }
+  else if (inComp == true)
+  {
+    emitComment("Processing local var: " + exp.name);
+    if (symTable.get(exp.name) != null)
+    {
+      definitions = symTable.get(exp.name);
+      Defined temp = definitions.get(0);
+      definitions = symTable.get(exp.name);
+      Defined tempDef = new Defined(exp, level);
+      tempDef.setOffSet(frameOffset);
+      definitions.add(0, tempDef);
+      symTable.put(exp.name, definitions);
+    }
+    else
+    {
+        definitions = new ArrayList<Defined>();
+        Defined tempDef = new Defined(exp, level);
+        tempDef.setOffSet(frameOffset);
+        definitions.add(0, tempDef);
+        definitions.add(0, tempDef);
+        symTable.put(exp.name, definitions);
+    }
+  
+    frameOffset--;
+  }
+  else
+  {
+    if (symTable.get(exp.name) != null)
+    {
+      definitions = symTable.get(exp.name);
+      Defined temp = definitions.get(0);
+      definitions = symTable.get(exp.name);
+      Defined tempDef = new Defined(exp, level);
+      tempDef.setOffSet(frameOffset);
+      definitions.add(0, tempDef);
+      symTable.put(exp.name, definitions);
+    }
+    else
+    {
+        definitions = new ArrayList<Defined>();
+        Defined tempDef = new Defined(exp, level);
+        tempDef.setOffSet(frameOffset);
+        definitions.add(0, tempDef);
+        definitions.add(0, tempDef);
+        symTable.put(exp.name, definitions);
+    }
+  }
 }
 
 //SimpleVar
@@ -580,7 +544,8 @@ public void visit(SimpleVar exp, int level ) {
 }
 
 //WhileExp
-public void visit(WhileExp exp, int level ) {
+public void visit(WhileExp exp, int level ) 
+{
   //System.out.println("WhileExp: ");
   emitComment("-> while");
   emitComment("while: jump after body comes back here");

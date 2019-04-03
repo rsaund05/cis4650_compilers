@@ -253,6 +253,7 @@ public int getType(Exp toCheck)
 
   return toReturn;
 }
+
 public int typeCheck(Exp left, Exp right)
 {
   int leftType = -1;
