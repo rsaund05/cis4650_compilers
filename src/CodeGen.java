@@ -291,7 +291,7 @@ public void visit( ExpList expList, int level ) {
     else if (exp.rhs instanceof OpExp)
     {
       OpExp tempOp = (OpExp)exp.rhs;
-      procOp (tempOp.left, tempOp.right, tempOp.op, level);
+      procOp (tempOp, tempOp.op, level);
     }
    
     if (exp.rhs instanceof IntExp) {
@@ -336,7 +336,7 @@ public void visit( ExpList expList, int level ) {
 
   public void visit( OpExp exp, int level ) {
     emitComment("-> op");
-    procOp(exp.left, exp.right, exp.op, level);
+    procOp(exp, exp.op, level);
     
     level++;
     exp.left.accept( this, level );
@@ -354,7 +354,7 @@ public void visit( ExpList expList, int level ) {
     if (ex.left instanceof OpExp)
     {
       tempOp = (OpExp)ex.left;
-      procOp(tempOp.left, tempOp.right, tempOp.op, level);
+      procOp(tempOp, tempOp.op, level);
     }
     else if (ex.left instanceof VarExp)
     {
@@ -390,12 +390,12 @@ public void visit( ExpList expList, int level ) {
 
     if (ex.right instanceof OpExp)
     {
-      tempOp = (OpExp)right;
-      procOp(tempOp.left, tempOp.right, tempOp.op, level);
+      tempOp = (OpExp)ex.right;
+      procOp(tempOp, tempOp.op, level);
     }
     else if (ex.right instanceof VarExp)
     {
-        tempV = (VarExp)left;
+        tempV = (VarExp)ex.left;
         tempVar = (Var)tempV.variable;
 
         if (tempVar instanceof SimpleVar)
@@ -416,7 +416,7 @@ public void visit( ExpList expList, int level ) {
     }
     else if (ex.right instanceof IntExp)
     {
-      right.accept(this, level);
+      ex.right.accept(this, level);
       emitRM("LD", ac, 0, fp, "op: load left");
     }
     else if(ex.right instanceof CallExp)
