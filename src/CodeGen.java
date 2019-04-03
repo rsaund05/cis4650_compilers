@@ -295,16 +295,7 @@ public void visit( ExpList expList, int level ) {
     }
    
     if (exp.rhs instanceof IntExp) {
-    	IntExp temp = (IntExp)exp.rhs;
-    	emitComment("-> constant");
-  		try {
-  			int tempVal = Integer.parseInt(temp.value);
-  			emitRM("LDC", ac, tempVal, 0, "load const");
-  			emitComment("<- constant");
-  		} catch (Exception e) {
-  			e.printStackTrace();
-  		}
-  		
+    	exp.rhs.accept(this, level);
     }
     emitRM("LD", ac, 0, fp, "op: load left");
     emitRM("ST", ac, 0, fp, "assign: Store value");
@@ -353,21 +344,21 @@ public void visit( ExpList expList, int level ) {
     emitComment("<- op");
   }
 
-  public void procOp (Exp left, Exp right, int op, int level)
+  public void procOp (OpExp ex, int op, int level)
   {
     OpExp tempOp;
     VarExp tempV;
     Var tempVar;
     int offset;
 
-    if (left instanceof OpExp)
+    if (ex.left instanceof OpExp)
     {
-      tempOp = (OpExp)left;
+      tempOp = (OpExp)ex.left;
       procOp(tempOp.left, tempOp.right, tempOp.op, level);
     }
-    else if (left instanceof VarExp)
+    else if (ex.left instanceof VarExp)
     {
-      tempV = (VarExp)left;
+      tempV = (VarExp)ex.left;
       tempVar = (Var)tempV.variable;
 
       if (tempVar instanceof SimpleVar)
@@ -387,22 +378,22 @@ public void visit( ExpList expList, int level ) {
         emitRM("ST", ac, 0, fp, "op: push left");
       }
     }
-    else if (left instanceof IntExp)
+    else if (ex.left instanceof IntExp)
     {
-        left.accept(this, level);
+        ex.left.accept(this, level);
         emitRM("ST", ac, 0, fp, "op: push left");
     }
-    else if(left instanceof CallExp)
+    else if(ex.left instanceof CallExp)
     {
       emitRM("ST", ac, 0, fp, "op: push left");
     }
 
-    if (right instanceof OpExp)
+    if (ex.right instanceof OpExp)
     {
       tempOp = (OpExp)right;
       procOp(tempOp.left, tempOp.right, tempOp.op, level);
     }
-    else if (right instanceof VarExp)
+    else if (ex.right instanceof VarExp)
     {
         tempV = (VarExp)left;
         tempVar = (Var)tempV.variable;
@@ -423,12 +414,12 @@ public void visit( ExpList expList, int level ) {
 
         }
     }
-    else if (right instanceof IntExp)
+    else if (ex.right instanceof IntExp)
     {
       right.accept(this, level);
       emitRM("LD", ac, 0, fp, "op: load left");
     }
-    else if(right instanceof CallExp)
+    else if(ex.right instanceof CallExp)
     {
       emitRM("LD", ac, 0, fp, "op: load left");
     }
@@ -642,7 +633,6 @@ public void visit(SimpleDec exp, int level )
         definitions = new ArrayList<Defined>();
         Defined tempDef = new Defined(exp, level);
         tempDef.setOffSet(globalOffset);
-        definitions.add(0, tempDef);
         definitions.add(0, tempDef);
         symTable.put(exp.name, definitions);
     }
