@@ -544,7 +544,9 @@ public void visit(CompoundExp exp, int level )
 //FunctionDec
 public void visit(FunctionDec exp, int level ) 
 {
-  exp.setFuncAddr(emitLoc);
+  if (exp.func.equals("main"))
+    entry = emitLoc;
+
   frameOffset = 0;
   emitComment("Processing function: " + exp.func);
   emitComment("jump around function body here");
