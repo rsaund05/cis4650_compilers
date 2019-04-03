@@ -55,7 +55,7 @@ public class CodeGen implements AbsynVisitor {
 	}
 
 	public static void emitRM_Abs(String opCode, int r, int a, String comment){
-		System.out.println(emitLoc + ": " + opCode + " " + r + " " + (a - (emitLoc + 1)) + "(" + pc + ") \t" + comment);
+		System.out.println(emitLoc + ": " + opCode + " " + r + ", " + (a - (emitLoc + 1)) + "(" + pc + ") \t" + comment);
     emitLoc++;
     highEmitLoc++;
 
