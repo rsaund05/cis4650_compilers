@@ -250,18 +250,18 @@ public void visit( ExpList expList, int level ) {
       definitions = symTable.get(temp.name);
       Defined tempD = definitions.get(0);
       offset = tempD.getOffSet();
-  		emitRM("LDA", 0, offset, gp, "load id address");
+  		emitRM("LDA", 0, offset, fp, "load id address");
   		emitComment("<- id");
-  		emitRM("ST", ac, offset, gp, "op: Push left");
+  		emitRM("ST", ac, offset, fp, "op: Push left");
     }
     else if (exp.lhs instanceof IndexVar)
     {
 		IndexVar temp = (IndexVar)exp.lhs;
     	emitComment("-> id");
   		emitComment("looking up id: " + temp.name);
-  		emitRM("LDA", 0, globalOffset, gp, "load id address");
+  		emitRM("LDA", 0, globalOffset, fp, "load id address");
   		emitComment("<- id");
-  		emitRM("ST", ac, globalOffset, gp, "op: Push left");
+  		emitRM("ST", ac, globalOffset, fp, "op: Push left");
     } 
 
 	  exp.rhs.accept( this, level );
@@ -277,14 +277,14 @@ public void visit( ExpList expList, int level ) {
         definitions = symTable.get(temp.name);
         Defined tempD = definitions.get(0);
         offset = tempD.getOffSet();
-  			emitRM("LD", 0, offset, gp, "load id value");
+  			emitRM("LD", 0, offset, fp, "load id value");
   			emitComment("<- id");
     	}
     	else if (rhs instanceof IndexVar){
     		IndexVar temp = (IndexVar)rhs;
     		emitComment("-> id");
   			emitComment("looking up id: " + temp.name);
-  			emitRM("LD", 0, globalOffset, gp, "load id value");
+  			emitRM("LD", 0, globalOffset, fp, "load id value");
   			emitComment("<- id");
     	}
     }
@@ -301,8 +301,8 @@ public void visit( ExpList expList, int level ) {
   		}
   		
     }
-    emitRM("LD", ac, 0, gp, "op: load left");
-    emitRM("ST", ac, 0, gp, "assign: Store value");
+    emitRM("LD", ac, 0, fp, "op: load left");
+    emitRM("ST", ac, 0, fp, "assign: Store value");
     emitComment("<- op");
   }
 
