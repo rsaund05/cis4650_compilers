@@ -310,7 +310,12 @@ public void visit( ExpList expList, int level ) {
     emitComment("-> if");
     level++;
     exp.test.accept( this, level );
+    int savedLoc = emitSkip(1);
     exp.thenpart.accept( this, level );
+    int savedLoc2 = emitSkip(0);
+    emitBackup(savedLoc);
+    emitRM_Abs("JEQ", 0, savedLoc2, "if: jump to else part");
+    emitRestore();
     if (exp.elsepart != null )
     {
       emitComment("if: jump to else belongs here");
@@ -324,6 +329,7 @@ public void visit( ExpList expList, int level ) {
 
   public void visit( IntExp exp, int level ) {
     emitComment("-> constant");
+    emitRm("LDC", ac, exp.value, 0, "load const");
     emitComment("<- constant");
   }
 
@@ -421,7 +427,7 @@ public void visit(CompoundExp exp, int level )
 //FunctionDec
 public void visit(FunctionDec exp, int level ) 
 {
-
+  exp.setFuncAddr(emitLoc);
   frameOffset = 0;
   emitComment("Processing function: " + exp.func);
   emitComment("jump around function body here");
@@ -580,14 +586,20 @@ public void visit(WhileExp exp, int level )
   //System.out.println("WhileExp: ");
   emitComment("-> while");
   emitComment("while: jump after body comes back here");
+  int savedLoc = emitSkip(0);
   level++;
   if (exp.test != null){
   	exp.test.accept(this, level);
   	emitComment("while: jump to end belongs here");
   }
-    
+  int savedLoc2 = emitSkip(1);
   if (exp.body != null)
     exp.body.accept(this, level);
+  emitRM_Abs("LDA", pc, savedLoc, "while: absolute jump to test");
+  int savedLoc3 = emitSkip(0);
+  emitBackup(savedLoc2);
+  emitRM_Abs("JEQ", 0, savedLoc3, "while: jump to end");
+  emitRestore();
   emitComment("<- while");
   
   delete(level);
