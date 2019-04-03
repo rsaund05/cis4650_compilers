@@ -122,8 +122,8 @@ public class CodeGen implements AbsynVisitor {
 		emitRM("ST", fp, globalOffset+ofpFO, fp, "push ofp");
 		emitRM("LDA", fp, globalOffset, fp, "push frame");
 		emitRM_Abs("LDA", pc, entry, "jump to main loc");
-    	emitRM("LD", fp, ofpFO, fp, "pop frame");
-    	emitComment("end of execution.");
+    emitRM("LD", fp, ofpFO, fp, "pop frame");
+    emitComment("end of execution.");
 		emitRO("HALT", 0, 0, 0, "");
 		//reset to stdout
 		System.setOut(console); //Reset output to terminal
@@ -550,6 +550,7 @@ public void visit(FunctionDec exp, int level )
   frameOffset = 0;
   emitComment("Processing function: " + exp.func);
   emitComment("jump around function body here");
+  int savedLoc = emitSkip(1);
 
   frameOffset--;
   emitRM("ST", 0, frameOffset, fp, "store return");
@@ -575,16 +576,19 @@ public void visit(FunctionDec exp, int level )
       symTable.put(exp.func, definitions);
   }
 
+  emitRM("LD", pc, -1, fp, "return to caller");
+  emitBackup(savedLoc);
+  emitRM_Abs("LDA", pc, highEmitLoc, "Jump around function body");
+  emitComment("<- fundecl");
+  emitRestore();
+
   level++;
   if (exp.params != null)
     exp.params.accept(this, level);
 
   if (exp.body != null)
     exp.body.accept(this, level);
-	
-	emitRM("LD", pc, -1, fp, "return to caller");
-	emitRM_Abs("LDA", pc, 0, "Jump around function body");
-  emitComment("<- fundecl");
+
 
   delete(level);
   level--;
