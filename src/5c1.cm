@@ -1,0 +1,20 @@
+/* This program is meant to demonstrate error handling given an invalid if-statement, and an 
+   invalid return statement, and an invalid function call (reported as invalid statement) */
+
+int gcd (int u, int v) {
+  if (v == 0) return u
+  else return gcd(v, u - u/v*v);
+}
+
+void main(void) {
+  int x; int y;
+  if(x == 5){
+	x = 5;
+   else {
+	x = 4;
+  }
+
+  x = input();
+  y = input(;
+  output(gcd(x, y));
+}
