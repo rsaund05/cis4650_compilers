@@ -256,7 +256,7 @@ public void visit( ExpList expList, int level ) {
     }
     else if (exp.lhs instanceof IndexVar)
     {
-		IndexVar temp = (IndexVar)exp.lhs;
+		  IndexVar temp = (IndexVar)exp.lhs;
     	emitComment("-> id");
   		emitComment("looking up id: " + temp.name);
   		emitRM("LDA", 0, globalOffset, fp, "load id address");
@@ -287,6 +287,11 @@ public void visit( ExpList expList, int level ) {
   			emitRM("LD", 0, globalOffset, fp, "load id value");
   			emitComment("<- id");
     	}
+    }
+    else if (exp.rhs instanceof OpExp)
+    {
+      OpExp tempOp = (OpExp)exp.rhs;
+      procOp (tempOp.left, tempOp.right, tempOp.op, level);
     }
    
     if (exp.rhs instanceof IntExp) {
@@ -329,51 +334,163 @@ public void visit( ExpList expList, int level ) {
 
   public void visit( IntExp exp, int level ) {
     emitComment("-> constant");
-    emitRm("LDC", ac, exp.value, 0, "load const");
+    try{
+      emitRM("LDC", ac, Integer.parseInt(exp.value), 0, "load const");
+    }catch (Exception e)
+    {
+
+    }
     emitComment("<- constant");
   }
 
   public void visit( OpExp exp, int level ) {
     emitComment("-> op");
-    //System.out.print( "OpExp:" ); 
-    switch( exp.op ) {
-      case OpExp.PLUS:
-        //System.out.println( " + " );
-        break;
-      case OpExp.MINUS:
-        //System.out.println( " - " );
-        break;
-      case OpExp.MUL:
-        //System.out.println( " * " );
-        break;
-      case OpExp.DIV:
-        //System.out.println( " / " );
-        break;
-      case OpExp.EQ:
-        //System.out.println( " == " );
-        break;
-      case OpExp.NE:
-        //System.out.println(" != ");
-        break;
-      case OpExp.LT:
-        //System.out.println( " < " );
-        break;
-      case OpExp.LE:
-        //System.out.println(" <= ");
-        break;
-      case OpExp.GT:
-        //System.out.println( " > " );
-        break;
-      case OpExp.GE:
-        //System.out.println(" >= ");
-        break;
-      default:
-        //System.out.println( "Unrecognized operator at line " + exp.row + " and column " + exp.col);
-    }
+    procOp(exp.left, exp.right, exp.op, level);
+    
     level++;
     exp.left.accept( this, level );
     exp.right.accept( this, level );
     emitComment("<- op");
+  }
+
+  public void procOp (Exp left, Exp right, int op, int level)
+  {
+    OpExp tempOp;
+    VarExp tempV;
+    Var tempVar;
+    int offset;
+
+    if (left instanceof OpExp)
+    {
+      tempOp = (OpExp)left;
+      procOp(tempOp.left, tempOp.right, tempOp.op, level);
+    }
+    else if (left instanceof VarExp)
+    {
+      tempV = (VarExp)left;
+      tempVar = (Var)tempV.variable;
+
+      if (tempVar instanceof SimpleVar)
+      {
+        SimpleVar temp = (SimpleVar)tempVar;
+        emitComment("-> id");
+        emitComment("looking up id: " + temp.name);
+        definitions = symTable.get(temp.name);
+        Defined tempD = definitions.get(0);
+        offset = tempD.getOffSet();
+  			emitRM("LD", 0, offset, fp, "load id value");
+        emitComment("<- id");
+        emitRM("ST", ac, 0, fp, "op: push left");
+      }
+      else if (tempVar instanceof IndexVar)
+      {
+        emitRM("ST", ac, 0, fp, "op: push left");
+      }
+    }
+    else if (left instanceof IntExp)
+    {
+        left.accept(this, level);
+        emitRM("ST", ac, 0, fp, "op: push left");
+    }
+    else if(left instanceof CallExp)
+    {
+      emitRM("ST", ac, 0, fp, "op: push left");
+    }
+
+    if (right instanceof OpExp)
+    {
+      tempOp = (OpExp)right;
+      procOp(tempOp.left, tempOp.right, tempOp.op, level);
+    }
+    else if (right instanceof VarExp)
+    {
+        tempV = (VarExp)left;
+        tempVar = (Var)tempV.variable;
+
+        if (tempVar instanceof SimpleVar)
+        {
+          SimpleVar temp = (SimpleVar)tempVar;
+          emitComment("-> id");
+          emitComment("looking up id: " + temp.name);
+          definitions = symTable.get(temp.name);
+          Defined tempD = definitions.get(0);
+          offset = tempD.getOffSet();
+          emitRM("LD", 0, offset, fp, "load id value");
+          emitComment("<- id");
+        }
+        else if (tempVar instanceof IndexVar)
+        {
+
+        }
+    }
+    else if (right instanceof IntExp)
+    {
+      right.accept(this, level);
+      emitRM("LD", ac, 0, fp, "op: load left");
+    }
+    else if(right instanceof CallExp)
+    {
+      emitRM("LD", ac, 0, fp, "op: load left");
+    }
+
+    switch(op)
+    {
+      case OpExp.PLUS:
+        emitRO("ADD", ac, 1, ac, "ADD OP");
+        break;
+      case OpExp.MINUS:
+        emitRO("SUB", ac, 1, ac, "SUB OP");
+        break;
+      case OpExp.MUL:
+        emitRO("MUL", ac, 1, ac, "MUL OP");
+        break;  
+      case OpExp.DIV:
+        emitRO("DIV", ac, 1, ac, "DIV OP");
+        break;
+      case OpExp.EQ:
+        emitRO("SUB", ac, 1, ac, "EQUAL OP");
+        emitRM("JEQ", ac, 2, pc, "");
+        emitRM("LDC", ac, 0, 0, "FALSE CASE");
+        emitRM("LDA", pc, 1, pc, "UNCONDITIONAL JUMP");
+        emitRM("LDC", ac, 1, 0, "TRUE CASE");
+        break;
+      case OpExp.NE:
+        emitRO("SUB", ac, 1, ac, "OP <");
+        emitRM("JNE", ac, 2, pc, "");
+        emitRM("LDC", ac, 0, 0, "FALSE CASE");
+        emitRM("LDA", pc, 1, pc, "UNCONDITIONAL JUMP");
+        emitRM("LDC", ac, 1, 0, "TRUE CASE");
+        break;
+      case OpExp.LT:
+        emitRO("SUB", ac, 1, ac, "OP <");
+        emitRM("JLT", ac, 2, pc, "");
+        emitRM("LDC", ac, 0, 0, "FALSE CASE");
+        emitRM("LDA", pc, 1, pc, "UNCONDITIONAL JUMP");
+        emitRM("LDC", ac, 1, 0, "TRUE CASE");
+        break;
+      case OpExp.LE:
+        emitRO("SUB", ac, 1, ac, "OP <");
+        emitRM("JLE", ac, 2, pc, "");
+        emitRM("LDC", ac, 0, 0, "FALSE CASE");
+        emitRM("LDA", pc, 1, pc, "UNCONDITIONAL JUMP");
+        emitRM("LDC", ac, 1, 0, "TRUE CASE");
+        break;
+      case OpExp.GT:
+        emitRO("SUB", ac, 1, ac, "OP <");
+        emitRM("JGT", ac, 2, pc, "");
+        emitRM("LDC", ac, 0, 0, "FALSE CASE");
+        emitRM("LDA", pc, 1, pc, "UNCONDITIONAL JUMP");
+        emitRM("LDC", ac, 1, 0, "TRUE CASE");
+        break;
+      case OpExp.GE:
+        emitRO("SUB", ac, 1, ac, "OP <");
+        emitRM("JLE", ac, 2, pc, "");
+        emitRM("LDC", ac, 0, 0, "FALSE CASE");
+        emitRM("LDA", pc, 1, pc, "UNCONDITIONAL JUMP");
+        emitRM("LDC", ac, 1, 0, "TRUE CASE");
+        break;
+    }
+    return;
   }
 
   public void visit( VarExp exp, int level ) {
