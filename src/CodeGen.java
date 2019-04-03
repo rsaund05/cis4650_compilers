@@ -234,9 +234,9 @@ public void visit( ExpList expList, int level ) {
     }
   }
 
-  public void visit( AssignExp exp, int level ) {
+  public void visit( AssignExp exp, int level ){
     emitComment("-> op");
-    // System.out.println( "AssignExp:" );
+    int offset;
     level++;
 
     exp.lhs.accept( this, level );
@@ -249,7 +249,7 @@ public void visit( ExpList expList, int level ) {
 
       definitions = symTable.get(temp.name);
       Defined tempD = definitions.get(0);
-      int offset = tempD.getOffSet();
+      offset = tempD.getOffSet();
   		emitRM("LDA", 0, offset, gp, "load id address");
   		emitComment("<- id");
   		emitRM("ST", ac, offset, gp, "op: Push left");
@@ -264,7 +264,7 @@ public void visit( ExpList expList, int level ) {
   		emitRM("ST", ac, globalOffset, gp, "op: Push left");
     } 
 
-	exp.rhs.accept( this, level );
+	  exp.rhs.accept( this, level );
     if (exp.rhs instanceof VarExp)
     {
     	VarExp tempV = (VarExp)exp.rhs;
@@ -273,8 +273,11 @@ public void visit( ExpList expList, int level ) {
     	 if (rhs instanceof SimpleVar) {
     		SimpleVar temp = (SimpleVar)rhs;
     		emitComment("-> id");
-  			emitComment("looking up id: " + temp.name);
-  			emitRM("LD", 0, globalOffset, gp, "load id value");
+        emitComment("looking up id: " + temp.name);
+        definitions = symTable.get(temp.name);
+        Defined tempD = definitions.get(0);
+        offset = tempD.getOffSet();
+  			emitRM("LD", 0, offset, gp, "load id value");
   			emitComment("<- id");
     	}
     	else if (rhs instanceof IndexVar){
@@ -285,7 +288,6 @@ public void visit( ExpList expList, int level ) {
   			emitComment("<- id");
     	}
     }
-
    
     if (exp.rhs instanceof IntExp) {
     	IntExp temp = (IntExp)exp.rhs;
@@ -299,8 +301,8 @@ public void visit( ExpList expList, int level ) {
   		}
   		
     }
-    emitRM("LD", ac, globalOffset, gp, "op: load left");
-    emitRM("ST", ac, globalOffset, gp, "assign: Store value");
+    emitRM("LD", ac, 0, gp, "op: load left");
+    emitRM("ST", ac, 0, gp, "assign: Store value");
     emitComment("<- op");
   }
 
@@ -315,6 +317,9 @@ public void visit( ExpList expList, int level ) {
        exp.elsepart.accept( this, level );
     }
     emitComment("<- if");
+
+    delete(level);
+    level--;
   }
 
   public void visit( IntExp exp, int level ) {
@@ -420,8 +425,31 @@ public void visit(FunctionDec exp, int level )
   frameOffset = 0;
   emitComment("Processing function: " + exp.func);
   emitComment("jump around function body here");
+
   frameOffset--;
   emitRM("ST", 0, frameOffset, fp, "store return");
+  frameOffset--;
+
+  if (symTable.get(exp.func) != null)
+  {
+    definitions = symTable.get(exp.func);
+    Defined temp = definitions.get(0);
+    definitions = symTable.get(exp.func);
+    Defined tempDef = new Defined(exp, level);
+    tempDef.setOffSet(emitLoc);
+    definitions.add(0, tempDef);
+    symTable.put(exp.func, definitions);
+  }
+  else
+  {
+      definitions = new ArrayList<Defined>();
+      Defined tempDef = new Defined(exp, level);
+      tempDef.setOffSet(emitLoc);
+      definitions.add(0, tempDef);
+      definitions.add(0, tempDef);
+      symTable.put(exp.func, definitions);
+  }
+
   level++;
   if (exp.params != null)
     exp.params.accept(this, level);
@@ -432,6 +460,9 @@ public void visit(FunctionDec exp, int level )
 	emitRM("LD", pc, -1, fp, "return to caller");
 	emitRM_Abs("LDA", pc, 0, "Jump around function body");
   emitComment("<- fundecl");
+
+  delete(level);
+  level--;
 }
 
 //IndexVar
@@ -557,8 +588,10 @@ public void visit(WhileExp exp, int level )
     
   if (exp.body != null)
     exp.body.accept(this, level);
-	emitComment("<- while");
+  emitComment("<- while");
   
+  delete(level);
+  level--;
 }
 
 public void visit (NameTy exp, int level)
