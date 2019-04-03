@@ -288,15 +288,16 @@ public void visit( ExpList expList, int level ) {
   			emitComment("<- id");
     	}
     }
+    else if (exp.rhs instanceof IntExp) {
+    	exp.rhs.accept(this, level);
+    }
     else if (exp.rhs instanceof OpExp)
     {
       OpExp tempOp = (OpExp)exp.rhs;
       procOp (tempOp, tempOp.op, level);
     }
    
-    if (exp.rhs instanceof IntExp) {
-    	exp.rhs.accept(this, level);
-    }
+
     emitRM("LD", ac, 0, fp, "op: load left");
     emitRM("ST", ac, 0, fp, "assign: Store value");
     emitComment("<- op");
@@ -541,11 +542,12 @@ public void visit(FunctionDec exp, int level )
   frameOffset = 0;
   emitComment("Processing function: " + exp.func);
   emitComment("jump around function body here");
-  int savedLoc = emitSkip(1);
 
   frameOffset--;
   emitRM("ST", 0, frameOffset, fp, "store return");
   frameOffset--;
+  
+  int savedLoc = emitSkip(1);
 
   if (symTable.get(exp.func) != null)
   {
@@ -567,12 +569,6 @@ public void visit(FunctionDec exp, int level )
       symTable.put(exp.func, definitions);
   }
 
-  emitRM("LD", pc, -1, fp, "return to caller");
-  emitBackup(savedLoc);
-  emitRM_Abs("LDA", pc, highEmitLoc, "Jump around function body");
-  emitComment("<- fundecl");
-  emitRestore();
-
   level++;
   if (exp.params != null)
     exp.params.accept(this, level);
@@ -580,6 +576,11 @@ public void visit(FunctionDec exp, int level )
   if (exp.body != null)
     exp.body.accept(this, level);
 
+  emitRM("LD", pc, -1, fp, "return to caller");
+  emitBackup(savedLoc);
+  emitRM_Abs("LDA", pc, highEmitLoc, "Jump around function body");
+  emitComment("<- fundecl");
+  emitRestore();
 
   delete(level);
   level--;
