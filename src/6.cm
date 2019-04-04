@@ -1,0 +1,26 @@
+/* This program is meant to demonstrate error handling for an invalid variable declaration, an invalid
+   statement, and an invalid return statement */
+
+void main (void)
+{
+    int x
+    int y;
+
+    x = y + x + y + = x;
+
+    return;
+}
+
+int max(int x, int y)
+{
+    if (x > y)
+    {
+        return x;
+    }
+    else
+    {
+        return y;
+    }
+
+    return
+}
