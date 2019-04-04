@@ -1,7 +1,3 @@
-/* This Program is meant to be parsed without error.
-   The program contains a global variable, two function declarations, loops, compound expressions,
-   function argument lists, etc. */
-
 int x[10];
 
 int minloc(int a[], int low, int high) {

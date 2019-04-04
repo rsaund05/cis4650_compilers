@@ -20,7 +20,7 @@ parser code {:
        reason for the error which is passed into the method in the
        String 'message'. */
     public void report_error(String message, Object info) {
-   
+        CM.PARSE_ERROR = true;
         /* Create a StringBuffer called 'm' with the string 'Error' in it. */
         StringBuffer m = new StringBuffer("Error");
    
@@ -173,6 +173,8 @@ params            ::= INT ID:i LSQUARE RSQUARE
                   | VOID ID:i
                     {:RESULT = new SimpleDec(ileft, iright, new NameTy(ileft, iright, NameTy.VOID), i);:}
                   | VOID: v
+                    {:RESULT = null;:}
+                  |
                     {:RESULT = null;:}
                   ;
 
