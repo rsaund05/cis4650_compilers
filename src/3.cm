@@ -1,0 +1,5 @@
+int glob;
+void main(void) {
+	int y;
+	glob = 2;
+}

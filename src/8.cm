@@ -1,37 +1,37 @@
-int j;
-int i;
-void k;
+/* This program is meant to demonstrate error handling for an invalid function declaration, an 
+   invalid variable declaration, and an invalid return statement */ 
 
-void foo(int size, void d, int k)
+int add int x, int y)
 {
-	int temp;
-	void kek;
-	while(i != 0)
-	{
-		int j;
-		void w;
-		int k;
-		k + j;
-	}
-	
-	if(k == 1)
-	{
-		int i;
-		int j;
-		
-		int temp;
-	}
-}
-int bar(){
-	void foobar;
-	return foo(i, k, j);
-}
-void main(void)
-{
-	int k;
-	int s;
-	void j;
-	foo(i, k, j, i);
-	k + s + foo(k, j, j);
+    return x + y;
 }
 
+int pow (int x, int pow)
+{
+    if (pow == 0)
+        return pow(x,0);
+
+    pow(x*x, pow -1);
+}
+
+void main (void)
+{
+    int x;
+    int y
+    int z;
+    z = 0;
+
+    x = 12;
+    y = x * 7 + 23 / 3;
+
+    while(z < 100)
+    {
+        z = z + 1;
+    }
+
+    y = add(y,z);
+
+    pow(add(x,z),y);
+
+    return 
+}

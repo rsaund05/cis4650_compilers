@@ -1,13 +1,13 @@
-int x;
-int y;
+/* This program is meant to demonstrate error handling for an invalid statement, and 
+   an invalid return statement. */
 
-void functionToEndAllFunctions(){
-	return 69;
-}
-
-void main(void){
-	int x; void g; int test;
-	x = foo();
-	g + test;
-	
+void main(void)
+{
+    int x;
+    int y
+    x + x = x;
+    y = x;
+    y =  + x;
+    test(one, two);
+    return
 }

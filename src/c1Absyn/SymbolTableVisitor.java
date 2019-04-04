@@ -3,6 +3,7 @@ import java.util.*;
 
 public class SymbolTableVisitor implements AbsynVisitor {
   public static boolean SHOW_SCOPE = false;
+  public static boolean SEMANTIC_ERROR = false;
 
   final static int SPACES = 4;
    public static ArrayList<Defined> definitions = new ArrayList<Defined>();
@@ -346,7 +347,10 @@ public int typeCheck(Exp left, Exp right)
     }
 
     if (type1 != type2 && type2 != -1 && type2 != -2)
+    {
+      SEMANTIC_ERROR = true;
       System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col + " trying to assign " + typeToString(type2)  + " to variable of type " + typeToString(type1));
+    }
   }
 
   public void visit( IfExp exp, int level ) {
@@ -358,7 +362,10 @@ public int typeCheck(Exp left, Exp right)
     check = checkTest(tempE);
 
     if (check != 0)
+    {
+      SEMANTIC_ERROR = true;
       System.err.println("Error, Line: " + exp.row + " Col: " + exp.col + " Void value detected in condition.");
+    }
     
     SysPrint("Entering a new block:");
     exp.test.accept( this, level );
@@ -443,7 +450,10 @@ public int typeCheck(Exp left, Exp right)
     exp.left.accept(this,level);
 
     if (checkOPExp(exp.left, exp.right) == -1)
+    {
+      SEMANTIC_ERROR = true;
       System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col + ": mismatched types ");
+    }
   }
 
   public void visit( VarExp exp, int level ) {
@@ -454,13 +464,19 @@ public int typeCheck(Exp left, Exp right)
     {
       SimpleVar temp = (SimpleVar) exp.variable;
         if (symTable.get(temp.name) == null)
+        {
+          SEMANTIC_ERROR = true;
           System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col + ": " + temp.name + " undefined");
+        }
     }
     else
     {
       IndexVar temp = (IndexVar) exp.variable;
       if (symTable.get(temp.name) == null)
-          System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col + ": variable " + temp.name + " undefined");
+      {
+        SEMANTIC_ERROR = true;
+        System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col + ": variable " + temp.name + " undefined");
+      }
     }
   }
 
@@ -474,6 +490,7 @@ public void visit(ArrayDec exp, int level ){
 
     if (temp.level == level)
     {
+      SEMANTIC_ERROR = true;
       System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col + ": " + exp.name + " has already been declared");
     }
     else
@@ -500,7 +517,10 @@ public void visit(CallExp exp, int level ) {
   int type1 = -1;
   int type2 = -1;
   if (symTable.get(exp.func) == null)
+  {
+    SEMANTIC_ERROR = true;
     System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col + ": undefined function " + exp.func);
+  }
   else
   {
     definitions = symTable.get(exp.func);
@@ -517,6 +537,7 @@ public void visit(CallExp exp, int level ) {
 
       if (callList == null)
       {
+        SEMANTIC_ERROR = true;
         System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col + ": too few arguments");
         break;
       }
@@ -543,6 +564,7 @@ public void visit(CallExp exp, int level ) {
 
         if (type1 != type2)
         {
+          SEMANTIC_ERROR = true;
           System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col + ": conflicting types: " + typeToString(type1) + " : " + typeToString(type2));
         }
 
@@ -551,7 +573,10 @@ public void visit(CallExp exp, int level ) {
     }
 
     if (params == null && callList != null)
+    {
+      SEMANTIC_ERROR = true;
       System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col +": too many arguments");
+    }
   }
 }
 
@@ -574,6 +599,7 @@ public void visit(FunctionDec exp, int level ) {
 
         if (temp.level == level)
         {
+          SEMANTIC_ERROR = true;
           System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col + ": " + exp.func + " has already been declared");
         }
         else
@@ -602,7 +628,11 @@ public void visit(FunctionDec exp, int level ) {
     exp.body.accept(this, level);
 
   if (functionType(exp.body) != exp.result.typ && functionType(exp.body) != -1)
+  {
+    SEMANTIC_ERROR = true;
     System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col +": Function return type does not match, return type is " + typeToString(functionType(exp.body)) + " should be " + typeToString(exp.result.typ));
+
+  }
  
     print(level);
     delete(level);
@@ -685,7 +715,10 @@ public void visit(IndexVar exp, int level ) {
     type = getType(temp);
 
     if (type == 1)
+    {
+      SEMANTIC_ERROR = true;
       System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col +": array index must be of type int");
+    }
   }
   else if (exp.index instanceof CallExp)
   {
@@ -693,7 +726,10 @@ public void visit(IndexVar exp, int level ) {
     type = getType(temp);
 
     if (type == 1)
+    {
+      SEMANTIC_ERROR = true;
       System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col +": array index must be of type int");
+    }
   }
 }
 
@@ -717,6 +753,7 @@ public void visit(SimpleDec exp, int level ) {
 
     if (temp.level == level)
     {
+      SEMANTIC_ERROR = true;
       System.err.println("Error, Line: " + exp.row + ", Col: " + exp.col +": variable " + exp.name + " has already been declared");
     }
     else
@@ -750,7 +787,10 @@ public void visit(WhileExp exp, int level ) {
   check = checkTest(tempE);
 
   if (check != 0)
+  {
+    SEMANTIC_ERROR = true;
     System.err.println("Error, Line: " + exp.row + " Col: " + exp.col + " Void value detected in condition.");
+  }
   SysPrint("Entering a while block");
    
   if (exp.test != null)

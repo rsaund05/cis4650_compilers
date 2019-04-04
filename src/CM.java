@@ -21,6 +21,7 @@ class CM {
   public static boolean SHOW_SCOPE = false;
   public static boolean COMPILE = false;
   public static boolean PARSE_ERROR = false;
+  public static boolean SEMANTIC_ERROR = false;
   public static String fileNameTM = "";
   static public void main(String argv[]) throws Exception{    
     /* Start the parser */
@@ -91,12 +92,18 @@ class CM {
       result.accept(visitor, 0);
       visitor.print(0);
       visitor.delete(0);
+      if(visitor.SEMANTIC_ERROR == true) SEMANTIC_ERROR = true;
+
       if(SHOW_SCOPE == true) {
         System.out.println("Leaving global scope"); 
         System.setOut(console);
         if(f != null) f.close();
       }
-      if(COMPILE == true){
+      if(SEMANTIC_ERROR == true) {
+        System.out.println("\n\nErrors are present in " + argv[0] + ", cannot compile");
+        System.exit(0);
+      }
+      if((COMPILE == true) && (SEMANTIC_ERROR != true)){
         //Setting up output stream to file
         //PrintStream console = System.out;
         //System.out.println("GENERATING CODE");
