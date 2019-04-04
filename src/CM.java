@@ -20,6 +20,7 @@ class CM {
   public static boolean SHOW_TREE = false;
   public static boolean SHOW_SCOPE = false;
   public static boolean COMPILE = false;
+  public static boolean PARSE_ERROR = false;
   public static String fileNameTM = "";
   static public void main(String argv[]) throws Exception{    
     /* Start the parser */
@@ -56,7 +57,10 @@ class CM {
        }
 
        
-      
+      if(PARSE_ERROR == true) {
+        System.out.println("\n\nErrors are present in " + argv[0] + ", cannot compile");
+        System.exit(0);
+      }
       SymbolTableVisitor visitor = new SymbolTableVisitor();
       if(SHOW_SCOPE == true){
         visitor.SHOW_SCOPE = true; 
