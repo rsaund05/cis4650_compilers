@@ -519,9 +519,8 @@ public void visit(ArrayDec exp, int level ) {
     else
     {
         definitions = new ArrayList<Defined>();
-        Defined temp = definitions.get(0);
         tempDef = new Defined(exp, level);
-        tempA = (ArrayDec)temp.declaration;
+        tempA = (ArrayDec)exp;
         try{
         tempDef.setOffSet(globalOffset - Integer.parseInt(tempA.size.value));
         }catch(Exception e)
@@ -556,9 +555,8 @@ public void visit(ArrayDec exp, int level ) {
     else
     {
         definitions = new ArrayList<Defined>();
-        Defined temp = definitions.get(0);
         tempDef = new Defined(exp, level);
-        tempA = (ArrayDec)temp.declaration;
+        tempA = (ArrayDec)exp;
         try{
         tempDef.setOffSet(frameOffset - Integer.parseInt(tempA.size.value));
         }catch(Exception e)
@@ -592,9 +590,8 @@ public void visit(ArrayDec exp, int level ) {
     else
     {
         definitions = new ArrayList<Defined>();
-        Defined temp = definitions.get(0);
         tempDef = new Defined(exp, level);
-        tempA = (ArrayDec)temp.declaration;
+        tempA = (ArrayDec)exp;
         try{
         tempDef.setOffSet(frameOffset - Integer.parseInt(tempA.size.value));
         }catch(Exception e)
@@ -665,7 +662,6 @@ public void visit(FunctionDec exp, int level )
       definitions = new ArrayList<Defined>();
       Defined tempDef = new Defined(exp, level);
       tempDef.setOffSet(emitLoc);
-      definitions.add(0, tempDef);
       definitions.add(0, tempDef);
       symTable.put(exp.func, definitions);
   }
@@ -760,7 +756,6 @@ public void visit(SimpleDec exp, int level )
         Defined tempDef = new Defined(exp, level);
         tempDef.setOffSet(frameOffset);
         definitions.add(0, tempDef);
-        definitions.add(0, tempDef);
         symTable.put(exp.name, definitions);
     }
   
@@ -783,7 +778,6 @@ public void visit(SimpleDec exp, int level )
         definitions = new ArrayList<Defined>();
         Defined tempDef = new Defined(exp, level);
         tempDef.setOffSet(frameOffset);
-        definitions.add(0, tempDef);
         definitions.add(0, tempDef);
         symTable.put(exp.name, definitions);
     }
