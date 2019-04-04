@@ -495,14 +495,115 @@ public void visit( ExpList expList, int level ) {
 //still need to finish
 //ArrayDec
 public void visit(ArrayDec exp, int level ) {
+  ArrayDec tempA;
+  Defined tempDef;
   if (level == 0)
   {
     emitComment("allocating global var: " + exp.name);
     emitComment("<- vardec");
+    if (symTable.get(exp.name) != null)
+    {
+      definitions = symTable.get(exp.name);
+      Defined temp = definitions.get(0);
+      tempDef = new Defined(exp, level);
+      tempA = (ArrayDec)temp.declaration;
+      try{
+      tempDef.setOffSet(globalOffset - Integer.parseInt(tempA.size.value));
+      }catch(Exception e)
+      {
+
+      }
+      definitions.add(0, tempDef);
+      symTable.put(exp.name, definitions);
+    }
+    else
+    {
+        definitions = new ArrayList<Defined>();
+        Defined temp = definitions.get(0);
+        tempDef = new Defined(exp, level);
+        tempA = (ArrayDec)temp.declaration;
+        try{
+        tempDef.setOffSet(globalOffset - Integer.parseInt(tempA.size.value));
+        }catch(Exception e)
+        {
+
+        }
+        definitions.add(0, tempDef);
+        symTable.put(exp.name, definitions);
+    }
+  
+    globalOffset = globalOffset - Integer.parseInt(tempA.size.value);
   }
   else if (inComp == true)
   {
     emitComment("Processing local var: " + exp.name);
+    if (symTable.get(exp.name) != null)
+    {
+      definitions = symTable.get(exp.name);
+      Defined temp = definitions.get(0);
+      definitions = symTable.get(exp.name);
+      tempDef = new Defined(exp, level);
+      tempA = (ArrayDec)temp.declaration;
+      try{
+      tempDef.setOffSet(frameOffset - Integer.parseInt(tempA.size.value));
+      }catch(Exception e)
+      {
+
+      }
+      definitions.add(0, tempDef);
+      symTable.put(exp.name, definitions);
+    }
+    else
+    {
+        definitions = new ArrayList<Defined>();
+        Defined temp = definitions.get(0);
+        tempDef = new Defined(exp, level);
+        tempA = (ArrayDec)temp.declaration;
+        try{
+        tempDef.setOffSet(frameOffset - Integer.parseInt(tempA.size.value));
+        }catch(Exception e)
+        {
+  
+        }
+        definitions.add(0, tempDef);
+        symTable.put(exp.name, definitions);
+    }
+  
+    frameOffset = frameOffset - Integer.parseInt(tempA.size.value);
+  }
+  else
+  {
+    if (symTable.get(exp.name) != null)
+    {
+      definitions = symTable.get(exp.name);
+      Defined temp = definitions.get(0);
+      definitions = symTable.get(exp.name);
+      tempDef = new Defined(exp, level);
+      tempA = (ArrayDec)temp.declaration;
+      try{
+      tempDef.setOffSet(frameOffset - Integer.parseInt(tempA.size.value));
+      }catch(Exception e)
+      {
+
+      }
+      definitions.add(0, tempDef);
+      symTable.put(exp.name, definitions);
+    }
+    else
+    {
+        definitions = new ArrayList<Defined>();
+        Defined temp = definitions.get(0);
+        tempDef = new Defined(exp, level);
+        tempA = (ArrayDec)temp.declaration;
+        try{
+        tempDef.setOffSet(frameOffset - Integer.parseInt(tempA.size.value));
+        }catch(Exception e)
+        {
+  
+        }
+        definitions.add(0, tempDef);
+        symTable.put(exp.name, definitions);
+    }
   }
 }
 
